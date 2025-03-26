@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World——网站食用说明书</title>
-    <url>/2024/09/18/hello-world/</url>
-    <content><![CDATA[<p>欢迎访问伴莺の小窝，这篇文章的诞生，意味着这个博客搭建得差不多啦~</p>
-<p>在网页左下角有我编辑网页时听的歌曲，不定期更新，默认关闭。如果有你想听的歌曲可以在<strong>此页面</strong>页面下评论</p>
+    <title>分卷压缩以及解压教程</title>
+    <url>/2024/09/30/Multi-partArchive/</url>
+    <content><![CDATA[<blockquote>
+<p>本教程以<a class="link"   href="https://www.7-zip.org/" >7-zip</a>为例，其他压缩软件原理相同。</p>
+</blockquote>
+<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><ol>
+<li>右键框选所有需要压缩的文件</li>
+<li>选择<em>7-zip-添加到压缩包</em></li>
+<li>在选择”分卷大小、字节”中按需选择，随后压缩即可</li>
+</ol>
+<hr>
+<h1 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h1><ol>
+<li>先将所有分卷文件全部重命名为统一名字</li>
+<li>在所有文件的后缀的后面加上”.”和三位编号</li>
+<li>右键001分卷，选择<em>提取到&#x2F;xxx文件夹</em></li>
+</ol>
+<ul>
+<li>例如：</li>
+<li>test.zip</li>
+<li>test2.zip</li>
+<li>test3.zip</li>
+<li>…</li>
+</ul>
+<p> 改为</p>
+<ul>
+<li>test.zip.001</li>
+<li>test.zip.002</li>
+<li>test.zip.003</li>
+<li>test.zip.xxx</li>
+</ul>
+<p><strong>注意：</strong>务必将所有的分卷文件准备在同一文件夹内，分卷不能有缺失</p>
 ]]></content>
       <categories>
         <category>计算机从入门到入土</category>
@@ -15,7 +42,7 @@
   </entry>
   <entry>
     <title>莺系列整合包食用指南</title>
-    <url>/2024/09/29/%E3%80%90MC%E3%80%91%E8%8E%BA%E7%B3%BB%E5%88%97%E6%95%B4%E5%90%88%E5%8C%85%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</url>
+    <url>/2024/09/29/YingOfMc/</url>
     <content><![CDATA[<h2 id="下载整合包"><a href="#下载整合包" class="headerlink" title="下载整合包"></a>下载整合包</h2><blockquote>
 <p>在下载之前，你需要知道：整合包的命名极其统一以便于理解，因此选择一个符合自己需求的整合包极其重要。</p>
 </blockquote>
@@ -66,7 +93,7 @@
 <h3 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2.下载链接"></a>2.下载链接</h3><h5 id="·-频道下载"><a href="#·-频道下载" class="headerlink" title="· 频道下载"></a>· 频道下载</h5><p>频道会持续上传当前最新MC版本的最新整合包，有需求时会上传其他版本的文件。加入频道<a class="link"   href="https://pd.qq.com/s/fq416q5oo"  title="自由武装游击队频道加入链接">点此</a>。</p>
 <h5 id="·-网盘下载"><a href="#·-网盘下载" class="headerlink" title="· 网盘下载"></a>· 网盘下载</h5><p>网盘拥有所有的整合包资源：</p>
 <ul>
-<li>蓝奏云——<a class="link"   href="https://wled.lanzouv.com/b02eq0oah"  title="蓝奏云链接">点此下载（密码：banying）</a>：超过100Mb的文件需要分段解压，站内教程<a href="https://www.wled.top/2024/09/30/%E5%88%86%E5%8D%B7%E5%8E%8B%E7%BC%A9%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%8E%8B%E6%95%99%E7%A8%8B/" title="分段解压教程">点此</a></li>
+<li>蓝奏云——<a class="link"   href="https://wled.lanzouv.com/b02eq0oah"  title="蓝奏云链接">点此下载（密码：banying）</a>：超过100Mb的文件需要分段解压，站内教程<a href="../2024/09/30//Multi-partArchive/#%E8%A7%A3%E5%8E%8B">点此</a></li>
 <li>123网盘——<a class="link"   href="https://www.123pan.com/s/4i2djv-UcnRA"  title="123链接">点此下载（提取码：wled）</a></li>
 <li>天翼云盘——<a class="link"   href="https://cloud.189.cn/web/share?code=uimqmamYF3Un"  title="天翼云链接">点此下载（访问码：ctj7）</a></li>
 <li>夸克网盘——<a class="link"   href="https://pan.quark.cn/s/a6e41fc480dd"  title="夸克云链接">点此下载（提取码：T4Yq）</a></li>
@@ -147,46 +174,697 @@
       </tags>
   </entry>
   <entry>
-    <title>分卷压缩以及解压教程</title>
-    <url>/2024/09/30/%E5%88%86%E5%8D%B7%E5%8E%8B%E7%BC%A9%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%8E%8B%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<blockquote>
-<p>本教程以<a class="link"   href="https://www.7-zip.org/" >7-zip</a>为例，其他压缩软件原理相同。</p>
-</blockquote>
-<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><ul>
-<li>右键框选所有需要压缩的文件</li>
-<li>选择<em>7-zip-添加到压缩包</em></li>
-<li>在选择”分卷大小、字节”中按需选择，随后压缩即可</li>
-</ul>
-<hr>
-<h1 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h1><ul>
-<li>先将所有分卷文件全部重命名为统一名字</li>
-<li>在所有文件的后缀的后面加上”.”和三位编号</li>
-<li>右键001分卷，选择<em>提取到&#x2F;xxx文件夹</em></li>
-<li>例如：</li>
-<li>test.zip</li>
-<li>test2.zip</li>
-<li>test3.zip</li>
-<li>…</li>
-</ul>
-<p> 改为</p>
-<ul>
-<li><p>test.zip.001</p>
-</li>
-<li><p>test.zip.002</p>
-</li>
-<li><p>test.zip.003</p>
-</li>
-<li><p>test.zip.xxx</p>
-</li>
-<li><p><strong>注意：</strong>务必将所有的分卷文件准备在同一文件夹内，分卷不能有缺失</p>
-</li>
-</ul>
+    <title>Hello World——网站搭建成功~</title>
+    <url>/2024/09/18/hello-world/</url>
+    <content><![CDATA[<p>欢迎访问伴莺の小窝，这篇文章的诞生，意味着这个博客搭建得差不多啦~</p>
+<p>在网页左下角有我编辑网页时听的歌曲，不定期更新，默认关闭。如果有你想听的歌曲可以在<strong>此页面</strong>页面下评论</p>
 ]]></content>
       <categories>
         <category>计算机从入门到入土</category>
       </categories>
       <tags>
+        <tag>资讯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>莺纪元1.21.1版本适配更新</title>
+    <url>/2025/02/08/YoG1.21.1Update/</url>
+    <content><![CDATA[
+  <div class="note-large default">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>写在之前</p>
+
+    </div>
+    <div class="notel-content">
+      <p>关于莺纪元系列整合包的介绍，可以查看右上角的链接，你也可以点下面的按钮快速前往查看:</p>
+<p><a class="button  regular" href='https://www.wled.top/Ying' title='Ying of MC'><i class='fa-solid fa-play-circle'></i> Ying of MC</a></p>
+<p>本篇不再赘述介绍整合包，更多的是介绍本次更新的整合包中所引入的<del>其中一部分</del>关键模组该如何使用。其中无需我过度说明的内容就直接引用mcmod中的介绍带过<del>（那种没有特殊格式的小作文文本一定是）</del></p>
+
+    </div>
+  </div>
+
+<blockquote>
+<p>更新日志截至整合包版本<strong>V1.1-B25.2.12</strong>，更新页不一定同步最新版本…</p>
+</blockquote>
+<h2 id="少配置-改动小的模组"><a href="#少配置-改动小的模组" class="headerlink" title="少配置&amp;改动小的模组"></a>少配置&amp;改动小的模组</h2><h3 id="苹果皮-AppleSkin"><a href="#苹果皮-AppleSkin" class="headerlink" title="苹果皮 | AppleSkin"></a>苹果皮 | <em>AppleSkin</em></h3><blockquote>
+<p>（苹果皮）appleskin-fabric-mc1.21-3.0.6.jar</p>
+</blockquote>
+<p>添加了各种与食物和饥饿机制相关的 HUD 改进。</p>
+<p>要介绍这个模组，需要先了解MC的<font color=orange>饥饿</font>与<font color=brown>回血</font>机制：<a class="button  regular" href='https://zh.minecraft.wiki/w/%E9%A5%A5%E9%A5%BF#%E6%9C%BA%E5%88%B6' title='点我查看wiki'><i class='fa-solid fa-play-circle'></i> 点我查看wiki</a></p>
+<ul>
+<li><font color=orange>饥饿</font>：饥饿值（即鸡腿图标）的消耗与隐藏饱和度有关。在隐藏饱和度消耗完后，才会开始消耗饥饿值。但很明显的是，<strong>原版将饱和度隐藏了，而本模组正是干这个的，</strong>在原版饱和度之上，犹如一圈金边框覆盖的饥饿值即是隐藏饱和度。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/AS2.gif"
+                      alt="饱和度恢复预览"
+                ><br>同时，本模组还额外支持了<strong>食物吃下后可以恢复的饥饿值</strong>。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/AS1.gif"
+                      alt="饥饿值恢复预览"
+                ><br>另外，在食物预览时，也会直接<strong>显示物品可以恢复的值</strong>。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/AS3.webp"
+                      alt="食物数值预览"
+                ></li>
+<li><font color=brown >回血</font>：在<del>令人难受的</del>某个版本更新后，玩家想要回血，就和饥饿值有关系了<del>凸(艹皿艹 )</del>。本模组在显示饱和度的同时，会同时显示<strong>食物吃下后可以恢复的血量</strong>。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/AS4.gif"
+                      alt="血量恢复预览"
+                ></li>
+</ul>
+<h3 id="后台锁帧-Dynamic-FPS"><a href="#后台锁帧-Dynamic-FPS" class="headerlink" title="后台锁帧 | Dynamic FPS"></a>后台锁帧 | <em>Dynamic FPS</em></h3><blockquote>
+<p>（后台锁帧）dynamic-fps-3.7.7+minecraft-1.21.0-fabric.jar</p>
+</blockquote>
+<p>本模组会自动降低游戏在未聚焦（降至 1 FPS ）或最小化时（完全不渲染）的游戏帧数。</p>
+<p>本模组还修复了原版游戏的一个会使游戏在后台占用更多性能的 Bug ，同时使得游戏在重载资源包时不渲染任何东西.</p>
+<h3 id="垃圾桶-TrashSlot"><a href="#垃圾桶-TrashSlot" class="headerlink" title="垃圾桶 | TrashSlot"></a>垃圾桶 | <em>TrashSlot</em></h3><blockquote>
+<p>（垃圾桶）trashslot-fabric-1.21.1-21.1.2.jar</p>
+</blockquote>
+<p>为生存模式下的背包添加一个垃圾桶槽位。<br>最后一次放入垃圾槽位中的物品会被暂时保留（可取回），在下一个物品放入时被自动替换删除。为防止与其它模组的 GUI 互相遮挡，垃圾槽位可以通过鼠标按住拖动到界面的任意位置。关闭 GUI 界面会记录关闭前的位置，对于每种不同的 GUI 保存不同的显示状态和位置。移动到已有的 GUI 边缘时会自动贴靠，默认位置在背包栏底边最右侧。</p>
+<p>快捷键：</p>
+<ul>
+<li>鼠标悬停 + Delete：将物品移入垃圾槽 &amp; 在垃圾槽上可将其手动删除。</li>
+<li>Shift + Delete：删除所有相同物品（保留的数量上限不变）。</li>
+<li>T：隐藏&#x2F;显示垃圾桶，在按键绑定中可设定。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/TS.webp"
+                      alt="垃圾桶按键预览"
+                ></li>
+</ul>
+<h3 id="附魔描述-Enchantment-Descriptions"><a href="#附魔描述-Enchantment-Descriptions" class="headerlink" title="附魔描述 | Enchantment Descriptions"></a>附魔描述 | <em>Enchantment Descriptions</em></h3><blockquote>
+<p>（附魔描述）enchdesc-fabric-1.21.1-21.1.5.jar</p>
+</blockquote>
+<p>附魔描述是一个轻量级客户端模组，它在附魔的工具提示中增加了对附魔的描述。支持所有原版的附魔，有许多含有附魔的模组也以本模组的形式展示附魔描述。</p>
+<h3 id="客户端优化-Client-Tweaks"><a href="#客户端优化-Client-Tweaks" class="headerlink" title="客户端优化 | Client Tweaks"></a>客户端优化 | <em>Client Tweaks</em></h3><blockquote>
+<p>（客户端优化）clienttweaks-fabric-1.21.1-21.1.2.jar</p>
+</blockquote>
+<p>本模组集成了许多仅客户端的小调整，以求提升玩家的游玩体验，作者称之为“完善你们在Minecraft中的体验的秘诀”。<strong>本模组提供的所有调整都可以在配置文件或者游戏内模组选项界面中单独启用&#x2F;禁用与配置。</strong>为了避免过度改变机制导致的不适应，很多调整都是默认禁用的，因此请记得通览配置文件，启用你所想要的功能以获得最佳体验。</p>
+<p><code>（以下的“我”均指作者，“你”指玩家）</code></p>
+<ul>
+<li><strong>带方块时禁用副手火把</strong>：开启该选项之后，如果你的主手拿着方块，副手拿着火把，那么副手的火把将被禁止放置。因为在这种情况下，你绝对无意放置火把，只是刚好有东西挡在你要放置所持方块的位置上，而火把无空间要求而容易被放置，仅此而已。我为你们所有人修复了它。</li>
+<li><strong>空手时禁用副手火把</strong>：你知道尝试打开箱子，却误点击了旁边的方块的感觉吧？ 如果你的副手仍然有火把，这时就会把火把放置下来。现在你必须再次打掉这根火把。呵呵。此选项使得游戏仅允许在主手不空时放置火把。这可以作为上一选项的扩展而启用。</li>
+<li><strong>仅在带工具时启用副手火把</strong>：这是我认为最好的选项，但是它会过度改变原版行为，因此<strong>默认关闭</strong>。此选项仅允许在拿着工具时从副手放置火把。再也不会意外把火把放置下来了。</li>
+<li><strong>不使用最后一根火把</strong>：当使用动态光源时，此选项很有用。副手上的最后一个火把将无法放置，因此你可以始终随身携带一个光源。</li>
+<li><strong>隐藏自己的效果粒子</strong>：此选项将使客户端上你自己的药水效果粒子不再扎眼。其他玩家仍然能正常看到这些粒子效果，但它们再也不会挡着你的视野。<del>（嗯？我是不是加了两个这个功能的模组？）</del></li>
+<li><strong>隐藏副手物品</strong>：此选项将阻止你的副手物品被渲染，如果你不愿意看到左侧携带的火把，或者只是讨厌看到副手物品的话。这项调整也可以通过热键来切换。</li>
+<li><strong>隐藏盾牌，除非持有武器</strong>：除非你正拿着武器，否则将阻止副手的盾牌被渲染。具体来说，它必须是剑或斧，且其伤害大于3点（）生命值。不，你拿着的那根木棍不算是武器。</li>
+<li><strong>自动爬梯</strong>：我经常在矿井里弄出超长的梯子联通上下，但是，在攀爬过程中必须一直按住一个键真的烦。启用这项调整后，你爬梯子时只需要向上看，就会自动向上爬。这意味着你可以输入聊天内容或是执行其他操作，而不会立即回落并重置返回顶部的漫长旅程的全部进度。</li>
+<li><strong>禁用药水移位</strong>：当玩家带有药水效果时，防止物品栏向右移动。你可能从来没有注意到物品栏移位过，因为NEI物品管理器在1.7.10中做过这样的功能，夸克在1.10.2中做过这样的功能，然后还有一个名为 No Potion Shift 的模组可以做到。如果你没有安装它们，还有本模组能用！</li>
+<li><strong>关闭步行辅助</strong>：有些人讨厌步行辅助，包括我。但是有时候，那些步行辅助被绑定在我们想保留的超酷的物品上。这就难办了。此选项可以只禁用步行辅助功能的部分。支持使用可配置的热键进行切换。</li>
+<li><strong>主设置中的主音量滑块</strong>：对，新的音量设置屏幕很酷。但是你还是不能在主设置屏幕上保留主音量滑块，不是吗？经过“多年”的研究，我得出的结论是可以，所以我把它加了回来。为你节省了一次点击，不用谢。</li>
+<li><strong>主设置中的音乐音量滑块</strong>：用户研究<del>（是编造的）</del>表明，一般的玩家经常进行关闭音乐的操作，而不是更改主音量的操作。因此，我们经验丰富的量子程序员团队也将音乐音量滑块带回了主设置屏幕。</li>
+</ul>
+<h3 id="越肩视角-Shoulder-Surfing"><a href="#越肩视角-Shoulder-Surfing" class="headerlink" title="越肩视角 | Shoulder Surfing"></a>越肩视角 | <em>Shoulder Surfing</em></h3><blockquote>
+<p>（越肩视角）ShoulderSurfing-Fabric-1.21.1-4.9.1.jar</p>
+</blockquote>
+<p>模组为原版的F5按键增加了额外一个视角，简称越肩视角，默认情况下越肩视角中玩家位于屏幕中偏左的位置。<br>快捷键：</p>
+<ul>
+<li>←、→、PageUp、PageDown：调整摄像机位置。</li>
+<li>↑、↓：调整摄像机远近。</li>
+<li>O：切换玩家位置。</li>
+</ul>
+<p>这些快捷键都可以在按键绑定中修改。此外，按键绑定中还有一个<strong>默认未绑定</strong>的按键：Toggle perspective——可以直接切换第一人称和越肩视角，这样就无需连按F5跳过原版第三人称和第二人称视角。直接把Toggle perspective改成F5也是可以的。</p>
+<h3 id="翅膀盔甲快捷切换-Elytra-Chestplate-Swapper"><a href="#翅膀盔甲快捷切换-Elytra-Chestplate-Swapper" class="headerlink" title="翅膀盔甲快捷切换 | Elytra&#x2F;Chestplate Swapper"></a>翅膀盔甲快捷切换 | <em>Elytra&#x2F;Chestplate Swapper</em></h3><blockquote>
+<p>（鞘翅护甲切换）elytra-chestplate-swapper-1.3.0-MC1.21.jar</p>
+</blockquote>
+<p>默认绑定的按键是 ~ 键，可在游戏选项中进行更改。</p>
+<p><font color=red>注意：一些服务器可能不允许这个模组的行为，在服务器上使用它之前，应先检查服务器的规则，作者不对不当使用此模组的后果负责。</font></p>
+<h3 id="隐藏盔甲-Show-Me-Your-Skin"><a href="#隐藏盔甲-Show-Me-Your-Skin" class="headerlink" title="隐藏盔甲 | Show Me Your Skin!"></a>隐藏盔甲 | <em>Show Me Your Skin!</em></h3><blockquote>
+<p>（隐藏盔甲）show-me-your-skin-1.11.3+1.21.jar</p>
+</blockquote>
+<p>本模组允许你自定义盔甲渲染。你可以使用快捷键<strong>默认 K</strong>或模组菜单来打开配置。</p>
+<p>可配置的选项包括：</p>
+<ul>
+<li>单个盔甲透明度。</li>
+<li>鞘翅是否显示。</li>
+<li>盔甲附魔效果是否显示。</li>
+<li>玩家名称是否显示。</li>
+<li>战斗时是否显示。</li>
+<li>每一名玩家的显示设置。</li>
+<li>盾牌附魔效果是否显示。</li>
+<li>在战斗中是否自动禁用透明盔甲。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/SM.webp"
+                      alt="隐藏盔甲预览"
+                ></li>
+</ul>
+<h3 id="相似物品-ItemSwapper"><a href="#相似物品-ItemSwapper" class="headerlink" title="相似物品 | ItemSwapper"></a>相似物品 | <em>ItemSwapper</em></h3><blockquote>
+<p>（相似物品）itemswapper-fabric-0.7.6-mc1.21.jar</p>
+</blockquote>
+<p>本模组物品栏系统进行了调整。添加了一个通过使用快捷键<strong>默认 R</strong>触发的物品切换界面。根据主手中的物品，界面将显示不同的选项。</p>
+<p>通过移动鼠标或使用滚轮查看列表在不同的选项之间切换。释放快捷键将把主界面上的物品与所选择的物品进行交换。在物品切换界面中，在选择一个物品时按下鼠标中键可以切换到相关物品。</p>
+<p>功能：</p>
+<ul>
+<li>在物品栏中的物品之间进行切换。</li>
+<li>在空手时显示物品栏。</li>
+<li>在物品栏中的潜影盒中切换物品（服务器需支持）。</li>
+<li>块状托盘的物品切换界面。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/IS3.webp"
+                      alt="托盘切换预览"
+                ></li>
+<li>动态物品列表，如工具、食物、药水等。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/IS1.webp"
+                      alt="托盘切换预览"
+                ></li>
+</ul>
+<h3 id="帽子-Everything-as-a-Hat"><a href="#帽子-Everything-as-a-Hat" class="headerlink" title="帽子 | Everything as a Hat"></a>帽子 | <em>Everything as a Hat</em></h3><blockquote>
+<p>（帽子）everythingasahat-0.4.0-1.21.jar</p>
+</blockquote>
+<p>本模组主要作用于客户端，在多人游戏中必须处于创造模式时才能使用，但在自己的存档中游玩时除旁观者模式外所有模式都可用。</p>
+<p>使用方法：直接在背包界面将你想要戴在头上的物品放在头盔槽位或者主手手持它按下“H”键。</p>
+<h3 id="坐-Sit"><a href="#坐-Sit" class="headerlink" title="坐 | Sit!"></a>坐 | <em>Sit!</em></h3><blockquote>
+<p>（坐）sit!-1.2.1+1.21-1.21.1.jar</p>
+</blockquote>
+<p>本模组在原版 Minecraft 中添加了坐下的功能。默认情况下可以坐在楼梯、台阶和地毯上。</p>
+<h3 id="更好的编辑书-Scribble"><a href="#更好的编辑书-Scribble" class="headerlink" title="更好的编辑书 | Scribble"></a>更好的编辑书 | <em>Scribble</em></h3><blockquote>
+<p>（更好的编辑书）Scribble-1.5.0+mc1.21-fabric.jar</p>
+</blockquote>
+<p>本模组可让玩家编辑图书更轻松。它添加了一些按钮，可以轻松设置文本格式、更改颜色、为任何重要语句添加下划线等等。在服务器上，每个人都可以看到这些颜色，即使他们没有安装此模组。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/SC.webp"
+                      alt="编辑书预览"
+                ></p>
+<h3 id="合成预测-CraftSense"><a href="#合成预测-CraftSense" class="headerlink" title="合成预测 | CraftSense"></a>合成预测 | <em>CraftSense</em></h3><blockquote>
+<p>（合成预测）craftsense-1.21-v1.1.5.jar</p>
+</blockquote>
+<p>本模组可根据玩家之前的合成习惯对配方做出预测和建议，从而帮助玩家进行合成，从而使制作过程更快更轻松。可以通过按键绑定来开启或关闭，<strong>默认 K</strong>。</p>
+<ul>
+<li><strong>合成预测</strong>：根据可用物品和最近的制作模式获取制作配方建议。当玩家将物品放入合成台中时，本模组将分析玩家背包的内容并提供制作结果的实时建议。只需单击建议的配方输出物品即可自动制作它，并将物品放入背包中。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CS1.webp"
+                      alt="预测预览"
+                ></li>
+<li><strong>合成记忆</strong>：本模组会记住玩家合成的最后一个物品。如果有材料，它会自动出现在合成输出槽中，只需单击一下即可立即合成；</li>
+<li><strong>基于类别的跟踪</strong>：本模组按类别分类物品，跟踪玩家最常合成的物品，以便在未来做出更好的预测；</li>
+<li><strong>屏幕显示</strong>：虚化的物品会显示在合成台中，通过直观地指示以完成建议的配方；</li>
+<li><strong>模组兼容</strong>：可与其他模组的配方配合使用；</li>
+<li><strong>环境意识</strong>：如果玩家的血量状况较差且没有武器但拥有所需的材料，本模组将优先考虑制作武器。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CS2.webp"
+                      alt="预测武器预览"
+                ></li>
+<li><strong>合成统计</strong>：<strong>默认 J</strong> 可访问显示合成模式数据统计屏幕。将鼠标悬停在图表元素上可查看每个类别中制作合成的详细数据。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CS3.webp"
+                      alt="预测统计预览"
+                ></li>
+</ul>
+<h3 id="传送-Teleport-Commands"><a href="#传送-Teleport-Commands" class="headerlink" title="传送 | Teleport Commands"></a><del>传送 | <em>Teleport Commands</em></del></h3><blockquote>
+<p><font color=red>已删除：V1.1-B25.2.12</font></p>
+</blockquote>
+<h3 id="物品描述-Yapping-Tooltips"><a href="#物品描述-Yapping-Tooltips" class="headerlink" title="物品描述 | Yapping Tooltips"></a>物品描述 | <em>Yapping Tooltips</em></h3><blockquote>
+<p>（物品描述）[1.21] Yapping Tooltips-fabric-1.2.2.jar</p>
+</blockquote>
+<p>本模组为大多数原版物品添加了物品提示，光标移到物品上<strong>长按Shift</strong>即可显示。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/YT.gif"
+                      alt="描述预览"
+                ></p>
+<h3 id="快速换画-Cycle-Paintings"><a href="#快速换画-Cycle-Paintings" class="headerlink" title="快速换画 | Cycle Paintings"></a>快速换画 | <em>Cycle Paintings</em></h3><blockquote>
+<p>（快速换画）cyclepaintings-1.21.1-3.6.jar</p>
+</blockquote>
+<p>本模组可以在玩家<strong>主手持画时右击</strong>墙上的画即可切换画的内容，<strong>潜行键+右键</strong>可以向上切换画的内容，即以前出现过的画。</p>
+<h3 id="键盘手势-Inventory-Essentials"><a href="#键盘手势-Inventory-Essentials" class="headerlink" title="键盘手势 | Inventory Essentials"></a>键盘手势 | <em>Inventory Essentials</em></h3><blockquote>
+<p>（键盘手势）inventoryessentials-fabric-1.21.1-21.1.2.jar</p>
+</blockquote>
+<ul>
+<li><strong>按住 Ctrl+单击左键</strong>一个物品，只快速移动一个，而不是一组；</li>
+<li><strong>按住 Shift+Ctrl+单击左键</strong>一个物品，快速移动所有该物品；</li>
+<li><strong>按住 Shift+左键&#x2F;右键</strong>，鼠标在物品上滑动，可以快速移动它们，不必单独点击每个物品；</li>
+<li>在客户端和服务端上是可选的，只有想用它的人才需要安装它。如果服务端没装，安装了本 模组的客户端仍然可以使用。</li>
+</ul>
+<h2 id="多配置-改动大的模组"><a href="#多配置-改动大的模组" class="headerlink" title="多配置&amp;改动大的模组"></a>多配置&amp;改动大的模组</h2><h3 id="鼠标手势-Mouse-Tweaks"><a href="#鼠标手势-Mouse-Tweaks" class="headerlink" title="鼠标手势 | Mouse Tweaks"></a>鼠标手势 | <em>Mouse Tweaks</em></h3><blockquote>
+<p>（鼠标手势）MouseTweaks-fabric-mc1.21-2.26.jar</p>
+</blockquote>
+<p>本模组是一个经典的鼠标手势模组，它取代了标准的鼠标右键拖动机制，添加了两个新的鼠标左键拖动机制和使用滚轮快速移动物品的能力。</p>
+<p>以下配置可在<em>根目录&#x2F;config&#x2F;MouseTweaks.cfg</em>中修改</p>
+<h4 id="右键手势"><a href="#右键手势" class="headerlink" title="右键手势"></a>右键手势</h4><blockquote>
+<p>RMBTweak&#x3D;1</p>
+</blockquote>
+<p>启用后将替换标准机制——如果你多次拖过一个槽位，一个<font color=red>物品将被多次放置</font>在那里。</p>
+<ol>
+<li>选择一组物品，<strong>按住鼠标右键</strong><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT1.webp"
+                      alt="手势教程"
+                ></li>
+<li>在物品栏<strong>拖动鼠标</strong><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT2.webp"
+                      alt="手势教程"
+                ></li>
+<li>在现有物品的上方拖动鼠标，以在同一槽位多次放置此物品<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT3.webp"
+                      alt="手势教程"
+                ></li>
+</ol>
+<h4 id="左键手势"><a href="#左键手势" class="headerlink" title="左键手势"></a>左键手势</h4><div class="tabs" id="tab-mt-l"><ul class="nav-tabs"><li class="tab active"><a class="#mt-l-1">有物品</a></li><li class="tab"><a class="#mt-l-2">无物品</a></li></ul><div class="tab-content"><div class="tab-pane active" id="mt-l-1"><blockquote>
+<p>LMBTweakWithItem&#x3D;1</p>
+</blockquote>
+<p>快速拾取或移动相同的物品。</p>
+<ol>
+<li><strong>按住鼠标左键</strong>拾取一个物品<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT4.webp"
+                      alt="手势教程"
+                ></li>
+<li>在物品栏上<strong>拖动鼠标</strong>，所有经过的相同物品就会被合并到一起<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT5.webp"
+                      alt="手势教程"
+                ></li>
+<li><strong>按住Shift并拖动鼠标</strong>，所有经过的相同物品就会被“按住 Shift 并单击”，即放到物品栏中<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT6.webp"
+                      alt="手势教程"
+                ></li>
+</ol></div><div class="tab-pane" id="mt-l-2"><blockquote>
+<p>LMBTweakWithoutItem&#x3D;1</p>
+</blockquote>
+<p>快速将物品移动到另一个物品栏中。<font color=gray>（操作期间鼠标不可见是正常现象）</font></p>
+<ol>
+<li>在空的物品栏中，<strong>按住 Shift+鼠标左键</strong><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT7.webp"
+                      alt="手势教程"
+                ></li>
+<li>在物品栏上<strong>拖动鼠标</strong>，物品就会被“按住 Shift 并单击”，即将所有鼠标经过的物品放到物品栏中<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MT8.webp"
+                      alt="手势教程"
+                ></li>
+</ol></div></div></div>
+
+<h4 id="滚轮手势"><a href="#滚轮手势" class="headerlink" title="滚轮手势"></a>滚轮手势</h4><blockquote>
+<p>WheelTweak&#x3D;1</p>
+</blockquote>
+<p>滚动鼠标滚轮以在物品栏之间快速移动物品。当你在一组物品上向下滚动时，其物品将被一个一个地移出你的物品栏。当你向上滚动时，物品将从另一个物品栏移入其中你的物品栏。</p>
+<div class="tabs" id="tab-mt-m"><ul class="nav-tabs"><li class="tab active"><a class="#mt-m-1">存放位置</a></li><li class="tab"><a class="#mt-m-2">滚动方向</a></li></ul><div class="tab-content"><div class="tab-pane active" id="mt-m-1"><blockquote>
+<p>WheelSearchOrder&#x3D;1</p>
+</blockquote>
+<p>当你向上滚动时，可以自定义物品被移入物品栏时的位置，配置为：</p>
+<p>0——将从第一个到最后一个槽位搜索物品</p>
+<p>1——将从最后一个到第一个槽位</p></div><div class="tab-pane" id="mt-m-2"><blockquote>
+<p>WheelScrollDirection&#x3D;0</p>
+</blockquote>
+<p>配置为：</p>
+<p>0——默认滚动操作。</p>
+<p>1——反转默认滚动操作。即向下滚动会拉动物品，向上滚动会推动物品</p>
+<p>2——启用物品栏位置感知滚动：</p>
+<ul>
+<li>如果物品在所选槽的上方，向上滚动将把物品推入其他物品栏中</li>
+<li>如果物品在所选槽的下方，则从其他物品栏中拉出物品。反之则是向下滚动。</li>
+</ul></div></div></div>
+<h3 id="合成辅助-Crafting-Tweaks"><a href="#合成辅助-Crafting-Tweaks" class="headerlink" title="合成辅助 | Crafting Tweaks"></a>合成辅助 | <em>Crafting Tweaks</em></h3><blockquote>
+<p>（合成辅助）craftingtweaks-fabric-1.21.1-21.1.5.jar</p>
+</blockquote>
+<p>提供三个按钮和一些快捷键，用于简化和改善一些合成方式。</p>
+<ul>
+<li>第一个按钮为<strong>顺时针</strong>旋转工作台内的物品，按住 Shift 时<strong>逆时针</strong>旋转。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CT1.gif"
+                      alt="合成预览"
+                ></li>
+<li>第二个按钮为<strong>均分</strong>工作台内的物品，<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CT2.gif"
+                      alt="合成预览"
+                >按住 Shift 时<strong>填满</strong>工作台。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CT3.gif"
+                      alt="合成预览"
+                ></li>
+<li>第三个按钮为<strong>取回</strong>工作台内的物品到玩家身上，按住 Shift 时<strong>强制取回</strong>物品。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CT4.gif"
+                      alt="描述预览"
+                ></li>
+</ul>
+<p>默认按一下 <strong>Tab 键</strong>切换到最后一个使用过的合成表。</p>
+<h3 id="标记-Ping-Wheel"><a href="#标记-Ping-Wheel" class="headerlink" title="标记 | Ping Wheel"></a>标记 | <em>Ping Wheel</em></h3><blockquote>
+<p>（标记）Ping-Wheel-1.10.1-fabric-1.21.1.jar</p>
+</blockquote>
+<p>本模组允许玩家发送信号标记，多人游戏时<font color=red>处于同一频道的玩家可共享标记点</font>。默认标记按键为<strong>鼠标按键 5</strong>。</p>
+<p>调整相关配置须使用指令，<strong>输入&#x2F;pingwheel help 命令</strong>可查看详情。</p>
+<h3 id="EMI"><a href="#EMI" class="headerlink" title="EMI"></a>EMI</h3><blockquote>
+<p>（EMI）emi-1.1.19+1.21.1+fabric.jar</p>
+</blockquote>
+<p>EMI是一个功能丰富、易于使用的物品及配方管理器，它带来了许多新功能，并优化了用户体验。</p>
+<p>EMI 带来了什么？当然，EMI 拥有你一开始就期待的<del>JEI&amp;REI</del>所有功能，如查看配方、收藏物品、搜索等。但 EMI 又有哪些新功能呢？</p>
+<ul>
+<li>可合成模式，用于<strong>快速合成</strong>你能合成的任何配方，可通过切换或作为空搜索的配置使用；</li>
+<li><strong>配方</strong>可与物品一起<strong>收藏</strong>，也可通过按键来快速合成；</li>
+<li><strong>配方树</strong>可分解复杂合成的消耗，显示<strong>每个步骤</strong>、所需的<strong>原材料</strong>和剩余材料；</li>
+<li><strong>配方树合成模式</strong>，分析完成一项任务所需的材料和步骤，包括侧边栏中的<strong>合成收藏夹</strong>，你可以用它来<strong>完成每一步</strong>，精确到你需要的材料数量；<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/EMI1.webp"
+                      alt="EMI教程"
+                ></li>
+<li>智能显示<strong>标签</strong>，包括转译、模型和提示框，让你对材料一目了然，例如“木板”，而不是在游戏中缓慢地循环每种木板；</li>
+<li>智能分解基础消耗，让配方树自动分解为原材料，并允许你在游戏过程中定义自己的<strong>默认配方</strong>；</li>
+<li>配方、标签和材料的<strong>提示框</strong>，可显示将合成的物品和材料的消耗；<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/EMI2.webp"
+                      alt="EMI教程"
+                ></li>
+<li>可通过绑定<strong>直接快速合成至你的物品栏或光标中</strong>，一次合成一个或多个，可以和收藏配方或可合成模式结合使用；</li>
+</ul>
+<p>更多功能配置可在模组菜单(<em>Modemenu</em>)和EMI配置中查找并修改。</p>
+<h4 id="附属："><a href="#附属：" class="headerlink" title="附属："></a><font color=blue>附属</font>：</h4><div class="tabs" id="tab-emi-dlc"><ul class="nav-tabs"><li class="tab active"><a class="#emi-dlc-1">战利品</a></li><li class="tab"><a class="#emi-dlc-2">矿物分布</a></li><li class="tab"><a class="#emi-dlc-3">工作方块</a></li><li class="tab"><a class="#emi-dlc-4">附魔描述</a></li></ul><div class="tab-content"><div class="tab-pane active" id="emi-dlc-1"><blockquote>
+<p>（EMI-战利品）emi_loot-0.7.5+1.21+fabric.jar</p>
+</blockquote>
+<p>显示宝箱，方块和生物的战利品表，宝箱战利品按百分比排序。</p>
+<p>方块&#x2F;生物战利品表显示方块&#x2F;生物可能的掉落物，根据获得该掉落物所需的任何特定情况（精准采集、仅当生物着火时等）分为不同的类别。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/EMI3.webp"
+                      alt="EMI教程"
+                ></p></div><div class="tab-pane" id="emi-dlc-2"><blockquote>
+<p>（EMI-矿物分布）emi_ores-1.2+1.21.1+fabric.jar</p>
+</blockquote>
+<p>使用本模组，可以从 EMI 里查看矿石生成信息，它可以显示有关矿石在世界上生成的信息，其中包括：</p>
+<ul>
+<li>Y 轴分布；</li>
+<li>矿脉大小；</li>
+<li>每个矿脉的最大矿物数量；</li>
+<li>可以生成的生物群系。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/EMI4.webp"
+                      alt="EMI教程"
+                ><br>客户端和服务端都需要安装才能运行，如果只有客户端或服务端，它将不会生效。</p></div><div class="tab-pane" id="emi-dlc-3"><blockquote>
+<p>（EMI-工作方块）EMIProfessions-fabric-1.21.1-1.0.2.jar</p>
+</blockquote>
+<p>此模组为 EMI 新增了新功能，可让使用者确定每个村民职业需要哪些工作方块。可以在绿宝石或村民刷怪蛋上使用 EMI 的快捷键<strong>默认 U</strong>，它会显示所有村民职业的列表。</p></div><div class="tab-pane" id="emi-dlc-4"><blockquote>
+<p>（EMI-附魔描述）emi_enchanting-0.1.2+1.21.jar</p>
+</blockquote>
+<p>本模组是 EMI 的附属，可显示有关附魔的各种信息。</p>
+<ul>
+<li>基本摘要信息：这个附魔是诅咒吗？此附魔是否可通过村民交易获得？它的最高等级是多少？</li>
+<li>生效的物品：列出当前所选附魔可以附魔的所有物品。右键单击一个物品来查看该物品可以拥有的所有有效附魔。</li>
+<li>附魔说明：使用与同名模组相同的格式，如：enchantment.namespace.path.desc。</li>
+<li>排查冲突：列出与当前所选附魔冲突的附魔。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/EMI5.webp"
+                      alt="EMI教程"
+                ></p></div></div></div>
+
+<h3 id="模组配置-Configured"><a href="#模组配置-Configured" class="headerlink" title="模组配置 | Configured"></a><del>模组配置 | <em>Configured</em></del></h3><blockquote>
+<p><font color=red>已删除：V1.1-B25.2.12</font></p>
+</blockquote>
+<h3 id="模组菜单-Mod-Menu"><a href="#模组菜单-Mod-Menu" class="headerlink" title="模组菜单 | Mod Menu"></a>模组菜单 | <em>Mod Menu</em></h3><blockquote>
+<p>（模组菜单）modmenu-11.0.3.jar</p>
+</blockquote>
+<p>此模组添加了一个可用于查看模组的列表<font color=gray><em>（类似于 Forge 的模组菜单界面）</em></font>。</p>
+<ul>
+<li>列表支持排序与搜索，并且被标记为前置库的模组可被隐藏<font color=gray>（注意：如果你打开了显示前置 Mod 选项，主界面左下角的 Mod 总数会发生变化<del>这个小细节真是太细了</del>）</font>；</li>
+<li>仅客户端及 API 类模组可被以特殊标签标记；</li>
+<li>单击一个模组后，其主页、相关信息以及反馈链接都会被显示出来；</li>
+<li>列表支持对可配置模组的配置；</li>
+<li>还可以直接将模组拖进菜单中加入，<font color=red>需要重启生效</font>；</li>
+<li>联网时根据 Modrinth 检测 Mod 是否有更新并提示；</li>
+<li>可直接打开模组文件夹。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/MM.webp"
+                      alt="摸粗菜单"
+                ></li>
+</ul>
+<h3 id="箱子显示-FindMe"><a href="#箱子显示-FindMe" class="headerlink" title="箱子显示 | FindMe"></a>箱子显示 | <em>FindMe</em></h3><blockquote>
+<p>（箱子显示）findme-3.3.1-fabric.jar</p>
+</blockquote>
+<p>本模组可让玩家通过按键查找附近容器中的物品。为此，玩家只需将鼠标悬停在物品上并按下<strong>默认 Y 键</strong>，云粒子就会在拥有该物品的容器中生成，范围可在配置（默认为 8 格）中进行修改。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/FM.gif"
+                      alt="箱子显示"
+                ></p>
+<h3 id="箱子追踪-Chest-Tracker"><a href="#箱子追踪-Chest-Tracker" class="headerlink" title="箱子追踪 | Chest Tracker"></a>箱子追踪 | <em>Chest Tracker</em></h3><blockquote>
+<p>（箱子追踪）chesttracker-2.6.7+1.21.1.jar</p>
+</blockquote>
+<p>本模组可以缓存已打开的箱子内的物品信息，后续通过按下“打开箱子追踪器 GUI”按键，可以打开物品列表 GUI。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CT1.webp"
+                      alt="箱子追踪"
+                ><br>点击某个物品就可以在世界中将存放其的容器标记出来，不止是箱子、熔炉、漏斗，只要是容器都可以。在物品栏中对着物品按<strong>默认 Y 键</strong>，也可以实现上图中高亮的效果。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CT2.webp"
+                      alt="箱子追踪"
+                ></p>
+<h3 id="动态准星-Dynamic-Crosshair"><a href="#动态准星-Dynamic-Crosshair" class="headerlink" title="动态准星 | Dynamic Crosshair"></a>动态准星 | <em>Dynamic Crosshair</em></h3><blockquote>
+<p>（动态准星）dynamiccrosshair-9.3+1.21.1-fabric.jar</p>
+</blockquote>
+<p>本模组可依据当前游戏内容<strong>自动隐藏或改变准星形状</strong>。</p>
+<p>功能：</p>
+<ul>
+<li>在不看任何东西时自动隐藏准星；<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/DC1.webp"
+                      alt="动态准星"
+                ></li>
+<li>根据准星瞄准物显示&#x2F;隐藏准星；</li>
+<li>根据手持物品自动切换显示&#x2F;隐藏准星；</li>
+<li>在多种情况下自动改变准外观风格；<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/DC2.webp"
+                      alt="动态准星"
+                ></li>
+<li>可高度配置。</li>
+</ul>
+<h3 id="投影-Litematica"><a href="#投影-Litematica" class="headerlink" title="投影 | Litematica"></a>投影 | <em>Litematica</em></h3><blockquote>
+<p>（投影）litematica-fabric-1.21-0.19.54.jar</p>
+</blockquote>
+<p>本模组可以将你建造的结构保存为一个结构文件，你可以使用本模组来通过结构文件创建一个全息蓝图，通过木棍（默认使用的操作工具）可以移动全息蓝图的放置位置。</p>
+<p>按下菜单键**默认 M <strong>后弹出主菜单。按下</strong> M + C **打开配置菜单。</p>
+<p>通过<font color=green>简易放置模式</font>可以实现在建造蓝图时自动切换到对应的建筑材料，极大的方便玩家在任何世界中轻松建造细节复杂的建筑、电路&#x2F;体积压缩密集的红石机器。</p>
+<p>在你拥有指令权限时，你可以直接通过快速粘贴（热键：executeOperation）来实现对建筑蓝图的快速建造<font color=gray>（类似于 WorldEdit 中的 &#x2F;&#x2F;paste 指令）</font><strong>默认 &#x2F;setblock 指令</strong>，你可以在 Litematica 的“设置-通用”中修改用于快速粘贴的指令。<del>这里需要注意的一点是使用 setblock 指令不会带上方块在投影中的 NBT</del><font color=gold>该问题已在其附属模组中解决</font>。</p>
+<p>在服务端和客户端单人存档同时装有该模组时，会不使用 &#x2F;setblock 的方式，而是<strong>直接放置</strong>，并且方块内会包括投影中的 NBT。关于这一点不同的是<font color=red>放置出来的机器会更加<strong>稳定</strong>，不会造成方块的更新</font>。</p>
+<p>兼容性信息：</p>
+<ul>
+<li><strong>不需要</strong>服务器装载该模组：你只需要在自己的客户端内装载本模组就可以使用它的绝大部分功能，部分功能不能实现的原因是因为服务器对你的权限有限制（例如：对 setblock 指令使用的限制）。</li>
+<li>在开启不兼容的光影时投影会显示错误（例如全息蓝图的闪烁、消失和全黑等），关掉光影后显示正常。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/L1.webp"
+                      alt="投影"
+                ></li>
+</ul>
+<h4 id="结构文件："><a href="#结构文件：" class="headerlink" title="结构文件："></a>结构文件：</h4><div class="tabs" id="tab-l-f"><ul class="nav-tabs"><li class="tab active"><a class="#l-f-1">文件格式</a></li><li class="tab"><a class="#l-f-2">保存位置</a></li><li class="tab"><a class="#l-f-3">注意事项</a></li></ul><div class="tab-content"><div class="tab-pane active" id="l-f-1"><ul>
+<li>文件的保存格式：.litematic 文件；</li>
+<li>支持读取的文件格式：.litematic 文件、.schematic 文件、.nbt 文件<font color=gray>（原版的结构文件 Vanilla Structure）</font>；</li>
+<li>可能不支持读取的文件格式：.schem 文件<font color=gray>（在某些版本中无法读取）</font>。</li>
+</ul></div><div class="tab-pane" id="l-f-2"><p>版本隔离问题——</p>
+<ul>
+<li>关闭版本隔离：.minecraft&#x2F;schematics</li>
+<li>开启版本隔离：.minecraft&#x2F;versions&#x2F;&lt;游戏版本名称&gt;&#x2F;schematics<font color=red>（整合包默认会开启版本隔离）</font></li>
+</ul>
+<p>当然，在你选择加载结构文件时，本模组会先显示默认的保存文件夹目录。保存的位置支持创建文件夹，即在 schematics 文件夹下支持创建文件夹存放结构文件。</p></div><div class="tab-pane" id="l-f-3"><ol>
+<li>如果你从类似 Minecraft Schematics 或者 Syncmatica 网站下载了别人的蓝图，<font color=red>请确保没有任何病毒在内</font><del>（是的投影文件也会有病毒）</del>；</li>
+<li>除了 .litematic 格式的结构文件，其他格式的结构文件（如 .nbt 或者 .schematic 等）可能支持不佳而出现结构文件无法加载的情况，取决于结构文件本身适用的版本；</li>
+<li>已经加载的投影可以热重载，点击刷新投影即可；</li>
+</ol></div></div></div>
+
+<h4 id="附属：-1"><a href="#附属：-1" class="headerlink" title="附属："></a><font color=blue>附属</font>：</h4><div class="tabs" id="tab-l-dlc"><ul class="nav-tabs"><li class="tab active"><a class="#l-dlc-1">NBT修复</a></li><li class="tab"><a class="#l-dlc-2">打印</a></li><li class="tab"><a class="#l-dlc-3">共享图</a></li></ul><div class="tab-content"><div class="tab-pane active" id="l-dlc-1"><p>本模组能够在服务器中粘贴方块&#x2F;实体的 NBT 数据。</p>
+<p>原理是通过使用一个自定义的消息数据包来绕过聊天长度的限制，所以客户端只需在 &#x2F;setblock 或 &#x2F;summon 命令中添加实体 NBT 标签。</p>
+<p>此外，<del>如果设置中存在这俩选项的话</del>还需要把 commandUseWorldEdit 设置为false，把 pasteNbtRestoreBehavior 设置为 None，这样这个 Mod 才能工作。</p></div><div class="tab-pane" id="l-dlc-2"><p>本模组允许玩家通过在投影中放置正确的方块来更快地建造大型结构。</p>
+<p>使用打印机非常简单：默认情况下可以通过<strong>按 CAPS_LOCK 键</strong>来切换该功能。</p>
+<p>要配置打印速度和范围等，请打开 Litematica 的设置，然后切换到“通用”选项卡，打印机的配置可以在页面底部找到。</p>
+<p>同时也可以在“热键”选项卡下重新绑定打印切换。默认情况下**按住 V **也会打印，无论打印机是打开还是关闭。</p>
+<p>以下方块&#x2F;实体的添加尚未实现，本模组<font color=red>将跳过它们</font>而不会错误地放置它们：</p>
+<ul>
+<li>方块：砂轮、放在地上的各种头颅、告示牌、发光地衣、藤蔓；</li>
+<li>实体：物品展示框、盔甲架。</li>
+</ul></div><div class="tab-pane" id="l-dlc-3"><p>本模组可以使你在服务器（服务器也需安装）中与其他安装了模组的玩家一起共享原理图及其位置。</p>
+<ul>
+<li>在安装后可以在投影投影模组的界面中打开此模组的相应菜单。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/L2.webp"
+                      alt="投影"
+                ></li>
+<li>加载原理图后进入编辑原理图界面找到已经加载的原理图，按下 Shift 并点击 Share 上传到服务器即可与其他玩家共享。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/L3.webp"
+                      alt="投影"
+                ></li>
+<li>其他玩家需要在投影界面打开 View Syncmatica。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/L4.webp"
+                      alt="投影"
+                ></li>
+<li>然后单击 Download 按钮，即可加载原理图。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/L5.webp"
+                      alt="投影"
+                ></li>
+<li>如想要卸载，单击 Unload 即可。<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/L6.webp"
+                      alt="投影"
+                ></li>
+</ul></div></div></div>
+
+<h3 id="聊天工具箱-Chat-Tools"><a href="#聊天工具箱-Chat-Tools" class="headerlink" title="聊天工具箱 | Chat Tools"></a>聊天工具箱 | <em>Chat Tools</em></h3><blockquote>
+<p>（聊天工具箱）chattools-1.21.1-v2.3.8.jar</p>
+</blockquote>
+<p>该模组可为玩家提供众多实用聊天功能且支持高度个性化，请在配置页面进行配置，配置页面启动方式：</p>
+<ul>
+<li>通过指令<strong>输入&#x2F;chattools opengui</strong>打开</li>
+<li>在模组菜单（modmenu）中打开该模组配置界面</li>
+</ul>
+<div class="tabs" id="tab-ct"><ul class="nav-tabs"><li class="tab active"><a class="#ct-1">基本</a></li><li class="tab"><a class="#ct-2">聊天提醒</a></li><li class="tab"><a class="#ct-3">注入聊天</a></li><li class="tab"><a class="#ct-4">快捷发言</a></li><li class="tab"><a class="#ct-5">聊天气泡</a></li><li class="tab"><a class="#ct-6">自动响应</a></li></ul><div class="tab-content"><div class="tab-pane active" id="ct-1"><p>包含模组基本设定。</p>
+<ul>
+<li><strong>显示聊天时间</strong> | <em>Show Timestamp</em>：在消息前添加一个时间戳<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT1.webp"
+                      alt="聊天功能"
+                ></li>
+<li><strong>隐藏自己昵称</strong> | <em>Nickname Hider</em>：在自己视角里隐藏自己的名称<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT2.webp"
+                      alt="聊天功能"
+                ></li>
+<li><strong>最大聊天记录数量</strong> | <em>Max History Length</em>：调整游戏保留聊天记录的上限<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT3.webp"
+                      alt="聊天功能"
+                ></li>
+<li><strong>翻译器</strong> | <em>Translator</em></li>
+</ul></div><div class="tab-pane" id="ct-2"><p>各种聊天提醒功能。</p>
+<ul>
+<li><strong>后台弹窗提醒</strong> | <em>Toast</em>：<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT4.gif"
+                      alt="聊天功能"
+                ></li>
+<li><strong>声音选项</strong> | <em>Sound</em>：支持自定义音效</li>
+<li><strong>动作栏选项</strong> | <em>Actionbar</em>：在动作栏提醒关注的消息</li>
+<li><strong>高亮选项</strong> | <em>Highlight</em>：支持自定义高亮前缀（匹配到的消息前面加前缀）<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT5.webp"
+                      alt="聊天功能"
+                ></li>
+</ul></div><div class="tab-pane" id="ct-3"><p>使用指定样式格式化自己的消息。</p>
+<ul>
+<li><strong>注入文本</strong> | <em>Pattern</em>：即自动为发出的消息文本添加某种样式的处理，例如：</li>
+</ul>
+<p>&amp;e{text} 在支持以 &amp; 作为自定义颜色前缀的服务器中将会让您的消息变成金色</p>
+<p>&amp;e{text} <del>(ovo)</del> 将额外为您加上个性化后缀（小尾巴）</p>
+<p>我的坐标是：{pos} 将为您自动替换 {pos} 为当前坐标</p>
+<ul>
+<li><strong>匹配黑名单</strong> | <em>Auto-Disable when matches</em>：在有些情况下，我们不希望自己的文本被格式化，这些情况包括（但不限于）：</li>
+</ul>
+<p>向箱子商店插件售卖物品时在聊天栏输入的物品数量（或all）；</p>
+<p>以各种特殊字符开头的指令。</p>
+<p>该模组的默认正则表达式字串 ^\d+$|^[.#%$&#x2F;].*|\ball\b 即可满足需求，</p>
+<p>当然，您也可以更改或自行添加更多。</p></div><div class="tab-pane" id="ct-4"><p>用快捷键来代替常用的指令。</p>
+<ul>
+<li><strong>一键复读</strong> | <em>Trigger Last Command Hotkey</em>：按下设置的热键即可将您上一条指令重复一遍，例如：在跑酷地图中 F3+C 记录坐标并发送一次后，此后每按下一次快捷键即可快速回溯到记录点位置。</li>
+<li><strong>指令宏</strong> | <em>Command Keybindings</em><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT6.webp"
+                      alt="聊天功能"
+                ></li>
+</ul></div><div class="tab-pane" id="ct-5"><p>启用聊天气泡 | <em>Enable Chat Bubbles</em><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT7.png"
+                      alt="聊天功能"
+                ><br>在不同的服务器应用不同的气泡规则<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/MC1.21.1/CTT8.png"
+                      alt="聊天功能"
+                ></p></div><div class="tab-pane" id="ct-6"><p>在不同的服务器应用不同的响应规则</p></div></div></div>
+
+<h3 id="声音部分"><a href="#声音部分" class="headerlink" title="声音部分"></a>声音部分</h3><blockquote>
+<p>（物理音效）sound-physics-remastered-fabric-1.21.1-1.4.8.jar</p>
+<p><del>（音效过滤）DynamicSoundFilters-1.4.0+1.21.1.jar</del><font color=red>已发现模组存在冲突，将在V1.2版本删除！</font></p>
+<p>（自然音效）AmbientSounds_FABRIC_v6.1.4_mc1.21.1.jar</p>
+<p>（音乐播放器）Concerto-fabric-1.1.2-mc1.21.1.jar</p>
+</blockquote>
+<h4 id="物理音效-Sound-Physics-Remastered"><a href="#物理音效-Sound-Physics-Remastered" class="headerlink" title="物理音效 | Sound Physics Remastered"></a>物理音效 | <em>Sound Physics Remastered</em></h4><p>本模组为游戏带来了逼真的声音衰减、混响，以及穿过方块时的声音吸收。</p>
+<h4 id="音效过滤-Dynamic-Sound-Filters"><a href="#音效过滤-Dynamic-Sound-Filters" class="headerlink" title="音效过滤 | Dynamic Sound Filters"></a><del>音效过滤 | <em>Dynamic Sound Filters</em></del></h4><h4 id="自然音效-AmbientSounds"><a href="#自然音效-AmbientSounds" class="headerlink" title="自然音效 | AmbientSounds"></a>自然音效 | <em>AmbientSounds</em></h4><p>添加更多的生物叫声、更多的声音循环、更多的环境音效，让这个世界变得更加真实。</p>
+<p><strong>使用 &#x2F;clientconfig 命令</strong>可访问配置菜单。</p>
+<p>使用 &#x2F;ambient-debug 命令可查看正在播放的声音（特别是在遇到任何问题时提供此信息）。</p>
+<p>关于关闭和降低鸟叫、蝉叫声的方法：</p>
+<ul>
+<li>在模组菜单（modmenu）打开 Mod 选项；</li>
+<li>搜索 Sound 出现 AmbientSounds 然后打开配置文件；</li>
+<li>鸟叫声：<em>categories - animal - bird - bird</em>第一项 建议调至 0.4；</li>
+<li>蝉叫声：<em>categories - animal - Cicadas</em>建议调至 0.3；</li>
+</ul>
+<p>general 中的 volume 可以调节总音量。</p>
+<h4 id="音乐播放器-Concerto"><a href="#音乐播放器-Concerto" class="headerlink" title="音乐播放器 | Concerto"></a>音乐播放器 | <em>Concerto</em></h4><p>本模组提供了游戏内置的 网易云 &#x2F; QQ音乐 &#x2F; 本地文件 &#x2F; 网络文件 &#x2F; B站音频 的播放功能，以及多人游戏中的音乐分享、音乐室（Beta）、点播功能。</p>
+<p>基本功能均支持 GUI 内操作。在游戏界面中<strong>按 U 键</strong>可打开全局歌单&#x2F;音乐播放管理界面，<strong>按 I 键</strong>可打开主索引界面，<strong>按 N 键</strong>可播放下一首。</p>
+<div class="tabs" id="tab-cct"><ul class="nav-tabs"><li class="tab active"><a class="#cct-1">添加音乐</a></li><li class="tab"><a class="#cct-2">歌词显示</a></li><li class="tab"><a class="#cct-3">音乐分享</a></li><li class="tab"><a class="#cct-4">播放模式</a></li><li class="tab"><a class="#cct-5">平台登录</a></li></ul><div class="tab-content"><div class="tab-pane active" id="cct-1"><p>可在网易云&#x2F;QQ音乐索引页面操作。</p>
+<p>其他类型音频可在主索引页面进入添加音乐界面手动添加。</p>
+<p>可将多个文件&#x2F;文件夹拖入全局歌单界面&#x2F;添加界面以进行添加。</p></div><div class="tab-pane" id="cct-2"><p>在游戏<strong>根目录&#x2F;Concerto&#x2F;client_config.json中</strong>配置相关项：</p>
+<ul>
+<li><p>对齐方式 | <em>Alignment</em>：<em>LEFT(左)</em> &amp; <em>CENTER(中)</em> &amp; <em>RIGHT(右)</em></p>
+</li>
+<li><p>位置| <em>Position</em>：<em>窗口横向占比</em>(+或-)<em>像素</em>,<em>窗口纵向占比</em>(+或-)<em>像素</em>。（例如 0.5,1-60 即窗口中下侧距底部60像素的位置）</p>
+</li>
+</ul></div><div class="tab-pane" id="cct-3"><p>服务端可选装，若服务端未安装本模组将会使用发送消息的方式分享，其他有安装本模组的玩家可识别。若模组客户端与服务端握手失败也会使用此方案。</p>
+<p>只能分享被认为是“安全”的音乐来源（网易云、QQ音乐），无法分享“不安全”的音乐来源（本地音乐、未知的网络资源）。</p>
+<p>多人游戏音乐室&#x2F;一起听：服务端必须安装本模组，仍处于Beta测试阶段，不保证能完全正常使用。</p></div><div class="tab-pane" id="cct-4"><p>包括循环、正序、倒序、随机。若遇到无法播放&#x2F;损坏的音乐来源将会自动跳过。</p></div><div class="tab-pane" id="cct-5"><p>网易云支持二维码、账号密码、手机验证码三种方式登录。</p>
+<p>QQ音乐支持微信二维码、QQ二维码两种方式登录。</p>
+<p><font color=red>QQ音乐每次重启后需重新登录，搜索功能需登录后方可使用。</font></p></div></div></div>
+]]></content>
+      <categories>
+        <category>MC</category>
+      </categories>
+      <tags>
         <tag>帮助</tag>
+        <tag>资讯</tag>
       </tags>
   </entry>
 </search>
