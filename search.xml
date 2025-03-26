@@ -90,13 +90,15 @@
 <li>L——Lite：指精简整合方式，是舍去了部分功能，且额外加入了部分优化模组的整合包（该整合包不一定会在每个版本发布，且由于功能缺失，<strong>L版和同版本其他整合方式兼容性未知</strong>）</li>
 </ul>
 <hr>
-<h3 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2.下载链接"></a>2.下载链接</h3><h5 id="·-频道下载"><a href="#·-频道下载" class="headerlink" title="· 频道下载"></a>· 频道下载</h5><p>频道会持续上传当前最新MC版本的最新整合包，有需求时会上传其他版本的文件。加入频道<a class="link"   href="https://pd.qq.com/s/fq416q5oo"  title="自由武装游击队频道加入链接">点此</a>。</p>
+<h3 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2.下载链接"></a>2.下载链接</h3><h5 id="·-频道下载"><a href="#·-频道下载" class="headerlink" title="· 频道下载"></a>· 频道下载</h5><p>频道会根据需求上传所需MC版本的最新整合包，<font color=red>由于企鹅风控可能会上传失败，推荐前往网盘下载</font>。加入频道<a class="link"   href="https://pd.qq.com/s/fq416q5oo"  title="自由武装游击队频道加入链接">点此</a>。</p>
 <h5 id="·-网盘下载"><a href="#·-网盘下载" class="headerlink" title="· 网盘下载"></a>· 网盘下载</h5><p>网盘拥有所有的整合包资源：</p>
 <ul>
-<li>蓝奏云——<a class="link"   href="https://wled.lanzouv.com/b02eq0oah"  title="蓝奏云链接">点此下载（密码：banying）</a>：超过100Mb的文件需要分段解压，站内教程<a href="../2024/09/30//Multi-partArchive/#%E8%A7%A3%E5%8E%8B">点此</a></li>
+<li>百度云——网盘界的老大哥，分享的文件100%失效…百度网盘，永久停更！</li>
+<li>阿里云——和楼上坐一桌，永久停更！</li>
+<li>蓝奏云——<a class="link"   href="https://wled.lanzouv.com/b02eq0oah"  title="蓝奏云链接">点此下载（密码：banying）</a>：超过100Mb的文件需要分段解压，站内教程<a href="../2024/09/30//Multi-partArchive/#%E8%A7%A3%E5%8E%8B">点此</a>（<font color=red>由于维护工作量超标，大于100Mb的文件随缘更新</font>）</li>
 <li>123网盘——<a class="link"   href="https://www.123pan.com/s/4i2djv-UcnRA"  title="123链接">点此下载（提取码：wled）</a></li>
 <li>天翼云盘——<a class="link"   href="https://cloud.189.cn/web/share?code=uimqmamYF3Un"  title="天翼云链接">点此下载（访问码：ctj7）</a></li>
-<li>夸克网盘——<a class="link"   href="https://pan.quark.cn/s/a6e41fc480dd"  title="夸克云链接">点此下载（提取码：T4Yq）</a></li>
+<li>夸克网盘——<a class="link"   href="https://pan.quark.cn/s/cc2f6504f813"  title="夸克云链接">点此下载（提取码：hsee）</a></li>
 </ul>
 <h5 id="·-留言下载"><a href="#·-留言下载" class="headerlink" title="· 留言下载"></a>· 留言下载</h5><p>如果上述链接都无法下载，你可以在评论区留下你的邮箱以及你需要的整合包版本，资源将<del>随缘</del>发送到你的邮箱。</p>
 <hr>
@@ -171,19 +173,6 @@
       </categories>
       <tags>
         <tag>帮助</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World——网站搭建成功~</title>
-    <url>/2024/09/18/hello-world/</url>
-    <content><![CDATA[<p>欢迎访问伴莺の小窝，这篇文章的诞生，意味着这个博客搭建得差不多啦~</p>
-<p>在网页左下角有我编辑网页时听的歌曲，不定期更新，默认关闭。如果有你想听的歌曲可以在<strong>此页面</strong>页面下评论</p>
-]]></content>
-      <categories>
-        <category>计算机从入门到入土</category>
-      </categories>
-      <tags>
-        <tag>资讯</tag>
       </tags>
   </entry>
   <entry>
@@ -864,6 +853,19 @@
       </categories>
       <tags>
         <tag>帮助</tag>
+        <tag>资讯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World——网站搭建成功~</title>
+    <url>/2024/09/18/hello-world/</url>
+    <content><![CDATA[<p>欢迎访问伴莺の小窝，这篇文章的诞生，意味着这个博客搭建得差不多啦~</p>
+<p>在网页左下角有我编辑网页时听的歌曲，不定期更新，默认关闭。如果有你想听的歌曲可以在<strong>此页面</strong>页面下评论</p>
+]]></content>
+      <categories>
+        <category>计算机从入门到入土</category>
+      </categories>
+      <tags>
         <tag>资讯</tag>
       </tags>
   </entry>
