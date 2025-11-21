@@ -1,46 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>分卷压缩以及解压教程</title>
-    <url>/2024/09/30/Multi-partArchive/</url>
-    <content><![CDATA[<blockquote>
-<p>本教程以<a class="link"   href="https://www.7-zip.org/" >7-zip<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>为例，其他压缩软件原理相同。</p>
-</blockquote>
-<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><ol>
-<li>右键框选所有需要压缩的文件</li>
-<li>选择<em>7-zip-添加到压缩包</em></li>
-<li>在选择”分卷大小、字节”中按需选择，随后压缩即可</li>
-</ol>
-<hr>
-<h1 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h1><ol>
-<li>先将所有分卷文件全部重命名为统一名字</li>
-<li>在所有文件的后缀的后面加上”.”和三位编号</li>
-<li>右键001分卷，选择<em>提取到&#x2F;xxx文件夹</em></li>
-</ol>
-<ul>
-<li>例如：</li>
-<li>test.zip</li>
-<li>test2.zip</li>
-<li>test3.zip</li>
-<li>…</li>
-</ul>
-<p> 改为</p>
-<ul>
-<li>test.zip.001</li>
-<li>test.zip.002</li>
-<li>test.zip.003</li>
-<li>test.zip.xxx</li>
-</ul>
-<p><strong>注意：</strong>务必将所有的分卷文件准备在同一文件夹内，分卷不能有缺失</p>
-]]></content>
-      <categories>
-        <category>计算机从入门到入土</category>
-      </categories>
-      <tags>
-        <tag>帮助</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深渊 第零章</title>
     <url>/2025/06/09/Darkness0/</url>
     <content><![CDATA[<h2 id="序——普度众生"><a href="#序——普度众生" class="headerlink" title="序——普度众生"></a>序——普度众生</h2><blockquote>
@@ -127,6 +87,46 @@
       </categories>
       <tags>
         <tag>深渊</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分卷压缩以及解压教程</title>
+    <url>/2024/09/30/Multi-partArchive/</url>
+    <content><![CDATA[<blockquote>
+<p>本教程以<a class="link"   href="https://www.7-zip.org/" >7-zip<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>为例，其他压缩软件原理相同。</p>
+</blockquote>
+<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><ol>
+<li>右键框选所有需要压缩的文件</li>
+<li>选择<em>7-zip-添加到压缩包</em></li>
+<li>在选择”分卷大小、字节”中按需选择，随后压缩即可</li>
+</ol>
+<hr>
+<h1 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h1><ol>
+<li>先将所有分卷文件全部重命名为统一名字</li>
+<li>在所有文件的后缀的后面加上”.”和三位编号</li>
+<li>右键001分卷，选择<em>提取到&#x2F;xxx文件夹</em></li>
+</ol>
+<ul>
+<li>例如：</li>
+<li>test.zip</li>
+<li>test2.zip</li>
+<li>test3.zip</li>
+<li>…</li>
+</ul>
+<p> 改为</p>
+<ul>
+<li>test.zip.001</li>
+<li>test.zip.002</li>
+<li>test.zip.003</li>
+<li>test.zip.xxx</li>
+</ul>
+<p><strong>注意：</strong>务必将所有的分卷文件准备在同一文件夹内，分卷不能有缺失</p>
+]]></content>
+      <categories>
+        <category>计算机从入门到入土</category>
+      </categories>
+      <tags>
+        <tag>帮助</tag>
       </tags>
   </entry>
   <entry>
@@ -262,77 +262,6 @@
       </categories>
       <tags>
         <tag>帮助</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>莺纪元整合包更新预告</title>
-    <url>/2025/04/01/YoG25.4Pre/</url>
-    <content><![CDATA[<hr>
-<h2 id="模组部分"><a href="#模组部分" class="headerlink" title="模组部分"></a>模组部分</h2><h3 id="我咋玩着玩着游戏就没了？"><a href="#我咋玩着玩着游戏就没了？" class="headerlink" title="我咋玩着玩着游戏就没了？"></a><em><font color=purple>我咋玩着玩着游戏就没了？</font></em></h3><p>别急别急，作者也遇到这个这个问题了<font color=blue>QWQ</font></p>
-<p>自1.20开始，整合包的体量不断变大，功能更丰富的同时也带来了非常多的兼容性问题<del class="mask">，奈何作者技术实在是差</del>，导致整合包<font color=red>稳定性下降</font></p>
-<p>针对该问题后续将会有以下更新：</p>
-<h4 id="1-删除的模组"><a href="#1-删除的模组" class="headerlink" title="1. 删除的模组"></a>1. 删除的模组</h4><p>有一些<font color=red>功能微乎其微且兼容性又差</font>的模组将直接删除。有部分比较关键但互相冲突的模组将采取<font color=green>择优保留</font>。</p>
-<p>还有一些<font color=red>较为冗余</font>的模组，比如tpa（传送请求）、hat（帽子）等模组今后将<font color=green>不再加入</font>整合包，如果需要使用可以在服务器加入相同功能。</p>
-<h4 id="2-添加的模组"><a href="#2-添加的模组" class="headerlink" title="2. 添加的模组"></a>2. 添加的模组</h4><p>整合包将加入更多<font color=green>优化类</font>模组，以改善多模组带来的性能问题。</p>
-<hr>
-<h3 id="我还是觉得操作反人类？"><a href="#我还是觉得操作反人类？" class="headerlink" title="我还是觉得操作反人类？"></a><em><font color=purple>我还是觉得操作反人类？</font></em></h3><p>即使现在的整合包已经加入了EMI（合成树）、TW（鼠标手势）等等优化操作的模组，但海量的模组交互也<font color=red>难以靠几个模组改善</font>。</p>
-<p>因此，在最新的1.21.1整合包外作者发布了更新日志&amp;<font color=green>模组介绍</font>，以解决部分对模组操作的疑问，后续<strong>可能</strong>将会有以下改善：</p>
-<ul>
-<li>在整合包内内置模组介绍</li>
-<li>添加可视化按键模组<del class="mask">（本来要加的，但是貌似没适配新版本）</del></li>
-<li>更改模组的默认设置，改善冲突问题</li>
-</ul>
-<hr>
-<h3 id="我想自己修改模组？"><a href="#我想自己修改模组？" class="headerlink" title="我想自己修改模组？"></a><em><font color=purple>我想自己修改模组？</font></em></h3><p>整合包Full版虽然模组较多，但其中例如<em>地毯</em>等<font color=red>大众不常用的模组不会添加</font>，请谅解整合包需要考虑更多人的需求。</p>
-<p>当然，作者欢迎为整合包提出建议，如果提出某个专项的功能的人多了，<font color=green>Ultra版整合包</font>也会提上日程的。</p>
-<p>如果只是想对已有的整合包做一点小修改，作者不保证其兼容性问题，还请自己探索。</p>
-<hr>
-<h2 id="光影-材质部分"><a href="#光影-材质部分" class="headerlink" title="光影&amp;材质部分"></a>光影&amp;材质部分</h2><h3 id="我不满意整合包自带的？"><a href="#我不满意整合包自带的？" class="headerlink" title="我不满意整合包自带的？"></a><em><font color=purple>我不满意整合包自带的？</font></em></h3><p>作者的本意并非是<font color=red>将个人审美强加于人</font>，造成该问题实在抱歉。</p>
-<p>针对该问题，整合包发版将有如下改动：</p>
-<ul>
-<li><font color=green>F、U版默认不再添加光影&amp;材质</font></li>
-<li><font color=green>OCI版不改动</font></li>
-</ul>
-<p>光影&amp;材质向来是根据个人主观评价的，作者也考虑过对其进行大改。但考虑到众口难调以及整合包体量问题，<font color=red>最终放弃了</font>。</p>
-<hr>
-<h2 id="包体部分"><a href="#包体部分" class="headerlink" title="包体部分"></a>包体部分</h2><h3 id="我还是觉得整合包太难装了？"><a href="#我还是觉得整合包太难装了？" class="headerlink" title="我还是觉得整合包太难装了？"></a><em><font color=purple>我还是觉得整合包太难装了？</font></em></h3><p>尽管作者在早期整合了OCI（One Click to Install）版本，但其简化的操作依旧<font color=red>不尽人意</font>。</p>
-<p>因此，在未来将推出<font color=gold>YMCL(Ying Minecraft Launcher)：我的世界莺启动器</font></p>
-<p>详情请看下文。</p>
-<hr>
-<h3 id="我能不删旧版整合包更新吗？"><a href="#我能不删旧版整合包更新吗？" class="headerlink" title="我能不删旧版整合包更新吗？"></a><em><font color=purple>我能不删旧版整合包更新吗？</font></em></h3><p><font color=red>这个问题已经困扰了作者很久，并且是最影响体验的问题。</font></p>
-<p>在遍历过各种办法试图解决该问题后，作者决定将推出一个<font color=green>整合包安装&amp;更新器</font>。</p>
-<p>详情请看下文。</p>
-<hr>
-<h2 id="YMCL部分"><a href="#YMCL部分" class="headerlink" title="YMCL部分"></a><font color=gold>YMCL</font>部分</h2><h3 id="我想用其他的启动器？"><a href="#我想用其他的启动器？" class="headerlink" title="我想用其他的启动器？"></a><em><font color=purple>我想用其他的启动器？</font></em></h3><p>设计之初，作者就想到了这个问题。<del class="mask">作者也深知其技术力完全达不到龙猫大大的水平QwQ</del></p>
-<p>因此YMCL其核心功能依旧是上文所述的<font color=green>整合包安装&amp;更新器</font>，甚至启动MC的功能也只是<strong>顺带的</strong>。</p>
-<p>而对MC的启动、配置功能，你也可以<font color=green>选择由其它启动器启动</font></p>
-<hr>
-<h3 id="我在哪里能下载？"><a href="#我在哪里能下载？" class="headerlink" title="我在哪里能下载？"></a><em><font color=purple>我在哪里能下载？</font></em></h3><p>哈哈，感谢你的<strong>期待</strong>。正如上文所述，YMCL目前还是企划与开发，将在未来推出。</p>
-<hr>
-<blockquote>
-<p>写在最后，希望你能给作者更多的机会与建议。</p>
-<p>让我们一起，无限进步！</p>
-<p><del class="mask">祝<font color=green>愚人节</font>快乐</del></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>MC</category>
-      </categories>
-      <tags>
-        <tag>资讯</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World——网站搭建成功~</title>
-    <url>/2024/09/18/hello-world/</url>
-    <content><![CDATA[<p>欢迎访问伴莺の小窝，这篇文章的诞生，意味着这个博客搭建得差不多啦~</p>
-<p>在网页左下角有我编辑网页时听的歌曲，不定期更新，默认关闭。如果有你想听的歌曲可以在<strong>此页面</strong>页面下评论</p>
-]]></content>
-      <categories>
-        <category>计算机从入门到入土</category>
-      </categories>
-      <tags>
-        <tag>资讯</tag>
       </tags>
   </entry>
   <entry>
@@ -1013,6 +942,77 @@
       </categories>
       <tags>
         <tag>帮助</tag>
+        <tag>资讯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>莺纪元整合包更新预告</title>
+    <url>/2025/04/01/YoG25.4Pre/</url>
+    <content><![CDATA[<hr>
+<h2 id="模组部分"><a href="#模组部分" class="headerlink" title="模组部分"></a>模组部分</h2><h3 id="我咋玩着玩着游戏就没了？"><a href="#我咋玩着玩着游戏就没了？" class="headerlink" title="我咋玩着玩着游戏就没了？"></a><em><font color=purple>我咋玩着玩着游戏就没了？</font></em></h3><p>别急别急，作者也遇到这个这个问题了<font color=blue>QWQ</font></p>
+<p>自1.20开始，整合包的体量不断变大，功能更丰富的同时也带来了非常多的兼容性问题<del class="mask">，奈何作者技术实在是差</del>，导致整合包<font color=red>稳定性下降</font></p>
+<p>针对该问题后续将会有以下更新：</p>
+<h4 id="1-删除的模组"><a href="#1-删除的模组" class="headerlink" title="1. 删除的模组"></a>1. 删除的模组</h4><p>有一些<font color=red>功能微乎其微且兼容性又差</font>的模组将直接删除。有部分比较关键但互相冲突的模组将采取<font color=green>择优保留</font>。</p>
+<p>还有一些<font color=red>较为冗余</font>的模组，比如tpa（传送请求）、hat（帽子）等模组今后将<font color=green>不再加入</font>整合包，如果需要使用可以在服务器加入相同功能。</p>
+<h4 id="2-添加的模组"><a href="#2-添加的模组" class="headerlink" title="2. 添加的模组"></a>2. 添加的模组</h4><p>整合包将加入更多<font color=green>优化类</font>模组，以改善多模组带来的性能问题。</p>
+<hr>
+<h3 id="我还是觉得操作反人类？"><a href="#我还是觉得操作反人类？" class="headerlink" title="我还是觉得操作反人类？"></a><em><font color=purple>我还是觉得操作反人类？</font></em></h3><p>即使现在的整合包已经加入了EMI（合成树）、TW（鼠标手势）等等优化操作的模组，但海量的模组交互也<font color=red>难以靠几个模组改善</font>。</p>
+<p>因此，在最新的1.21.1整合包外作者发布了更新日志&amp;<font color=green>模组介绍</font>，以解决部分对模组操作的疑问，后续<strong>可能</strong>将会有以下改善：</p>
+<ul>
+<li>在整合包内内置模组介绍</li>
+<li>添加可视化按键模组<del class="mask">（本来要加的，但是貌似没适配新版本）</del></li>
+<li>更改模组的默认设置，改善冲突问题</li>
+</ul>
+<hr>
+<h3 id="我想自己修改模组？"><a href="#我想自己修改模组？" class="headerlink" title="我想自己修改模组？"></a><em><font color=purple>我想自己修改模组？</font></em></h3><p>整合包Full版虽然模组较多，但其中例如<em>地毯</em>等<font color=red>大众不常用的模组不会添加</font>，请谅解整合包需要考虑更多人的需求。</p>
+<p>当然，作者欢迎为整合包提出建议，如果提出某个专项的功能的人多了，<font color=green>Ultra版整合包</font>也会提上日程的。</p>
+<p>如果只是想对已有的整合包做一点小修改，作者不保证其兼容性问题，还请自己探索。</p>
+<hr>
+<h2 id="光影-材质部分"><a href="#光影-材质部分" class="headerlink" title="光影&amp;材质部分"></a>光影&amp;材质部分</h2><h3 id="我不满意整合包自带的？"><a href="#我不满意整合包自带的？" class="headerlink" title="我不满意整合包自带的？"></a><em><font color=purple>我不满意整合包自带的？</font></em></h3><p>作者的本意并非是<font color=red>将个人审美强加于人</font>，造成该问题实在抱歉。</p>
+<p>针对该问题，整合包发版将有如下改动：</p>
+<ul>
+<li><font color=green>F、U版默认不再添加光影&amp;材质</font></li>
+<li><font color=green>OCI版不改动</font></li>
+</ul>
+<p>光影&amp;材质向来是根据个人主观评价的，作者也考虑过对其进行大改。但考虑到众口难调以及整合包体量问题，<font color=red>最终放弃了</font>。</p>
+<hr>
+<h2 id="包体部分"><a href="#包体部分" class="headerlink" title="包体部分"></a>包体部分</h2><h3 id="我还是觉得整合包太难装了？"><a href="#我还是觉得整合包太难装了？" class="headerlink" title="我还是觉得整合包太难装了？"></a><em><font color=purple>我还是觉得整合包太难装了？</font></em></h3><p>尽管作者在早期整合了OCI（One Click to Install）版本，但其简化的操作依旧<font color=red>不尽人意</font>。</p>
+<p>因此，在未来将推出<font color=gold>YMCL(Ying Minecraft Launcher)：我的世界莺启动器</font></p>
+<p>详情请看下文。</p>
+<hr>
+<h3 id="我能不删旧版整合包更新吗？"><a href="#我能不删旧版整合包更新吗？" class="headerlink" title="我能不删旧版整合包更新吗？"></a><em><font color=purple>我能不删旧版整合包更新吗？</font></em></h3><p><font color=red>这个问题已经困扰了作者很久，并且是最影响体验的问题。</font></p>
+<p>在遍历过各种办法试图解决该问题后，作者决定将推出一个<font color=green>整合包安装&amp;更新器</font>。</p>
+<p>详情请看下文。</p>
+<hr>
+<h2 id="YMCL部分"><a href="#YMCL部分" class="headerlink" title="YMCL部分"></a><font color=gold>YMCL</font>部分</h2><h3 id="我想用其他的启动器？"><a href="#我想用其他的启动器？" class="headerlink" title="我想用其他的启动器？"></a><em><font color=purple>我想用其他的启动器？</font></em></h3><p>设计之初，作者就想到了这个问题。<del class="mask">作者也深知其技术力完全达不到龙猫大大的水平QwQ</del></p>
+<p>因此YMCL其核心功能依旧是上文所述的<font color=green>整合包安装&amp;更新器</font>，甚至启动MC的功能也只是<strong>顺带的</strong>。</p>
+<p>而对MC的启动、配置功能，你也可以<font color=green>选择由其它启动器启动</font></p>
+<hr>
+<h3 id="我在哪里能下载？"><a href="#我在哪里能下载？" class="headerlink" title="我在哪里能下载？"></a><em><font color=purple>我在哪里能下载？</font></em></h3><p>哈哈，感谢你的<strong>期待</strong>。正如上文所述，YMCL目前还是企划与开发，将在未来推出。</p>
+<hr>
+<blockquote>
+<p>写在最后，希望你能给作者更多的机会与建议。</p>
+<p>让我们一起，无限进步！</p>
+<p><del class="mask">祝<font color=green>愚人节</font>快乐</del></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>MC</category>
+      </categories>
+      <tags>
+        <tag>资讯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World——网站搭建成功~</title>
+    <url>/2024/09/18/hello-world/</url>
+    <content><![CDATA[<p>欢迎访问伴莺の小窝，这篇文章的诞生，意味着这个博客搭建得差不多啦~</p>
+<p>在网页左下角有我编辑网页时听的歌曲，不定期更新，默认关闭。如果有你想听的歌曲可以在<strong>此页面</strong>页面下评论</p>
+]]></content>
+      <categories>
+        <category>计算机从入门到入土</category>
+      </categories>
+      <tags>
         <tag>资讯</tag>
       </tags>
   </entry>
