@@ -1,6 +1,447 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>从入门到入土教你如何搭建网站</title>
+    <url>/2025/12/01/BuildWeb/</url>
+    <content><![CDATA[<details class="blue" data-header-exclude>
+    <summary><i class="fa-solid fa-chevron-right"></i>写在之前 </summary>
+    <div class='content markdown-body'>
+      <p><strong><font color=green>Thank you for your visit.</font></strong></p>
+<p>作为一个刚入门的前端开发工程师，你一定有了一些可以拿出手的项目 &amp; 实例 &amp; 练手，但仅限于本地，无法将其<strong>简单</strong>地提供给他人预览。因此，本文从<strong>上传网页文件</strong>到<strong>多子域名绑定</strong>，一步步带你部署<strong>属于你</strong>的网站。</p>
+  <div class="note p-4 mb-4 rounded-small markdown-body danger">
+    <p>本内容首发<font color=green>伴莺の小窝</font>，未经授权<font color=red>禁止搬运！</font></p>
+
+  </div>
+
+  <div class="note p-4 mb-4 rounded-small markdown-body warning">
+    <p>作品中包含部分AI内容，用于校正、完善文章，如有错误请向管理员反馈。</p>
+
+  </div>
+
+  <div class="note p-4 mb-4 rounded-small markdown-body info">
+    <p><strong><font color=red>本教程仅适用于小白，通过Github Page部署网页！</font></strong><br>如果你能看懂我在说什么，最好将Github Page更换为自己的服务器并进行<font color=red><strong>备案</strong></font>，以防法律问题！</p>
+
+  </div>
+    </div>
+  </details>
+
+<hr>
+<h2 id="1-代码上传至Github并部署为网站"><a href="#1-代码上传至Github并部署为网站" class="headerlink" title="1 代码上传至Github并部署为网站"></a>1 代码上传至Github并部署为网站</h2><h3 id="1-0-在此之前"><a href="#1-0-在此之前" class="headerlink" title="1.0 在此之前"></a>1.0 在此之前</h3><p>由于Github Page默认的入口文件名为<code>index.html</code>，因此需要先自己的检查项目结构，确保你的页面入口文件名为<code>index.html</code>。</p>
+<p>例如一个项目中，首页<code>home.html</code>为网站的入口，则将你项目中<strong>所有</strong>和<code>home.html</code>相关的代码重命名为<code>index.html</code>：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 原来的入口文件名</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&#x27;home.html&#x27;</span>;</span><br><span class="line"><span class="comment">// 替换为index.html</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&#x27;index.html&#x27;</span>;</span><br></pre></td></tr></table></figure></div>
+
+<p>如果原本入口文件名就是<code>index.html</code>，则无需修改。</p>
+<p>修改完毕后，建议完整测试一遍项目功能，防止有代码漏改。</p>
+<h3 id="1-1-注册Github账号"><a href="#1-1-注册Github账号" class="headerlink" title="1.1  注册Github账号"></a>1.1  注册Github账号</h3><blockquote>
+<p><a class="link"   href="https://www.github-zh.com/post/what-is-github" >Github是什么？<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p>Github是一个面向开源及私有软件项目的托管平台，因为只支持<code>git</code>作为唯一的版本库格式进行托管，故名GitHub。</p>
+</blockquote>
+
+  <div class="note p-4 mb-4 rounded-small markdown-body tip">
+    <p>已有账号跳至<a href="./#1-2-%E5%88%9B%E5%BB%BA%E6%96%B0%E4%BB%93%E5%BA%93">步骤1.2</a></p>
+
+  </div>
+
+<hr>
+<p><strong>1.1.1 打开<a class="link"   href="https://github.com/" >github.com<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></strong></p>
+<p>由于Github服务器<del class="mask">位于国外，且DNS污染严重，</del>难以正常连接，所以你可以使用加速器访问，这里推荐以下加速器，相关使用教程可自行搜索：</p>
+<ul>
+<li><a class="link"   href="https://steampp.net/" >Steam++<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：原本是一个游戏平台加速器，但也可以免费加速Github，且操作简单。</li>
+<li><a class="link"   href="https://cn.bing.com/search?q=github%E5%8A%A0%E9%80%9F&qs=n&form=QBRE&sp=-1&lq=0&pq=github%E5%8A%A0%E9%80%9F" >自行搜索<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：更多方法自行搜索</li>
+</ul>
+<p><strong>1.1.2 点击<code>Sign up</code>注册</strong></p>
+<p>若1.1.1步骤正常打开，页面应该与下图一致，点击右上角的注册按钮跳转至注册页</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/github.jpg"
+                      alt="首页图"
+                ></p>
+<p>在选项框中依次输入你的<code>邮箱</code>、<code>密码</code>、<code>用户名</code>、<code>国家</code>(一般为自动填写为China，无需更改)</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/resgit.jpg"
+                      alt="注册页"
+                ></p>
+<p>前往邮箱查看验证码，填入并继续…</p>
+<p>注册成功后登录账户…</p>
+<h3 id="1-2-创建新仓库"><a href="#1-2-创建新仓库" class="headerlink" title="1.2 创建新仓库"></a>1.2 创建新仓库</h3><blockquote>
+<p>以我的商店网站项目为例</p>
+</blockquote>
+<p>登录成功后，页面应该与下图一致，点击<code>Create repository</code>（两个位置任选其一即可）创建仓库：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/createre.jpg"
+                      alt="创建仓库"
+                ></p>
+<p><em>如果已经拥有其它仓库，则点击左侧仓库栏的右上角创建：</em></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/createre2.jpg"
+                      alt="创建仓库2"
+                ></p>
+<p>在<code>Repository name</code>中填入仓库名字；</p>
+<p>在<code>Description</code>中填入仓库描述；</p>
+<p><code>Configuration</code>中保持默认不更改；</p>
+<p>填写完毕后点击<code>Create Repository</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/createreinfo.jpg"
+                      alt="createreinfo"
+                ></p>
+<p>如果一切正常，则现在你的仓库是以下页面：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/createresus.jpg"
+                      alt="创建成功"
+                ></p>
+<h3 id="1-3-将项目文件上传至Github"><a href="#1-3-将项目文件上传至Github" class="headerlink" title="1.3 将项目文件上传至Github"></a>1.3 将项目文件上传至Github</h3>
+  <div class="note p-4 mb-4 rounded-small markdown-body tip">
+    <p><font color=green>Tips</font>:对GIt完全不理解的小白请使用方法1</p>
+
+  </div>
+
+
+
+<div class="tabs" id="tab-upf"><ul class="nav-tabs"><li class="tab active"><a class="#upf-1">【方法1】 文件拖拽上传</a></li><li class="tab"><a class="#upf-2">【方法2】 通过Git上传</a></li></ul><div class="tab-content"><div class="tab-pane active" id="upf-1"><p>在步骤1.2最后的页面中，点击<code>uploading an existing file</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/upf.png"
+                      alt="upf"
+                ></p>
+<p>在新的页面中，直接将项目文件拖拽至<code>Drag files here to add them to your repository</code>框中：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/upf.gif"
+                      alt="upf"
+                ></p>
+<p><em>如果一次上传的文件数量过多，则会显示上传过多文件的报错，此时只需要分批次上传即可：</em></p>
+<p><del class="mask">若文件数量过多，则方法1可能会导致目录错乱等问题，建议使用方法2</del></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/upfe.jpg"
+                      alt="上传报错"
+                ></p>
+<p>待所有文件上传成功后，点击最下方的<code>Commit changes</code>按钮提交更改：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/upfc.jpg"
+                      alt="提交更改"
+                ></p>
+<p>等待片刻后，就会出现已上传文件的仓库首页，如果一切正常，则现在你的仓库是以下页面（其中的文件即是自己的项目文件）：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/rehome.jpg"
+                      alt="仓库首页"
+                ></p>
+<p>现在，一切就绪。</p></div><div class="tab-pane" id="upf-2"><div class="note p-4 mb-4 rounded-small markdown-body warning">
+    <p>使用方法2请确保有一定Git的基础，Git出现的报错我不会提及，Git相关教程连接：<a class="link"   href="https://blog.csdn.net/m0_56676311/article/details/135509261" >Git教程<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> </p>
+
+  </div>
+
+<p>在步骤1.2最后的页面中，点击<code>https</code>，并复制后面出现的链接：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/copygith.jpg"
+                      alt="复制链接"
+                ></p>
+<p>安装git，官方下载链接：</p>
+<p><a class="button regular" href='https://git-scm.cn/downloads' title='Git官网'><i class='fa-solid fa-download'></i> Git官网</a></p>
+<p>安装完成后，在项目根目录右键打开<code>Open Git Bash here</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/opengit.gif"
+                      alt="opengit"
+                ></p>
+<p>确保<code>Git Bash</code>拥有管理员权限，如何开启管理员权限<a class="link"   href="https://cn.bing.com/search?pglt=419&q=git+bash%E7%AE%A1%E7%90%86%E5%91%98" >点此<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>。</p>
+<p>输入以下代码对项目进行初始化：</p>
+<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;Github用户名&quot;</span><br><span class="line">git config --global user.email &quot;Github注册邮箱&quot;</span><br><span class="line">git init</span><br></pre></td></tr></table></figure></div>
+
+<p>若在根目录创建了<code>.git</code>文件夹，并提示<code>Initialized empty Git repository in 项目路径</code>则初始化完成。</p>
+<p>将项目中的所有文件提交到待上传：</p>
+<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit --m &#x27;提交说明&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<p>获取ssh key（第一条指令输入后不断回车）：</p>
+<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure></div>
+
+<p>生成完毕后，在<code>C:\Users\用户名\.ssh</code>中找到<code>id_rsa.pub</code>文件，复制文件内的所有内容。<strong>注意是否有乱码</strong>！</p>
+<p>回到Github网页上，点击<code>用户头像-Setting-Access-SSH and GPG keys-New SSH key</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/savessh.gif"
+                      alt="savessh"
+                ></p>
+<p><code>Title</code>栏随意取名；</p>
+<p><code>Key</code>栏粘贴<code>id_rsa.pub</code>文件复制的所有内容；</p>
+<p>点击<code>Add SSH key</code>按钮保存；</p>
+<p>随后出现以下标签栏即可：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/savessh.jpg"
+                      alt="保存ssh"
+                ></p>
+<p>回到<code>Git Bash</code>中，将最开始复制的<code>https</code>链接粘贴到其中：</p>
+<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="code"><pre><span class="line">git remote add origin &quot;https链接&quot;</span><br><span class="line">git branch -M main</span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure></div>
+
+<p>绑定远程仓库后将分支改名为 <code>main</code>，并提交更新，成功后，你会看到以下类似输出：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/suspush.jpg"
+                      alt="上传成功"
+                ></p>
+<p>此时，回到你的<code>Github项目</code>中(github.com&#x2F;用户名&#x2F;项目名)，如果一切正常，则现在你的仓库是以下页面（其中的文件即是自己的项目文件）：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/rehome.jpg"
+                      alt="仓库首页"
+                ></p>
+<p>现在，一切就绪。</p></div></div></div>
+
+
+
+<h3 id="1-4-部署Github-Page"><a href="#1-4-部署Github-Page" class="headerlink" title="1.4 部署Github Page"></a>1.4 部署Github Page</h3><p>在步骤1.3最后的页面中，点击<code>Setting</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/gopage.png"
+                      alt="gopage"
+                ></p>
+<p>点击<code>Code and automation</code>中的<code>Page</code>；</p>
+<p>在<code>GitHub Pages</code>中找到<code>Branch</code>，点击其中的<code>none</code>按钮，选择<code>main</code>，点击<code>save</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/topage.gif"
+                      alt="topage"
+                ></p>
+<p>等待些许时间，刷新当前页面，如果一切正常，会出现一个链接：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/page.png"
+                      alt="就绪"
+                ></p>
+<p>其中的<code>https://用户名.github.io/仓库名</code>就是你的项目访问链接了。</p>
+<p>至此，你的项目已经可以通过上面的链接访问了，你也可以继续按照教程设置更多…..</p>
+<hr>
+<h2 id="2-为网站“取名”——购买并设置域名"><a href="#2-为网站“取名”——购买并设置域名" class="headerlink" title="2 为网站“取名”——购买并设置域名"></a>2 为网站“取名”——购买并设置域名</h2><p>即使现在你的项目已经可以正常访问了，但<code>https://用户名.github.io/仓库名</code>这一串名字想必不仅难记，而且难以被正常访问<del class="mask">（Thx Github）</del>，因此，我们可以为网站包装一下，使其更易访问。即使会破点财，但相信我，按照教程继续设置，你的成本会降到最低。</p>
+<h3 id="2-1-购买域名"><a href="#2-1-购买域名" class="headerlink" title="2.1 购买域名"></a>2.1 购买域名</h3><p>根据我的使用体验，这里提供几个域名服务商，你也可以根据自己的喜好在不同的域名服务商购买域名：</p>
+<ul>
+<li><a class="link"   href="https://wanwang.aliyun.com/domain/" >阿里云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——国内最大的云服务商，国内DNS污染率最低的服务商，若你以前没有使用过阿里云，则首年优惠力度最大。</li>
+<li><a class="link"   href="https://cloud.tencent.com/product/domain" >腾讯云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——部分域名后缀享有极高的价格优惠。</li>
+<li><a class="link"   href="https://www.spaceship.com/zh/domains/" >Space Ship<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——优惠力度最大的海外服务商，若你的服务器在海外，则该服务商最优先。</li>
+<li><a class="link"   href="https://cloud.baidu.com/product/bcd.html" >百度云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+</ul>
+<p>以下均以<em>阿里云</em>为例<del class="mask">（我的域名在国内没有优惠了QwQ）</del>，所有服务商的操作都相似。</p>
+<p>购买、实名（若有）的部分省略。</p>
+
+  <div class="note-large yellow">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>注意</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>建议只购买一年，在要到期时删除域名，可防止极~~~长时间的赎回期和删除期。</p>
+<p>确保你已关闭自动续费（一般都自动设置了），否则次年的费用可能价格高昂！</p>
+
+    </div>
+  </div>
+
+<p>购买成功后打开域名控制台，找到自己的域名：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/dohome.png"
+                      alt="dohome"
+                ></p>
+
+  <div class="note p-4 mb-4 rounded-small markdown-body info">
+    <p>以下存在分支，若你想要进行步骤3，现在可以直接跳转至<a href="./#3-1-%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D">步骤3.1</a>。跳过步骤2的后续步骤可以节省很多不必要的重复操作。</p>
+
+  </div>
+
+<h3 id="2-2-将域名解析到Github-Page"><a href="#2-2-将域名解析到Github-Page" class="headerlink" title="2.2 将域名解析到Github Page"></a>2.2 将域名解析到Github Page</h3><p>打开<code>域名解析</code>（或<code>DNS解析</code>等类似选项），点击添加记录；</p>
+<p>选择记录类型为<code>CNAME</code>；</p>
+<p>主机记录（或<code>名称</code>等类似选项）设为<code>www</code>；</p>
+<p>记录值（或<code>内容</code>等类似选项）设为<code>用户名.github.io</code>(你的项目访问地址仅填写前面的部分)；</p>
+<p>其它保持默认：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/bandgit.png"
+                      alt="bandgit"
+                ></p>
+<h3 id="2-3-在Github-Page中添加域名"><a href="#2-3-在Github-Page中添加域名" class="headerlink" title="2.3 在Github Page中添加域名"></a>2.3 在Github Page中添加域名</h3><p>返回你的Github项目首页，进入<code>Settings-Code and automation-Page</code>；</p>
+<p>在设置中找到<code>Custom domain</code>选项，输入<code>www.你的域名</code>，点击<code>Save</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/savedo.png"
+                      alt="savedo"
+                ></p>
+<p>等待片刻后，若出现<code>Your site is live at http://你的网站/</code>和<code>DNS check successful</code>，则设置完毕：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/dosus.png"
+                      alt="dosus"
+                ></p>
+<p>现在，你就可以使用你购买的域名访问你的项目了。</p>
+<hr>
+<h2 id="3-为网站加速"><a href="#3-为网站加速" class="headerlink" title="3 为网站加速"></a>3 为网站加速</h2><p>步骤2中进行的操作仅能为你的网站“命名”，而不能改变你网站部署在Github上访问速度慢的问题。因此，本步骤可以为你提供一个可以免费加速访问你的项目，甚至还能提供部分防御攻击的功能：<font color=orange>CloudFlare</font></p>
+<h3 id="3-0-为什么我不推荐CDN"><a href="#3-0-为什么我不推荐CDN" class="headerlink" title="3.0 为什么我不推荐CDN"></a>3.0 为什么我不推荐CDN</h3><p>由于众所周知的问题，<del class="mask">在天朝境内部署CDN可能会有法律问题，</del>除非你已备案且拥有钞能力，否则我不推荐使用CDN。</p>
+<p>若你执意想要部署CDN，请自行搜索教程，我不会提供。</p>
+<h3 id="3-1-注册CloudFlare账号"><a href="#3-1-注册CloudFlare账号" class="headerlink" title="3.1 注册CloudFlare账号"></a>3.1 注册CloudFlare账号</h3><p>打开<a class="link"   href="https://dash.cloudflare.com/sign-up" >该链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>进入CloudFlare注册页，输入你的邮件地址和密码进行注册；</p>
+<p>在<code>Enter an existing domain</code>中输入你购买的域名（不包含www）；</p>
+<p><code>Block AI training bots</code>选项可自拟，推荐<code>Block only on hostnames with ads</code>；</p>
+<p>填写完毕后，点击<code>Continue</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/cfs.png"
+                      alt="cfs"
+                ></p>
+<p><code>Add DNS records</code>选项直接点击<code>Continue</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/cfs2.png"
+                      alt="cfs2"
+                ></p>
+<p><code>Select a plan</code>选项选择<code>Free</code>；</p>
+<p>跳转页面后，在<code>Replace your current nameservers with Cloudflare nameservers</code>中找到CloudFlare的两个DNS服务器并复制：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/copycf.png"
+                      alt="copycf"
+                ></p>
+<h3 id="3-2-重新设置域名"><a href="#3-2-重新设置域名" class="headerlink" title="3.2 重新设置域名"></a>3.2 重新设置域名</h3><hr>
+<p>回到域名服务商的控制台，点击<code>修改DNS服务器</code>（或者<code>自定义名称服务器</code>其他类似选项）；</p>
+<p>删除之前的所有DNS；</p>
+<p>添加上一步中复制的CloudFlare的DNS服务器：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/changedns.png"
+                      alt="changedns"
+                ></p>
+<p>添加成功后，等待片刻回到CloudFlare…</p>
+<h3 id="3-3-在CloudFlare中设置域名解析"><a href="#3-3-在CloudFlare中设置域名解析" class="headerlink" title="3.3 在CloudFlare中设置域名解析"></a>3.3 在CloudFlare中设置域名解析</h3><p>在此之前，若你现在的CloudFlare页面仍是英文，则可以在<code>右上角Profile-Language</code>中将语言设置调为中文：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/toc.png"
+                      alt="toc"
+                ></p>
+<p>若设置正常，稍等一会儿后刷新即可绑定成功：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/cfdns.png"
+                      alt="cfdns"
+                ></p>
+<p>打开<code>SSL/TLS-边缘证书-始终使用 HTTPS</code>选项：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/https.png"
+                      alt="https"
+                ></p>
+<p>进入<code>DNS-记录</code>；</p>
+<p>点击<code>添加记录</code>；</p>
+<p><code>类型</code>选择<code>CNAME</code>；</p>
+<p><code>名称</code>输入<code>www</code>；</p>
+<p><code>目标</code>输入<code>用户名.github.io</code>；</p>
+<p><code>代理状态</code>打开（Github Page推荐）；</p>
+<p>点击保存：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/cfset.png"
+                      alt="cfset"
+                ></p>
+<h3 id="3-4-在Github-Page中添加域名"><a href="#3-4-在Github-Page中添加域名" class="headerlink" title="3.4 在Github Page中添加域名"></a>3.4 在Github Page中添加域名</h3>
+  <div class="note p-4 mb-4 rounded-small markdown-body info">
+    <p>本步骤与<a href="./#2-3-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D">步骤2.3</a>完全相同 </p>
+
+  </div>
+
+<p>返回你的Github项目首页，进入<code>Settings-Code and automation-Page</code>；</p>
+<p>在设置中找到<code>Custom domain</code>选项，输入<code>www.你的域名</code>，点击<code>Save</code>：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/savedo.png"
+                      alt="savedo"
+                ></p>
+<p>等待片刻后，若出现<code>Your site is live at http://你的网站/</code>和<code>DNS check successful</code>，则设置完毕：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/BuildWeb/dosus.png"
+                      alt="dosus"
+                ></p>
+<p>现在，你就可以使用你购买的域名访问你的项目了。</p>
+<hr>
+<h2 id="4-设置二级域名"><a href="#4-设置二级域名" class="headerlink" title="4 设置二级域名"></a>4 设置二级域名</h2><h3 id="4-1-什么是二级域名"><a href="#4-1-什么是二级域名" class="headerlink" title="4.1 什么是二级域名"></a>4.1 什么是二级域名</h3><p>你购买的域名不仅只有<code>www</code>前缀可以使用，换句话来说，其实任意字符都可以使用，而<code>www</code>只是根域名。</p>
+<p>举个例子你就能明白了：</p>
+<blockquote>
+<p>直接输入并访问<code>your.domain</code>，访问的是<code>www.your.domain</code>；</p>
+<p>而输入并访问<code>kid.your.domain</code>，可以访问不同的页面。</p>
+</blockquote>
+<p>如果你还没明白，可以参考百度：</p>
+<blockquote>
+<p>输入并访问<code>baidu.com</code>，访问的是百度首页；</p>
+<p>输入并访问<code>pan.baidu.com</code>，访问的是百度云盘；</p>
+<p>输入并访问<code>fanyi.baidu.com</code>，访问的是百度翻译；</p>
+</blockquote>
+<p>也就是说，二级域名可以将你的一个域名用作不同的页面。</p>
+<p>也就是说，二级域名可以将你的一个域名用作<strong>不同项目</strong></p>
+<h3 id="4-2-添加二级域名"><a href="#4-2-添加二级域名" class="headerlink" title="4.2 添加二级域名"></a>4.2 添加二级域名</h3>
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>提示</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>若你未进行步骤3，则打开你购买域名的服务商的域名控制台，后续步骤参考同理</p>
+<p>若你进行了步骤3，则打开CloudFlare的域名控制台，后续步骤参考同理</p>
+
+    </div>
+  </div>
+
+<p>打开你的域名控制台，来到之前设置域名域名解析的页面。</p>
+<p>重复一遍<a href="./#2-2-%E5%B0%86%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E5%88%B0Github-Page">步骤2.2</a>或<a href="./#3-3-%E5%9C%A8CloudFlare%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90">步骤3.3</a>，在填写<code>www</code>的那一栏改为你想要的二级域名名称，例如<code>store</code>、<code>fanyi</code>等。</p>
+<p>完成后，再重复一遍<a href="./#2-3-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D">步骤2.3</a>或<a href="./#3-4-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D">步骤3.4</a>，同理，在填写域名时，将<code>www.你的域名</code>那一栏写为<code>二级域名.你的域名</code>。</p>
+<p>大功告成！</p>
+<hr>
+<h2 id="特别鸣谢"><a href="#特别鸣谢" class="headerlink" title="特别鸣谢"></a>特别鸣谢</h2><p><a class="link"   href="https://github.com/Yawly628" >@Yawly628<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：提供部分初始化页面</p>
+]]></content>
+      <categories>
+        <category>计算机从入门到入土</category>
+      </categories>
+      <tags>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深渊 第零章</title>
     <url>/2025/06/09/Darkness0/</url>
     <content><![CDATA[<h2 id="序——普度众生"><a href="#序——普度众生" class="headerlink" title="序——普度众生"></a>序——普度众生</h2><blockquote>
@@ -124,141 +565,6 @@
 ]]></content>
       <categories>
         <category>计算机从入门到入土</category>
-      </categories>
-      <tags>
-        <tag>帮助</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>莺系列整合包食用指南</title>
-    <url>/2024/09/29/YingOfMc/</url>
-    <content><![CDATA[<h2 id="下载整合包"><a href="#下载整合包" class="headerlink" title="下载整合包"></a>下载整合包</h2><blockquote>
-<p>在下载之前，你需要知道：整合包的命名极其统一以便于理解，因此选择一个符合自己需求的整合包极其重要。</p>
-</blockquote>
-<h3 id="1-版本选择"><a href="#1-版本选择" class="headerlink" title="1. 版本选择"></a>1. 版本选择</h3><p>按现在最新发布的<em>Ying of Generation on 1.20.1（V2.0-B23.11.26-OCI）</em>为例，下图为精简一图流：<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img/MC.tech/pic.png"
-                      alt="一图流" title="一图流"
-                ></p>
-<h5 id="·-整合包名称"><a href="#·-整合包名称" class="headerlink" title="· 整合包名称"></a>· 整合包名称</h5><p>图中的<em>Ying of Generation</em>就是莺纪元的名称<del class="mask">(这不废话嘛)</del>，除此之外，还有莺之诗<em>Ying of Epic</em>整合包。</p>
-<h5 id="·-MC版本"><a href="#·-MC版本" class="headerlink" title="· MC版本"></a>· MC版本</h5><p>图中的<em>1.20.1</em>是MC的版本号<del class="mask">(这不还是废话嘛)</del>，根据自己需要的MC版本下载就行。</p>
-<p><strong>请注意</strong>：由于模组对MC的版本兼容性问题，<strong>不要在整合包名称给出的版本以外的MC里加载整合包</strong>，那怕是小版本(1.20.1-&gt;1.20.2)也不行！</p>
-<h5 id="·-整合包版本"><a href="#·-整合包版本" class="headerlink" title="· 整合包版本"></a>· 整合包版本</h5><p>图中的<em>V2.0</em>是整合包版本号<del class="mask">(我怀疑这是水贴)</del>，<strong>符合MC版本的情况下建议越新越好</strong>，旧版本的整合包相比新版本可能存在模组过旧、bug过多、优化过差等等问题。</p>
-<p><strong>请注意</strong>：由于模组兼容性问题，在整合包版本不一致时：</p>
-<ul>
-<li>莺纪元：<ul>
-<li>（概率）存档损坏</li>
-<li>（概率）游戏崩溃</li>
-<li>（概率）无法加入多人世界</li>
-<li>（部分模组）模组配置重置</li>
-</ul>
-</li>
-<li>莺之诗<ul>
-<li>（必然）存档损坏</li>
-<li>（概率）游戏崩溃</li>
-<li>（概率）系统崩溃</li>
-<li>（必然）无法加入多人世界</li>
-<li>（部分模组）模组配置重置</li>
-</ul>
-</li>
-</ul>
-<h5 id="·-测试模式"><a href="#·-测试模式" class="headerlink" title="· 测试模式"></a>· 测试模式</h5><p>图中的<em>B</em>是测试模式，测试模式有以下几种：</p>
-<ul>
-<li>A——Alpha：未发布的测试版本，仅提供内部测试使用</li>
-<li>B——<strong>Beta</strong>：已经过测试的发布版本，基本没有影响游戏体验的bug，可以放心食用</li>
-<li>D——Dev.：未测试版本，那么不推荐食用。如需使用<strong>请提前备份存档等游戏数据</strong>，避免bug导致数据损坏或丢失</li>
-</ul>
-<p>所以，一般情况下，请寻找<em><strong>B模式</strong></em> 整合的包食用即可。</p>
-<h5 id="·-整合时间"><a href="#·-整合时间" class="headerlink" title="· 整合时间"></a>· 整合时间</h5><p>图中<em>23.11.26</em>是整合时间，可得知该整合包的制作时间。<del class="mask">(一般没什么用)</del>如果使用的整合包制作时间过久，可能会出现模组版本过低，导致新物品&amp;功能缺失的问题。<del class="mask">(这个时候应该把作者踹去更新整合包)</del></p>
-<h5 id="·-整合方式"><a href="#·-整合方式" class="headerlink" title="· 整合方式"></a>· 整合方式</h5><p>图中<em>OCI</em>是整合方式，整合方式有以下几种——</p>
-<ul>
-<li>OCI——One Click Install：指<strong>包含了启动器</strong>的一键安装方式，该方式的内部包默认为F版</li>
-<li>U——Ultra：指拓展整合方式，是基于额外追加了部分模组的整合包</li>
-<li>F——Full：指完整整合方式，是功能完善的全量整合包</li>
-<li>L——Lite：指精简整合方式，是舍去了部分功能，且额外加入了部分优化模组的整合包（该整合包不一定会在每个版本发布，且由于功能缺失，<strong>L版和同版本其他整合方式兼容性未知</strong>）</li>
-</ul>
-<hr>
-<h3 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2.下载链接"></a>2.下载链接</h3><h5 id="·-频道下载"><a href="#·-频道下载" class="headerlink" title="· 频道下载"></a>· 频道下载</h5><p>频道会根据需求上传所需MC版本的最新整合包，<font color=red>由于企鹅风控可能会上传失败，推荐前往网盘下载</font>。加入频道<a class="link"   href="https://pd.qq.com/s/fq416q5oo"  title="自由武装游击队频道加入链接">点此<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>。</p>
-<h5 id="·-网盘下载"><a href="#·-网盘下载" class="headerlink" title="· 网盘下载"></a>· 网盘下载</h5><p>网盘拥有所有的整合包资源：</p>
-<ul>
-<li>百度云——网盘界的老大哥，分享的文件100%失效…百度网盘，永久停更！</li>
-<li>阿里云——和楼上坐一桌，永久停更！</li>
-<li>蓝奏云——<a class="link"   href="https://wled.lanzouv.com/b02eq0oah"  title="蓝奏云链接">点此下载（密码：banying）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：超过100Mb的文件需要分段解压，站内教程<a href="../2024/09/30//Multi-partArchive/#%E8%A7%A3%E5%8E%8B">点此</a>（<font color=red>由于维护工作量超标，大于100Mb的文件随缘更新</font>）</li>
-<li>123网盘——<a class="link"   href="https://www.123pan.com/s/4i2djv-UcnRA"  title="123链接">点此下载（提取码：wled）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-<li>天翼云盘——<a class="link"   href="https://cloud.189.cn/web/share?code=uimqmamYF3Un"  title="天翼云链接">点此下载（访问码：ctj7）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-<li>夸克网盘——<a class="link"   href="https://pan.quark.cn/s/cc2f6504f813"  title="夸克云链接">点此下载（提取码：hsee）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-</ul>
-<h5 id="·-留言下载"><a href="#·-留言下载" class="headerlink" title="· 留言下载"></a>· 留言下载</h5><p>如果上述链接都无法下载，你可以在评论区留下你的邮箱以及你需要的整合包版本，资源将<del class="mask">随缘</del>发送到你的邮箱。</p>
-<hr>
-<h2 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h2><blockquote>
-<p>默认你已下载好了符合版本需求的Java</p>
-<p>以下为不完全的版本需求对应的Java下载链接：</p>
-<blockquote>
-<p>≤1.16.X的版本</p>
-<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html" >Java 16<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-</blockquote>
-<blockquote>
-<p>1.17.X-1.19.X</p>
-<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html" >Java 17<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-</blockquote>
-<blockquote>
-<p>1.20-1.20.4</p>
-<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk20-archive-downloads.html" >Java 20<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-</blockquote>
-<blockquote>
-<p>＞1.20.4的版本</p>
-<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html" >Java 21<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
-</blockquote>
-<p>为了照顾早期无法使用高版本Java的电脑，<a class="link"   href="https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html" >此处提供Java 8的下载链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>，但是高版本的MC几乎不支持Java 8运行。</p>
-</blockquote>
-<h3 id="1-OCI整合包"><a href="#1-OCI整合包" class="headerlink" title="1.OCI整合包"></a>1.OCI整合包</h3><h5 id="·-解压缩"><a href="#·-解压缩" class="headerlink" title="· 解压缩"></a>· 解压缩</h5><p>下载完成后，你会得到一个<em>Ying of XXX on X.XX.X(VX.X-XXX.XX.XX-OCI).zip</em>文件，在你想要存放MC的位置，解压该文件内所有文件。</p>
-<h5 id="·-一键安装"><a href="#·-一键安装" class="headerlink" title="· 一键安装"></a>· 一键安装</h5><p>解压完毕后，你会得到几个文件：</p>
-<ul>
-<li><em>HMCL.exe</em></li>
-<li><em>hmcl.json</em></li>
-<li><em>modpack.zip</em></li>
-</ul>
-<p><strong>如果不是，请检查整合包是否为OCI整合模式！</strong></p>
-<p>双击<em>HMCL.exe</em>，并等待初始化、一键安装完毕。在安装完成后，<em>modpack.zip</em>可以删除。</p>
-<p><strong>请注意</strong>：OCI整合包可能存在整合时间过久导致一键无法安装的问题，如果无法自动安装也无需删除，请参考F版安装教程安装即可。</p>
-<hr>
-<h3 id="2-U-F-L-整合包"><a href="#2-U-F-L-整合包" class="headerlink" title="2.U&amp;F&amp;L 整合包"></a>2.U&amp;F&amp;L 整合包</h3><h5 id="·-下载-准备启动器"><a href="#·-下载-准备启动器" class="headerlink" title="· 下载&amp;准备启动器"></a>· 下载&amp;准备启动器</h5><p>U&amp;F&amp;L整合模式皆采用的MCBBS格式整合包整合，因此主流的启动器都可以识别整合包并安装。如需下载启动器，推荐如下：</p>
-<ul>
-<li><a class="link"   href="https://hmcl.huangyuhui.net/download/" >HMCL<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——Hello Minecraft! Launcher：由<em>huangyuhui</em> 开发，具有六年历史、多系统支持、全新界面、自动安装、个性化主题、开源等特点</li>
-<li><a class="link"   href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" >PCL2<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——Plain Craft Launcher 2：由<em>龙腾猫跃</em> 开发的一款我的世界启动器，它集成了众多游戏版本、Mod、整合包相关的内容，方便玩家一键下载和安装</li>
-<li><a class="link"   href="https://www.bakaxl.com/#download" >BakaXL 4.0<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：一见惊鸿。这就是全新 BakaXL 启动器，采用了下一代技术构建。得益于全新的开发流程，现在的 BakaXL 不光体积轻盈，却仍然保留几乎所有强大的功能。</li>
-</ul>
-<p><strong>请注意</strong>：启动器存放的位置一般情况下就是你的游戏保存位置，请在合适位置放置启动器。</p>
-<h5 id="·-导入整合包"><a href="#·-导入整合包" class="headerlink" title="· 导入整合包"></a>· 导入整合包</h5><blockquote>
-<p>仅以HMCL启动器举例，其他启动器原理大致相同，自行安装。</p>
-<p><del class="mask">一般的启动器可以直接把下载的整合包拖到启动器上就能安装</del></p>
-</blockquote>
-<p>依次点击<em>版本列表</em> -<em>安装整合包</em> - <em>导入本地整合包文件</em><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img/MC.tech/HMCL1.png"
-                      alt="教程1" title="看图片干嘛"
-                ><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img/MC.tech/HMCL2.png"
-                      alt="教程2" title="看图片没看文字快的"
-                ><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img/MC.tech/HMCL3.png"
-                      alt="教程3" title="那你还是看吧"
-                ><br>选择刚刚下载的整合包(如果OCI安装失败，此步选择<em>modpack.zip</em>)</p>
-<p>导入整合包信息后确认安装版本无误点击<em>安装</em> 即可<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img/MC.tech/HMCL4.png"
-                      alt="教程3" title="那你还是看吧"
-                ></p>
-]]></content>
-      <categories>
-        <category>MC</category>
       </categories>
       <tags>
         <tag>帮助</tag>
@@ -943,6 +1249,141 @@
       <tags>
         <tag>帮助</tag>
         <tag>资讯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>莺系列整合包食用指南</title>
+    <url>/2024/09/29/YingOfMc/</url>
+    <content><![CDATA[<h2 id="下载整合包"><a href="#下载整合包" class="headerlink" title="下载整合包"></a>下载整合包</h2><blockquote>
+<p>在下载之前，你需要知道：整合包的命名极其统一以便于理解，因此选择一个符合自己需求的整合包极其重要。</p>
+</blockquote>
+<h3 id="1-版本选择"><a href="#1-版本选择" class="headerlink" title="1. 版本选择"></a>1. 版本选择</h3><p>按现在最新发布的<em>Ying of Generation on 1.20.1（V2.0-B23.11.26-OCI）</em>为例，下图为精简一图流：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/MC.tech/pic.png"
+                      alt="一图流" title="一图流"
+                ></p>
+<h5 id="·-整合包名称"><a href="#·-整合包名称" class="headerlink" title="· 整合包名称"></a>· 整合包名称</h5><p>图中的<em>Ying of Generation</em>就是莺纪元的名称<del class="mask">(这不废话嘛)</del>，除此之外，还有莺之诗<em>Ying of Epic</em>整合包。</p>
+<h5 id="·-MC版本"><a href="#·-MC版本" class="headerlink" title="· MC版本"></a>· MC版本</h5><p>图中的<em>1.20.1</em>是MC的版本号<del class="mask">(这不还是废话嘛)</del>，根据自己需要的MC版本下载就行。</p>
+<p><strong>请注意</strong>：由于模组对MC的版本兼容性问题，<strong>不要在整合包名称给出的版本以外的MC里加载整合包</strong>，那怕是小版本(1.20.1-&gt;1.20.2)也不行！</p>
+<h5 id="·-整合包版本"><a href="#·-整合包版本" class="headerlink" title="· 整合包版本"></a>· 整合包版本</h5><p>图中的<em>V2.0</em>是整合包版本号<del class="mask">(我怀疑这是水贴)</del>，<strong>符合MC版本的情况下建议越新越好</strong>，旧版本的整合包相比新版本可能存在模组过旧、bug过多、优化过差等等问题。</p>
+<p><strong>请注意</strong>：由于模组兼容性问题，在整合包版本不一致时：</p>
+<ul>
+<li>莺纪元：<ul>
+<li>（概率）存档损坏</li>
+<li>（概率）游戏崩溃</li>
+<li>（概率）无法加入多人世界</li>
+<li>（部分模组）模组配置重置</li>
+</ul>
+</li>
+<li>莺之诗<ul>
+<li>（必然）存档损坏</li>
+<li>（概率）游戏崩溃</li>
+<li>（概率）系统崩溃</li>
+<li>（必然）无法加入多人世界</li>
+<li>（部分模组）模组配置重置</li>
+</ul>
+</li>
+</ul>
+<h5 id="·-测试模式"><a href="#·-测试模式" class="headerlink" title="· 测试模式"></a>· 测试模式</h5><p>图中的<em>B</em>是测试模式，测试模式有以下几种：</p>
+<ul>
+<li>A——Alpha：未发布的测试版本，仅提供内部测试使用</li>
+<li>B——<strong>Beta</strong>：已经过测试的发布版本，基本没有影响游戏体验的bug，可以放心食用</li>
+<li>D——Dev.：未测试版本，那么不推荐食用。如需使用<strong>请提前备份存档等游戏数据</strong>，避免bug导致数据损坏或丢失</li>
+</ul>
+<p>所以，一般情况下，请寻找<em><strong>B模式</strong></em> 整合的包食用即可。</p>
+<h5 id="·-整合时间"><a href="#·-整合时间" class="headerlink" title="· 整合时间"></a>· 整合时间</h5><p>图中<em>23.11.26</em>是整合时间，可得知该整合包的制作时间。<del class="mask">(一般没什么用)</del>如果使用的整合包制作时间过久，可能会出现模组版本过低，导致新物品&amp;功能缺失的问题。<del class="mask">(这个时候应该把作者踹去更新整合包)</del></p>
+<h5 id="·-整合方式"><a href="#·-整合方式" class="headerlink" title="· 整合方式"></a>· 整合方式</h5><p>图中<em>OCI</em>是整合方式，整合方式有以下几种——</p>
+<ul>
+<li>OCI——One Click Install：指<strong>包含了启动器</strong>的一键安装方式，该方式的内部包默认为F版</li>
+<li>U——Ultra：指拓展整合方式，是基于额外追加了部分模组的整合包</li>
+<li>F——Full：指完整整合方式，是功能完善的全量整合包</li>
+<li>L——Lite：指精简整合方式，是舍去了部分功能，且额外加入了部分优化模组的整合包（该整合包不一定会在每个版本发布，且由于功能缺失，<strong>L版和同版本其他整合方式兼容性未知</strong>）</li>
+</ul>
+<hr>
+<h3 id="2-下载链接"><a href="#2-下载链接" class="headerlink" title="2.下载链接"></a>2.下载链接</h3><h5 id="·-频道下载"><a href="#·-频道下载" class="headerlink" title="· 频道下载"></a>· 频道下载</h5><p>频道会根据需求上传所需MC版本的最新整合包，<font color=red>由于企鹅风控可能会上传失败，推荐前往网盘下载</font>。加入频道<a class="link"   href="https://pd.qq.com/s/fq416q5oo"  title="自由武装游击队频道加入链接">点此<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>。</p>
+<h5 id="·-网盘下载"><a href="#·-网盘下载" class="headerlink" title="· 网盘下载"></a>· 网盘下载</h5><p>网盘拥有所有的整合包资源：</p>
+<ul>
+<li>百度云——网盘界的老大哥，分享的文件100%失效…百度网盘，永久停更！</li>
+<li>阿里云——和楼上坐一桌，永久停更！</li>
+<li>蓝奏云——<a class="link"   href="https://wled.lanzouv.com/b02eq0oah"  title="蓝奏云链接">点此下载（密码：banying）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：超过100Mb的文件需要分段解压，站内教程<a href="../2024/09/30//Multi-partArchive/#%E8%A7%A3%E5%8E%8B">点此</a>（<font color=red>由于维护工作量超标，大于100Mb的文件随缘更新</font>）</li>
+<li>123网盘——<a class="link"   href="https://www.123pan.com/s/4i2djv-UcnRA"  title="123链接">点此下载（提取码：wled）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li>天翼云盘——<a class="link"   href="https://cloud.189.cn/web/share?code=uimqmamYF3Un"  title="天翼云链接">点此下载（访问码：ctj7）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li>夸克网盘——<a class="link"   href="https://pan.quark.cn/s/cc2f6504f813"  title="夸克云链接">点此下载（提取码：hsee）<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+</ul>
+<h5 id="·-留言下载"><a href="#·-留言下载" class="headerlink" title="· 留言下载"></a>· 留言下载</h5><p>如果上述链接都无法下载，你可以在评论区留下你的邮箱以及你需要的整合包版本，资源将<del class="mask">随缘</del>发送到你的邮箱。</p>
+<hr>
+<h2 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h2><blockquote>
+<p>默认你已下载好了符合版本需求的Java</p>
+<p>以下为不完全的版本需求对应的Java下载链接：</p>
+<blockquote>
+<p>≤1.16.X的版本</p>
+<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html" >Java 16<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</blockquote>
+<blockquote>
+<p>1.17.X-1.19.X</p>
+<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html" >Java 17<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</blockquote>
+<blockquote>
+<p>1.20-1.20.4</p>
+<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk20-archive-downloads.html" >Java 20<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</blockquote>
+<blockquote>
+<p>＞1.20.4的版本</p>
+<p><a class="link"   href="https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html" >Java 21<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</blockquote>
+<p>为了照顾早期无法使用高版本Java的电脑，<a class="link"   href="https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html" >此处提供Java 8的下载链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>，但是高版本的MC几乎不支持Java 8运行。</p>
+</blockquote>
+<h3 id="1-OCI整合包"><a href="#1-OCI整合包" class="headerlink" title="1.OCI整合包"></a>1.OCI整合包</h3><h5 id="·-解压缩"><a href="#·-解压缩" class="headerlink" title="· 解压缩"></a>· 解压缩</h5><p>下载完成后，你会得到一个<em>Ying of XXX on X.XX.X(VX.X-XXX.XX.XX-OCI).zip</em>文件，在你想要存放MC的位置，解压该文件内所有文件。</p>
+<h5 id="·-一键安装"><a href="#·-一键安装" class="headerlink" title="· 一键安装"></a>· 一键安装</h5><p>解压完毕后，你会得到几个文件：</p>
+<ul>
+<li><em>HMCL.exe</em></li>
+<li><em>hmcl.json</em></li>
+<li><em>modpack.zip</em></li>
+</ul>
+<p><strong>如果不是，请检查整合包是否为OCI整合模式！</strong></p>
+<p>双击<em>HMCL.exe</em>，并等待初始化、一键安装完毕。在安装完成后，<em>modpack.zip</em>可以删除。</p>
+<p><strong>请注意</strong>：OCI整合包可能存在整合时间过久导致一键无法安装的问题，如果无法自动安装也无需删除，请参考F版安装教程安装即可。</p>
+<hr>
+<h3 id="2-U-F-L-整合包"><a href="#2-U-F-L-整合包" class="headerlink" title="2.U&amp;F&amp;L 整合包"></a>2.U&amp;F&amp;L 整合包</h3><h5 id="·-下载-准备启动器"><a href="#·-下载-准备启动器" class="headerlink" title="· 下载&amp;准备启动器"></a>· 下载&amp;准备启动器</h5><p>U&amp;F&amp;L整合模式皆采用的MCBBS格式整合包整合，因此主流的启动器都可以识别整合包并安装。如需下载启动器，推荐如下：</p>
+<ul>
+<li><a class="link"   href="https://hmcl.huangyuhui.net/download/" >HMCL<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——Hello Minecraft! Launcher：由<em>huangyuhui</em> 开发，具有六年历史、多系统支持、全新界面、自动安装、个性化主题、开源等特点</li>
+<li><a class="link"   href="https://afdian.com/p/0164034c016c11ebafcb52540025c377" >PCL2<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——Plain Craft Launcher 2：由<em>龙腾猫跃</em> 开发的一款我的世界启动器，它集成了众多游戏版本、Mod、整合包相关的内容，方便玩家一键下载和安装</li>
+<li><a class="link"   href="https://www.bakaxl.com/#download" >BakaXL 4.0<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：一见惊鸿。这就是全新 BakaXL 启动器，采用了下一代技术构建。得益于全新的开发流程，现在的 BakaXL 不光体积轻盈，却仍然保留几乎所有强大的功能。</li>
+</ul>
+<p><strong>请注意</strong>：启动器存放的位置一般情况下就是你的游戏保存位置，请在合适位置放置启动器。</p>
+<h5 id="·-导入整合包"><a href="#·-导入整合包" class="headerlink" title="· 导入整合包"></a>· 导入整合包</h5><blockquote>
+<p>仅以HMCL启动器举例，其他启动器原理大致相同，自行安装。</p>
+<p><del class="mask">一般的启动器可以直接把下载的整合包拖到启动器上就能安装</del></p>
+</blockquote>
+<p>依次点击<em>版本列表</em> -<em>安装整合包</em> - <em>导入本地整合包文件</em><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/MC.tech/HMCL1.png"
+                      alt="教程1" title="看图片干嘛"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/MC.tech/HMCL2.png"
+                      alt="教程2" title="看图片没看文字快的"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/MC.tech/HMCL3.png"
+                      alt="教程3" title="那你还是看吧"
+                ><br>选择刚刚下载的整合包(如果OCI安装失败，此步选择<em>modpack.zip</em>)</p>
+<p>导入整合包信息后确认安装版本无误点击<em>安装</em> 即可<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/MC.tech/HMCL4.png"
+                      alt="教程3" title="那你还是看吧"
+                ></p>
+]]></content>
+      <categories>
+        <category>MC</category>
+      </categories>
+      <tags>
+        <tag>帮助</tag>
       </tags>
   </entry>
   <entry>
