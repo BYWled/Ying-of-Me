@@ -146,7 +146,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-12-01T03:00:00.000Z">
-<meta property="article:modified_time" content="2025-12-01T10:14:14.773Z">
+<meta property="article:modified_time" content="2025-12-01T11:24:56.644Z">
 <meta property="article:author" content="BY·Wled">
 <meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary">
@@ -513,8 +513,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-01 18:14:14</span>
-            <span class="mobile">2025-12-01 18:14:14</span>
+            <span class="desktop">2025-12-01 19:24:56</span>
+            <span class="mobile">2025-12-01 19:24:56</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -552,12 +552,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.2k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>11 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>12 分钟</span>
         </span>
     
     
@@ -599,7 +599,7 @@
   </details>
 
 <hr>
-<h2 id="1-代码上传至Github并部署为网站"><a href="#1-代码上传至Github并部署为网站" class="headerlink" title="1 代码上传至Github并部署为网站"></a>1 代码上传至Github并部署为网站</h2><h3 id="1-0-在此之前"><a href="#1-0-在此之前" class="headerlink" title="1.0 在此之前"></a>1.0 在此之前</h3><p>由于Github Page默认的入口文件名为<code>index.html</code>，因此需要先自己的检查项目结构，确保你的页面入口文件名为<code>index.html</code>。</p>
+<h2 id="1-代码上传至Github并部署为网站"><a href="#1-代码上传至Github并部署为网站" class="headerlink" title="1 代码上传至Github并部署为网站"></a>1 代码上传至Github并部署为网站</h2><h3 id="1-0-在此之前"><a href="#1-0-在此之前" class="headerlink" title="1.0 在此之前"></a>1.0 在此之前</h3><p>由于Github Page默认的入口文件名为<code>index.html</code>，因此需要先检查自己的项目结构，确保你的页面入口文件名为<code>index.html</code>。</p>
 <p>例如一个项目中，首页<code>home.html</code>为网站的入口，则将你项目中<strong>所有</strong>和<code>home.html</code>相关的代码重命名为<code>index.html</code>：</p>
 <div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原来的入口文件名</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&#x27;home.html&#x27;</span>;</span><br><span class="line"><span class="comment">// 替换为index.html</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&#x27;index.html&#x27;</span>;</span><br></pre></td></tr></table></figure></div>
 
@@ -675,7 +675,7 @@
                 ></p>
 <h3 id="1-3-将项目文件上传至Github"><a href="#1-3-将项目文件上传至Github" class="headerlink" title="1.3 将项目文件上传至Github"></a>1.3 将项目文件上传至Github</h3>
   <div class="note p-4 mb-4 rounded-small markdown-body tip">
-    <p><font color=green>Tips</font>:对GIt完全不理解的小白请使用方法1</p>
+    <p><font color=green>Tips</font>:对Git完全不理解的小白请使用方法1</p>
 
   </div>
 
@@ -744,7 +744,7 @@
 
 <p>若在根目录创建了<code>.git</code>文件夹，并提示<code>Initialized empty Git repository in 项目路径</code>则初始化完成。</p>
 <p>将项目中的所有文件提交到待上传：</p>
-<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit --m &#x27;提交说明&#x27;</span><br></pre></td></tr></table></figure></div>
+<div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &#x27;提交说明&#x27;</span><br></pre></td></tr></table></figure></div>
 
 <p>获取ssh key（第一条指令输入后不断回车）：</p>
 <div class="code-container" data-rel="Cmd"><figure class="iseeu highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure></div>
@@ -818,11 +818,11 @@
 <ul>
 <li><a class="link"   target="_blank" rel="noopener" href="https://wanwang.aliyun.com/domain/" >阿里云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——国内最大的云服务商，国内DNS污染率最低的服务商，若你以前没有使用过阿里云，则首年优惠力度最大。</li>
 <li><a class="link"   target="_blank" rel="noopener" href="https://cloud.tencent.com/product/domain" >腾讯云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——部分域名后缀享有极高的价格优惠。</li>
-<li><a class="link"   target="_blank" rel="noopener" href="https://www.spaceship.com/zh/domains/" >Space Ship<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——优惠力度最大的海外服务商，若你的服务器在海外，则该服务商最优先。</li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.spaceship.com/zh/domains/" >Spaceship<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>——优惠力度最大的海外服务商，若你的服务器在海外，则该服务商最优先。</li>
 <li><a class="link"   target="_blank" rel="noopener" href="https://cloud.baidu.com/product/bcd.html" >百度云<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
 </ul>
 <p>以下均以<em>阿里云</em>为例<del class="mask">（我的域名在国内没有优惠了QwQ）</del>，所有服务商的操作都相似。</p>
-<p>购买、实名（若有）的部分省略。</p>
+<p>购买、实名（<strong>国内必须</strong>）的部分省略。</p>
 
   <div class="note-large yellow">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
@@ -878,7 +878,7 @@
 <p>现在，你就可以使用你购买的域名访问你的项目了。</p>
 <hr>
 <h2 id="3-为网站加速"><a href="#3-为网站加速" class="headerlink" title="3 为网站加速"></a>3 为网站加速</h2><p>步骤2中进行的操作仅能为你的网站“命名”，而不能改变你网站部署在Github上访问速度慢的问题。因此，本步骤可以为你提供一个可以免费加速访问你的项目，甚至还能提供部分防御攻击的功能：<font color=orange>CloudFlare</font></p>
-<h3 id="3-0-为什么我不推荐CDN"><a href="#3-0-为什么我不推荐CDN" class="headerlink" title="3.0 为什么我不推荐CDN"></a>3.0 为什么我不推荐CDN</h3><p>由于众所周知的问题，<del class="mask">在天朝境内部署CDN可能会有法律问题，</del>除非你已备案且拥有钞能力，否则我不推荐使用CDN。</p>
+<h3 id="3-0-为什么我不推荐购买国内CDN"><a href="#3-0-为什么我不推荐购买国内CDN" class="headerlink" title="3.0 为什么我不推荐购买国内CDN"></a>3.0 为什么我不推荐购买国内CDN</h3><p>由于众所周知的问题，<del class="mask">在天朝境内部署CDN可能会有法律问题，</del>除非你已备案且拥有钞能力，否则我不推荐使用CDN。</p>
 <p>若你执意想要部署CDN，请自行搜索教程，我不会提供。</p>
 <h3 id="3-1-注册CloudFlare账号"><a href="#3-1-注册CloudFlare账号" class="headerlink" title="3.1 注册CloudFlare账号"></a>3.1 注册CloudFlare账号</h3><p>打开<a class="link"   target="_blank" rel="noopener" href="https://dash.cloudflare.com/sign-up" >该链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>进入CloudFlare注册页，输入你的邮件地址和密码进行注册；</p>
 <p>在<code>Enter an existing domain</code>中输入你购买的域名（不包含www）；</p>
@@ -973,10 +973,10 @@
                 ></p>
 <p>现在，你就可以使用你购买的域名访问你的项目了。</p>
 <hr>
-<h2 id="4-设置二级域名"><a href="#4-设置二级域名" class="headerlink" title="4 设置二级域名"></a>4 设置二级域名</h2><h3 id="4-1-什么是二级域名"><a href="#4-1-什么是二级域名" class="headerlink" title="4.1 什么是二级域名"></a>4.1 什么是二级域名</h3><p>你购买的域名不仅只有<code>www</code>前缀可以使用，换句话来说，其实任意字符都可以使用，而<code>www</code>只是根域名。</p>
+<h2 id="4-设置二级域名"><a href="#4-设置二级域名" class="headerlink" title="4 设置二级域名"></a>4 设置二级域名</h2><h3 id="4-1-什么是二级域名"><a href="#4-1-什么是二级域名" class="headerlink" title="4.1 什么是二级域名"></a>4.1 什么是二级域名</h3><p>你购买的域名不仅只有<code>www</code>前缀可以使用，换句话来说，其实任意字符都可以使用，而<code>www</code>只是<del class="mask">一般情况下的</del>根域名。</p>
 <p>举个例子你就能明白了：</p>
 <blockquote>
-<p>直接输入并访问<code>your.domain</code>，访问的是<code>www.your.domain</code>；</p>
+<p>直接输入并访问<code>your.domain</code>，重定向访问的是<code>www.your.domain</code>；</p>
 <p>而输入并访问<code>kid.your.domain</code>，可以访问不同的页面。</p>
 </blockquote>
 <p>如果你还没明白，可以参考百度：</p>
@@ -1004,6 +1004,9 @@
 <p>重复一遍<a href="./#2-2-%E5%B0%86%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E5%88%B0Github-Page">步骤2.2</a>或<a href="./#3-3-%E5%9C%A8CloudFlare%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90">步骤3.3</a>，在填写<code>www</code>的那一栏改为你想要的二级域名名称，例如<code>store</code>、<code>fanyi</code>等。</p>
 <p>完成后，再重复一遍<a href="./#2-3-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D">步骤2.3</a>或<a href="./#3-4-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D">步骤3.4</a>，同理，在填写域名时，将<code>www.你的域名</code>那一栏写为<code>二级域名.你的域名</code>。</p>
 <p>大功告成！</p>
+<h4 id="4-2-1-有关根域名"><a href="#4-2-1-有关根域名" class="headerlink" title="4.2.1 有关根域名"></a>4.2.1 有关根域名</h4><p>通常我们将 <code>www</code> 作为主页入口的习惯。</p>
+<p>但在技术上，<code>www.your.domain</code> 其实也是一个二级域名，而 <code>your.domain</code> 是根域名。</p>
+<p>如果希望不带 www 也能访问，需要在填写<code>www</code>的那一栏改为 <code>@</code> 即可。</p>
 <hr>
 <h2 id="特别鸣谢"><a href="#特别鸣谢" class="headerlink" title="特别鸣谢"></a>特别鸣谢</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Yawly628" >@Yawly628<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>：提供部分初始化页面</p>
 
@@ -1020,7 +1023,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-01 18:14:14
+                    :</strong> 2025-12-01 19:24:56
             </li>
         
         <li>
@@ -1137,7 +1140,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">从入门到入土教你如何搭建网站</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E4%B8%8A%E4%BC%A0%E8%87%B3Github%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%BA%E7%BD%91%E7%AB%99"><span class="nav-text">1 代码上传至Github并部署为网站</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-0-%E5%9C%A8%E6%AD%A4%E4%B9%8B%E5%89%8D"><span class="nav-text">1.0 在此之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%B3%A8%E5%86%8CGithub%E8%B4%A6%E5%8F%B7"><span class="nav-text">1.1  注册Github账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%9B%E5%BB%BA%E6%96%B0%E4%BB%93%E5%BA%93"><span class="nav-text">1.2 创建新仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%86%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E8%87%B3Github"><span class="nav-text">1.3 将项目文件上传至Github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E9%83%A8%E7%BD%B2Github-Page"><span class="nav-text">1.4 部署Github Page</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E7%BD%91%E7%AB%99%E2%80%9C%E5%8F%96%E5%90%8D%E2%80%9D%E2%80%94%E2%80%94%E8%B4%AD%E4%B9%B0%E5%B9%B6%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D"><span class="nav-text">2 为网站“取名”——购买并设置域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%B4%AD%E4%B9%B0%E5%9F%9F%E5%90%8D"><span class="nav-text">2.1 购买域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B0%86%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E5%88%B0Github-Page"><span class="nav-text">2.2 将域名解析到Github Page</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D"><span class="nav-text">2.3 在Github Page中添加域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%B8%BA%E7%BD%91%E7%AB%99%E5%8A%A0%E9%80%9F"><span class="nav-text">3 为网站加速</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-0-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%B8%8D%E6%8E%A8%E8%8D%90CDN"><span class="nav-text">3.0 为什么我不推荐CDN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%B3%A8%E5%86%8CCloudFlare%E8%B4%A6%E5%8F%B7"><span class="nav-text">3.1 注册CloudFlare账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%87%8D%E6%96%B0%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D"><span class="nav-text">3.2 重新设置域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%9C%A8CloudFlare%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="nav-text">3.3 在CloudFlare中设置域名解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D"><span class="nav-text">3.4 在Github Page中添加域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%BE%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="nav-text">4 设置二级域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="nav-text">4.1 什么是二级域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="nav-text">4.2 添加二级域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%88%AB%E9%B8%A3%E8%B0%A2"><span class="nav-text">特别鸣谢</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%A3%E7%A0%81%E4%B8%8A%E4%BC%A0%E8%87%B3Github%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%BA%E7%BD%91%E7%AB%99"><span class="nav-text">1 代码上传至Github并部署为网站</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-0-%E5%9C%A8%E6%AD%A4%E4%B9%8B%E5%89%8D"><span class="nav-text">1.0 在此之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%B3%A8%E5%86%8CGithub%E8%B4%A6%E5%8F%B7"><span class="nav-text">1.1  注册Github账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%9B%E5%BB%BA%E6%96%B0%E4%BB%93%E5%BA%93"><span class="nav-text">1.2 创建新仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B0%86%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E8%87%B3Github"><span class="nav-text">1.3 将项目文件上传至Github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E9%83%A8%E7%BD%B2Github-Page"><span class="nav-text">1.4 部署Github Page</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E7%BD%91%E7%AB%99%E2%80%9C%E5%8F%96%E5%90%8D%E2%80%9D%E2%80%94%E2%80%94%E8%B4%AD%E4%B9%B0%E5%B9%B6%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D"><span class="nav-text">2 为网站“取名”——购买并设置域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%B4%AD%E4%B9%B0%E5%9F%9F%E5%90%8D"><span class="nav-text">2.1 购买域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B0%86%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E5%88%B0Github-Page"><span class="nav-text">2.2 将域名解析到Github Page</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D"><span class="nav-text">2.3 在Github Page中添加域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%B8%BA%E7%BD%91%E7%AB%99%E5%8A%A0%E9%80%9F"><span class="nav-text">3 为网站加速</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-0-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%B8%8D%E6%8E%A8%E8%8D%90%E8%B4%AD%E4%B9%B0%E5%9B%BD%E5%86%85CDN"><span class="nav-text">3.0 为什么我不推荐购买国内CDN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%B3%A8%E5%86%8CCloudFlare%E8%B4%A6%E5%8F%B7"><span class="nav-text">3.1 注册CloudFlare账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%87%8D%E6%96%B0%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D"><span class="nav-text">3.2 重新设置域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%9C%A8CloudFlare%E4%B8%AD%E8%AE%BE%E7%BD%AE%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="nav-text">3.3 在CloudFlare中设置域名解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%9C%A8Github-Page%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D"><span class="nav-text">3.4 在Github Page中添加域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%BE%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="nav-text">4 设置二级域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="nav-text">4.1 什么是二级域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="nav-text">4.2 添加二级域名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-%E6%9C%89%E5%85%B3%E6%A0%B9%E5%9F%9F%E5%90%8D"><span class="nav-text">4.2.1 有关根域名</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%88%AB%E9%B8%A3%E8%B0%A2"><span class="nav-text">特别鸣谢</span></a></li></ol>
 
 	</div>
 </div>
@@ -1168,7 +1171,7 @@
                     </span>
                     
                         <span>
-                            共 20.9k 字
+                            共 21k 字
                         </span>
                     
                 </p>
