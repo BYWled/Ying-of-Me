@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Wled">
+    
+    <meta name="author" content="BY·Wled">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://www.wled.top/2025/06/09/darkness0/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深渊 第零章">
+<meta property="og:url" content="https://www.wled.top/2025/06/09/Darkness0/index.html">
+<meta property="og:site_name" content="莺之驿站">
+<meta property="og:description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-06-08T16:52:00.000Z">
+<meta property="article:modified_time" content="2025-06-10T09:01:54.453Z">
+<meta property="article:author" content="金铭洋">
+<meta property="article:tag" content="深渊">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.wled.top/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/Oz-Vessalius-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/Oz-Vessalius-favicon.svg">
+    <meta name="theme-color" content="#21DEDB">
+    <link rel="shortcut icon" href="/images/Oz-Vessalius-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            深渊 第零章 | 伴莺の小窝
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.wled.top","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","delete_mask":true,"headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#21DEDB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"欢迎访问伴莺の小窝 | Welcome ~"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"伴莺の小窝","subtitle":{"text":["Wled's Relay Station"],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":{"github":"https://github.com/BYWled","bilibili":"https://space.bilibili.com/128746094","fa-solid fa-people-group":"./Dozer-Esports/index.html","fa-solid fa-basket-shopping":"https://store.wled.top/"},"qrs":null}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Something Just Like This","artist":"Coldplay","url":"https://evan.beee.top/music/Something%20Just%20Like%20This%20-%20The%20Chainsmokers%E3%80%81Coldplay.mp3","cover":"https://evan.beee.top/music/covers/Something_Just_Like_This.png","lrc":"/songs/SJLT.lrc"},{"name":"演","artist":"ChiliChill/三无Marblue","url":"/songs/yan.mp3","cover":"/songs/yan.jpg","lrc":"/songs/yan.lrc"},{"name":"サイエンス (feat. 重音テト)","artist":"MIMI/重音テト","url":"/songs/MIMI.mp3","cover":"/songs/MIMI.jpg","lrc":"/songs/MIMI.lrc"},{"name":"Sunshine","artist":"OneRepublic","url":"/songs/sun.mp3","cover":"/songs/sun.jpg","lrc":"/songs/sun.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"path":"/","icon":"fa-solid fa-home"},"MC":{"path":"/Ying","icon":"fa-solid fa-cube"},"小说":{"path":"/novel","icon":"fa-solid fa-book"},"关于":{"icon":"fa-regular fa-user","submenus":{"我":"/about","源代码":"https://github.com/BYWled/Ying-of-Me"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"流年间，途游光景伴莺随","show_on_mobile":false,"links":{"动态":{"path":"/archives","icon":"fa-regular fa-archive"},"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"类别":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/9/13 11:45:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                伴莺の小窝
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-home fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/Ying"
+                                        >
+                                    <i class="fa-solid fa-cube fa-fw"></i>
+                                    MC
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/novel"
+                                        >
+                                    <i class="fa-solid fa-book fa-fw"></i>
+                                    小说
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    我
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">
+                                                    源代码
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-solid fa-home fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/Ying"
+                        >
+                            <span>
+                                MC
+                            </span>
+                            
+                                <i class="fa-solid fa-cube fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/novel"
+                        >
+                            <span>
+                                小说
+                            </span>
+                            
+                                <i class="fa-solid fa-book fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-关于"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">我</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">源代码</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			
+			
+			<img src="/./img/Darkness/Darkness0.png" alt="深渊 第零章" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			
+			<div class="w-full flex items-center absolute bottom-0 justify-start">
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">深渊 第零章</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/Oz-Vessalius-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">金铭洋</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-06-09 00:52</span>
+        <span class="mobile">2025-06-09 00:52</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-06-10 17:01:54</span>
+            <span class="mobile">2025-06-10 17:01:54</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%AD%BB%E7%A5%9E%E6%97%A5%E8%AE%B0/">死神日记</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%B7%B1%E6%B8%8A/">深渊</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>6.2k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>20 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="序——普度众生"><a href="#序——普度众生" class="headerlink" title="序——普度众生"></a>序——普度众生</h2><blockquote>
+<p>吾本梨园子，蹁跹于玉台。台隳，天地不容，犹对红尘为看客，独向九重泪眸旋。曲收，无人击节，忽化青烟遁形迹，众生俱陷戏中帷。</p>
+<p align=right>——自序</p>
+</blockquote>
+<h3 id="18世纪，英格兰"><a href="#18世纪，英格兰" class="headerlink" title="18世纪，英格兰"></a><font color=gray>18世纪，英格兰</font></h3><p>暮色如粘稠的墨汁，自天际缓缓洇开，贪婪地吞噬着最后几缕挣扎的、血橙色的余晖。脚下的路，连同周遭的荒野，都在急速沉入模糊的昏暗中。我能清晰地感知到，他的胸腔里，他的意识，正被一种冰冷的、湿漉漉的恐惧所浸透。是意识消散前的永恒虚无吗？那比最深的海沟更窒息的黑暗深渊，他曾短暂地沉沦其中，又被我强行拽回这具尚有温度的躯壳。还是仅仅因为眼前这不断加深的暮色？光线每黯淡一分，他瞳孔里无形的恐慌便浓郁一分，仿佛涌动的阴影本身就是死神的衣袍，正无声地、不可抗拒地裹挟而来，要再次将他拖入万劫不复的、意识泯灭的深渊。他曾短暂地死过，黑暗烙印得太深，对他而言这不再是单纯的遮蔽，而是死神冰冷的吐息。</p>
+<p>我的思绪尚未抽离这无言的悲怮，变故骤临。他羸弱的身躯猛地向前一倾，像是被无形的绊索狠狠勒住，脚步瞬间凌乱不堪，踉跄着，如同风中即将折断的芦苇，几乎就要委顿于这冰冷的泥泞之中。脚踝——支撑着这副仍在抽条、骨骼纤细得可怜的少年身躯的脆弱关节——终究未能承受这荒野的崎岖与内心的重压。痛楚，如同淬了毒的匕首，瞬间刺穿了他。慌乱、委屈、猝不及防的剧痛，混杂着一种被世界再次抛弃的绝望感，化作几声压抑不住的、幼兽般的呜咽，从他紧咬的唇齿间泄露出来。这副娇生惯养、从未真正经受过风雨磋磨的小少爷躯体，此刻被这突如其来的暴力撕扯着。</p>
+<p>无需再等他的反馈，我迅速接管了他的视觉和已然失控的双腿。“坏了，”我在意识深处冷静地确认，“断了。”一丝极其微弱的、几乎被忽略的自责掠过——在接管之前，我竟未能感受到这具躯体的状态，未能及时缓冲这毁灭性的冲击。是我大意了。对这具从未品尝过苦难的容器而言，此刻的痛楚无异于地狱的酷刑。我调整着他能感受到的身体，将足以撕裂灵魂的剧痛过滤、钝化，同时将一道安抚的意识轻轻注入他混乱的思绪：</p>
+<p><em><strong>“不必担心，我会帮你。”</strong></em></p>
+<p>这并非谎言，至少在此刻，我的存在是他唯一能抓住的浮木。</p>
+<p>他应是接收到了这份温暖的支撑。我能感觉到他意识的震颤稍稍平复了一些，像惊涛骇浪中抓住船舷的手，虽未完全松开，却不再那般无望地挣扎。残存的意识不再像之前那样疯狂而无序地冲撞，反而开始以一种近乎麻木的、但至少是连贯的节奏流动起来。接下来的路途，由我驱动着这具残破的躯壳，模仿着日不落的贵族踮起脚，跋涉于愈发浓稠的夜色里。</p>
+<p>时间失去了刻度，只余下脚步在泥泞中拖拽的粘滞声响，以及夜风穿过枯枝发出的、如同死神低语的呜咽。脚下的触感悄然变化，凹凸不平的泥泞渐渐被一种相对坚实的土路取代。又不知过了多久，靴底敲击在坚硬冰冷的石板上，发出空洞而突兀的回响。这声音像是一把钥匙，瞬间刺穿了他意识中的迷雾。一种混合着归家的本能渴望与更深层恐惧的战栗，再次席卷了他。</p>
+<p>终于，在夜色几乎完全吞噬天地的时刻，我们抵达了这趟垂暮归途的终点。一座庄园的轮廓，庞大而阴森，如同巨兽的骨骸，赫然矗立在视野尽头。它曾是宏伟的象征，如今却只剩下破败的骸骨。那环绕的围墙，早已倾颓不堪，断壁残垣参差不齐地刺向铅灰色的夜空，活脱脱就是死神巨大、腐烂、七零八落的下颚。它们沉默地矗立着，仿佛正以一种缓慢而残忍的姿态，咀嚼着、吞噬着围墙之内曾经属于他家族的辉煌与温暖。昔日尚未照耀的荣光被无情地碾碎、消化，最终排泄出的，便是眼前这幅令人心胆俱寒的凄凉盛景——一个被死神啃噬殆尽、徒留残骸的昔日家园，以及一个被抹除存在的伯爵。晚风卷过废墟，带起一阵呜咽般的哨音，像是他在归来时的叹息。</p>
+<p>我们停驻在“死神下颚”的巨大缺口前。月光吝啬地洒下，勉强勾勒出庄园主宅黑洞洞的轮廓，窗户如同被挖空的眼窝，深不见底。一股混合着朽木、湿土和某种难以言喻的、时间沉淀下的腐败气息，浓烈地扑面而来。他残存的意识在这熟悉又陌生的气息冲击下剧烈地波动起来，是归巢的哀伤？还是面对最终审判的恐惧？我无从分辨，也无需分辨。他的心愿——回到这里——已然达成。而我的职责，如同名为天使的冰冷契约所昭示的，便是引导这缕因执念而滞留的灵魂，走向它最终的、永恒的超度。这破败的庄园，这被死神咀嚼过的残骸，便是他灵魂的终幕舞台。我驱动着这具属于他、此刻却由我掌控的躯体，迈过这道象征界限的残垣断壁，踏入那片更深的、连月光也怯于深入的黑暗之中。新的腐朽气息扑面而来，如同坟墓张开的口。</p>
+<p>我缓缓地、如同剥离一层粘连的薄膜，将对他躯体的掌控权一丝丝抽离。视觉、听觉、触觉……被钝化过的感官信号重新涌入他混乱的意识。首先回归的是脚踝处撕裂般的剧痛，他身体猛地一缩，发出一声破碎的抽气，单薄的身形在月光下像一株即将折断的细草。接着，是更庞大、更粘稠的恐惧——面对这座昔日家园已成庞然废墟的恐惧，混合着无家可归的、彻底的绝望。我能感知到他意识剧烈的震颤，如同风中残烛，微弱却执着地燃烧着最后一点可怜的生气。</p>
+<p><em><strong>“去吧。”</strong></em></p>
+<p>我在意识深处低语，那声音冰冷，但似乎比之前多了一丝……难以察觉的滞涩？像是冰冷的金属摩擦过粗粝的表面，</p>
+<p><em><strong>“这是你的地方。”</strong></em></p>
+<p>驱使他向前的意念，如同无形的推力，但其中或许夹杂了一丝连我自己都未曾预料的不忍——看着这具被我短暂复活、却又注定要在此刻走向终结的精致容器，承受着无望的痛苦。多眼熟的场景呀。</p>
+<p>他站在原地，身体因剧痛和彻骨的寒意无法抑制地颤抖着。月光勾勒出他清晰的侧影：柔顺的、此刻却被汗水和灰尘黏结的浅金色发丝贴在苍白的额角和颈侧，几缕凌乱地垂在眼前，遮不住因恐惧和疲惫而显得格外大的眼睛——那曾经或许像夏日晴空般湛蓝的眸子，如今只剩下被绝望浸透的灰暗，如同蒙尘的琉璃。挺直的鼻梁下，薄唇紧抿着，失了血色，微微颤抖，像是在极力压抑着呻吟或哭泣。那张过分精致的少年脸庞，此刻被痛苦和灰尘涂抹，脆弱得如同即将碎裂的薄瓷。他茫然地扫视着眼前地狱般的景象。曾经熟悉的门廊只剩下扭曲的骨架，精美的石雕被苔藓和裂痕覆盖，如同脸上丑陋的疤痕。夜风穿过残破的窗棂，发出呜咽般的尖啸，仿佛是这庄园垂死的呻吟。</p>
+<p>他抬起未受伤的脚，极其缓慢地、试探性地向前迈了一步。受伤的脚踝刚一虚点地面，钻心的疼痛便让他身体猛地一歪，发出一声压抑的痛呼。他死死咬住下唇，几乎要咬出血来，才勉强稳住身形。汗水沿着他光洁的额头和线条优美的下颌滑落，在月光下闪着冰冷的光。他不再试图完全用那只伤脚支撑，而是以一种极其别扭、拖拽的姿态，一瘸一拐地，开始了他在自己死亡殿堂中的踯躅巡礼。</p>
+<p>每一步都伴随着沉重的喘息和从齿缝间漏出的、破碎的呜咽。他穿过曾经是华丽门厅的地方，如今屋顶塌陷了大半，月光像冰冷的探照灯柱，斜斜地投射在堆积的瓦砾和腐朽的家具残骸上。灰尘在光柱中狂舞，如同无数细小的、不安的亡魂。他白皙却又沾满泥污的手指无意识地拂过断裂的半截楼梯扶手，指尖沾满了厚厚的积灰，冰冷粗糙的触感让他猛地缩回手，如同被毒蛇舔舐。他环顾四周，眼神空洞而迷茫，像是在确认这炼狱是否真的就是记忆中那个温暖的家。</p>
+<p>他转向通往二楼的残破楼梯。那楼梯早已失去了昔日的优雅，踏板腐朽断裂，扶手摇摇欲坠。每一步攀爬都如同酷刑。他必须用这双曾经只翻过书页、弹过琴键的手，死死抓住尚算稳固的栏杆残段，指节因用力而泛白，青筋在苍白的手背上凸起。他用完好的腿拼命蹬踏，再拖着那条断腿，一寸寸地向上挪移。每一次用力，受伤的脚踝都传来骨头摩擦般的剧痛，汗水浸透了他单薄的亚麻衬衫，紧贴在同样单薄的背脊上，勾勒出少年尚未完全长成的、纤细而脆弱的轮廓。沉重的喘息和痛苦的呻吟在死寂的废墟中回荡，异常清晰，仿佛是他献给这座坟墓的、最后的哀歌。</p>
+<p>终于，他挣扎着踏上了二楼同样破败不堪的走廊。月光从走廊尽头巨大的破洞倾泻而入，在地上铺开一条惨白的光带。他蹒跚地沿着走廊前行，对两旁那些曾经属于亲人的、如今房门洞开如同骷髅眼窝的房间视若无睹。他的目标明确而固执，如同被无形的线牵引，径直走向走廊尽头那扇半掩着的、熟悉的房门。</p>
+<p>那是他的卧室。</p>
+<p>他停在门前，喘息着，胸口剧烈起伏。手颤抖着，推开了吱呀作响、仿佛随时会碎裂的木门。房间内部比外面稍显完整，至少四壁尚存，屋顶也勉强遮挡着。但同样弥漫着浓重的腐朽气息。月光透过一扇幸存的、但布满蛛网裂纹的窗户照进来，在积满厚厚灰尘的地板上投下扭曲的光斑。曾经华丽的窗帘只剩下破烂的布条，如同垂死的蝴蝶翅膀挂在窗边。一张巨大的四柱床骨架还在，但床幔早已朽烂成灰，床垫塌陷下去，露出里面发黑霉变的填充物。角落里，一只褪了色、缺了耳朵的旧玩具熊歪倒在地，玻璃眼珠反射着月光，空洞地望着归来的主人。</p>
+<p>他站在门口，月光斜斜地打在他身上，像一尊即将碎裂的石膏像。汗水浸湿的金发贴在额角，灰尘沾染了他苍白的脸颊和精致的下颌线。灰暗的大眼睛缓缓扫过房间的每一个角落，每一个熟悉的、如今却面目全非的细节都在无声地切割着他残存的记忆。最终，他的目光落在一张破败不堪的床上。那里曾是他童年的堡垒，如今却像一具敞开的棺椁。</p>
+<p>他拖着残腿，极其缓慢地挪到床边。没有犹豫，没有整理，他只是用尽最后一丝力气，将自己疲惫不堪、疼痛欲裂的身体，如同丢弃一件破碎的玩偶般，重重地摔进了那片由霉烂织物和灰尘构成的眠床。巨大的尘埃云腾然而起，在月光下翻涌，覆盖了他。</p>
+<p>我心中莫名的既视感使我难以再冰冷地注视。至少，在最后能好受些吧，我动用精气，开始咏唱圣痕：</p>
+<p><strong>【万象听令，吾为圣上献唱，召术式：<font color=gold>《术·控魂 》</font>】</strong></p>
+<p>剧痛似乎在这一刻奇异地模糊了，被一种更深沉、更令人窒息的疲惫所取代。他蜷缩起来，像回归母体的婴儿，又像等待入殓的尸体。身体因寒冷和隐隐的疼痛微微颤抖着，那纤细的骨架在单薄衣衫下清晰可见。他的意识在先前的剧痛与疲惫的拉扯下变得稀薄、飘渺。恐惧并未完全消散，但被一种更深沉的、近乎认命的倦怠所覆盖。家已化为坟茔，他无处可去，无路可逃。也许，在这里睡去，便是最终的安宁？他以为的安宁。</p>
+<p>我，这位名为天使的寄生者，静静悬于他意识边缘的黑暗中，旁观着这临终的一幕。他的心愿——“回家”——已经达成。契约的条款清晰地浮现。我能感觉到他灵魂的精气正在迅速减弱，如同风中残烛的火苗，摇曳着，即将熄灭。那因执念而强行凝聚的生机，正在这破败的摇篮中飞速流逝。</p>
+<p>一丝难以言喻的、冰冷的吝惜感，如同投入死水潭的石子，在我非人的意识深处漾开微澜。如此精致，如此脆弱，却又如此执着……这具躯壳，这缕残魂。</p>
+<p><em><strong>“睡吧。”</strong></em></p>
+<p>我在他即将沉入永恒黑暗的意识中，对他说出最后一句话，带着一丝奇异的、近乎终结的温柔，</p>
+<p><em><strong>“光尘会覆盖你，我会陪着你，直到…最后。”</strong></em></p>
+<p>超度亦是永恒的陪伴，只是形式不同。他听懂了这意念中的终结与陪伴。紧绷的身体渐渐松弛下来，剧烈的颤抖平息了，只剩下细微的、几乎不可察觉的起伏。沉重的眼皮缓缓合上，沾满灰尘的长睫毛在苍白的脸颊上投下两道脆弱的阴影，如同合拢的蝶翼。沾着泥污和汗水的浅金色发丝，散落在霉烂的枕头上。他喉间发出一声极其微弱的、如同叹息般的呼气。呼吸变得极其微弱、悠长，每一次呼出都仿佛间隔着一个世纪，胸膛的起伏几乎停止。</p>
+<p>月光静静流淌在他身上，勾勒出少年单薄而静止的轮廓，苍白得如同大理石雕像。尘埃在光柱中缓缓沉降，如同为他献上的、无声的挽歌，覆盖上他精致的眉眼。窗外，死神的低语依旧，风穿过废墟的缝隙，呜咽着，咀嚼着这座庄园最后的残骸，也咀嚼着他即将彻底泯灭的意识。</p>
+<p>在这座被死神吞噬殆尽的庄园里，在他童年的棺椁之上，他永远地睡去了。尘埃为他覆面，月光为他守灵。而我，将履行冰冷的契约，引导这缕终于归巢的灵魂，融入那真正的、永恒的寂静——名为超度的虚无长夜。一丝吝惜，也终将如尘埃般落定，归于永恒的沉寂。</p>
+<p>契约完成。</p>
+<p align=right>——金铭洋 忆</p>
+
+<hr>
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>天使·任务</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>超度世间的冤魂，并在圣坛上记录下自己超度的亡魂信息。</p>
+
+    </div>
+  </div>
+
+<p>遁入虚无。小男孩因执念而滞留的精气，如同风中残烛的最后一点火星，被我轻易勾出。几乎在同时，他身下那具饱受痛苦、被我短暂驱使过的精致躯壳，仿佛被无形的时间之沙瞬间冲刷殆尽。血肉、筋络、衣物……所有属于这世间的存在，都在眨眼间风化、剥落、坍缩。月光下，只余下一副苍白、纤细、尚未完全长开的少年骨架，蜷缩在霉烂的床铺尘埃之中，如同被死神随意丢弃的玩具残骸。</p>
+<p>“逝者安息。”这份意念在我意思中一闪而过。紧接着，我发动无形的力量震荡，凝聚成圣痕：</p>
+<p><strong>【万象听令，吾为圣上献唱，结阵式：<font color="gold">《阵·圣坛》</font>】</strong></p>
+<p>没有炫目的光华，没有震耳的声响。只有一道纯粹至极、冰冷如亘古玄冰的意志波纹，以那副骸骨为中心悄然扩散。一座无形的、唯有圣痕方能感知的圣坛——或者说，是通往永恒虚无的渡口——瞬间形成。我将这份早已完成的契约，如同冰冷的烙印，精准地刻录进这灵魂的渡口。骸骨上似乎泛起一瞬微不可查的幽光，随即彻底沉寂，与尘埃、与朽木、与这座被死神咀嚼殆尽的庄园融为一体，再无分别。</p>
+<p>契约刻录完毕，冰冷的职责完成。我不再停留，意识如同退潮的黑色潮水，从这具苍白的遗骸、从这座巨大的坟墓中彻底抽离。没有回望，没有凭吊。我的存在本身，就是流淌于这满溢着悲苦与死亡气息的尘世长河中的一道暗流，冰冷、恒定、永不停歇。下一个执念的召唤，下一曲等待终结的悲剧，便是我唯一的航标。我淌入这喧嚣而绝望的世间，觅寻着……</p>
+<h3 id="20世纪，中国"><a href="#20世纪，中国" class="headerlink" title="20世纪，中国"></a><font color=gray>20世纪，中国</font></h3><p>刺鼻的硝烟、腐肉的恶臭、钢铁的灼热气息，混杂着泥土的腥咸，构成了一股令人窒息的地狱浓汤。又是战场。这巨大的、永不停歇的绞肉机，将鲜活的生命嚼碎、吞咽，再吐出残肢断臂和绝望的哀嚎。炮弹撕裂空气的尖啸是它的狂笑，机枪单调的嘶鸣是它永恒的咀嚼声。我悬浮于这沸腾的血肉磨坊之上，就是一个没有形体的幽灵，一个见死不救的、永恒的看客。绝望、恐惧、暴怒……各种浓烈到足以让常人崩溃的情绪带来的冲击如同高耸的浪涛，拍打着我冰冷的意识壁垒，却无法激起一丝涟漪。也罢，这赤裸裸的毁灭，或许比那些包裹在虚伪礼仪和堂皇辞藻下的、更为阴冷的冤屈与背叛，来得更纯粹些。</p>
+<p>我漫无目的地游荡在意识能感知到的战场边缘，掠过一副副被泥泞和血污覆盖的狰狞面孔，掠过一具具在痛苦中翻滚或已然僵直的躯体。直到，一个矮小的身影以一种极不协调的姿态，闯入了我的视野。</p>
+<p>那是个孩子。一个瘦骨嶙峋、衣衫被战火摧残得几乎无法蔽体的孩童，肮脏的小脸上唯有一双眼睛亮得惊人，里面燃烧着一种与他年龄绝不相称的、近乎野兽般的疯狂与……决绝？他像一只灵巧、身处绝望但满怀希望的耗子，在交错的壕沟和弹坑间穿梭，目标明确地扑向战场最炽热的前沿。</p>
+<p>“哦？”一丝好奇在我意识中泛起。并非出于怜悯，而是源于我心中隐去的一些往事。我的视线扫过交战双方那些沾满泥污、扭曲着杀意的面孔——无论是这边还是那边，似乎都有几道目光瞬间聚焦在这个小小的身影上，带着惊愕、愤怒，甚至……一丝都没有恐惧？</p>
+<p><em><strong>“两边都认识他？”</strong></em></p>
+<p>念头刚起，变故骤生！那孩童猛地停下，瘦小的身体爆发出不可思议的力量。他竟从腰间那个比巴掌大不了多少、干瘪破旧的布包里，掏出一个黑沉沉、圆滚滚的东西——手榴弹！</p>
+<p>自爆步兵？！这个认知如同冰冷的钢针，瞬间刺穿了我那惯常的漠然。如此幼小的躯壳里，如何能承载如此极端、如此彻底的毁灭意志？是对这绞肉机世界的终极控诉，还是被某种深不见底的仇恨彻底吞噬？</p>
+<p>震惊的涟漪尚未在我冰冷的意识核心完全荡开，那孩子已经在行动了！没有半分犹豫，他像一颗被点燃的、绝望的人形炮弹，用尽全身力气，朝着敌人先锋军的阵线中心，发起了决死的冲锋！瘦小的身影在枪林弹雨中显得如此渺小，却又带着一种撼人心魄的、向死而生的悲壮。</p>
+<p>轰——！！！</p>
+<p>震耳欲聋的爆炸声撕裂了战场的喧嚣，仿佛大地本身发出了一声痛楚的咆哮。炽热的火光和浓烟瞬间吞噬了那片区域。巨大的冲击波如同无形的巨锤，横扫四方。烟尘稍散，爆炸中心一片狼藉，死寂笼罩——那是死亡瞬间清场的真空。而那孩子……他并未在爆炸中心粉身碎骨。在生命最后一刻，那惊人的意志力竟支撑着他，在引信燃尽的瞬间，用尽最后一丝力气，将手榴弹奋力掷了出去！完成了这同归于尽的使命。</p>
+<p>然而，这并不能挽救他自己。那近在咫尺的、狂暴的能量，如同死神的巨掌，狠狠拍在他单薄的身躯上。他像一片被飓风撕碎的枯叶，被无可抗拒的力量猛地掀飞，划出一道凄厉的弧线，重重地砸进不远处一个半塌的、泥泞不堪的战壕里。</p>
+<p>我看了过去。那小小的身体以一种极其扭曲、怪异的姿势瘫软在污浊的泥水中。骨骼显然多处断裂，内脏遭受了毁灭性的冲击。鲜血正从他口鼻、甚至破碎的衣物下汩汩涌出，迅速染红了身下的泥浆。那张稚嫩的脸庞上，疯狂与决绝的光芒已经彻底熄灭，只剩下死寂的空洞和迅速蔓延的青灰。</p>
+<p>死了。干净利落，毫无悬念。</p>
+<p>这突如其来的、由孩童亲手点燃的终焉之火，仿佛一只冰冷的手，短暂地拉住了我流淌的意识。剧终人散。我漠然地注视着那具迅速失去温度、变得与周围泥泞死尸别无二致的小小残骸，准备再次启程，继续我永无止境的觅渡。</p>
+<p>然而，就在那孩童开始消散于天地间的精气逸散的瞬间，一股极其强烈、极其尖锐的味道猛地刺入我的感知。不是硝烟，不是血腥，也不是恐惧。</p>
+<p>是冤屈，是悲剧，是深不见底的、足以扭曲灵魂的黑暗。这味道如此浓烈，如此纯粹，仿佛浓缩了世间所有的不公与苦难，带着撕裂灵魂的尖啸，直指圣上的眼泪！</p>
+<p>这正是……圣上渴望洗刷的东西。</p>
+<p>看来，这趟尘世之河的流淌，需要在此处，为这具刚刚冷却的、充满冤屈的小小尸骸，稍作停留了。</p>
+<p>是时候行动了，冰冷的契约再次降临。</p>
+<p align=right>——金铭洋 忆</p>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 深渊 第零章</li>
+        <li><strong>作者:</strong> 金铭洋</li>
+        <li><strong>创建于
+                :</strong> 2025-06-09 00:52:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-06-10 17:01:54
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.wled.top/2025/06/09/Darkness0/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%B7%B1%E6%B8%8A/">#深渊</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/12/01/BuildWeb/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">从入门到入土教你如何搭建网站</span>
+						<span class="post-nav-item">上一篇</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/04/01/YoG25.4Pre/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">莺纪元整合包更新预告</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        async function loadGiscus() {
+            const giscusConfig = {
+                'src': 'https://giscus.app/client.js',
+                'data-repo': 'BYWled/Takling',
+                'data-repo-id': 'R_kgDOM2X6Kg',
+                'data-category': 'Announcements',
+                'data-category-id': 'DIC_kwDOM2X6Ks4Civf9',
+                'data-mapping': 'pathname',
+                'data-strict': '0',
+                'data-reactions-enabled': '1',
+                'data-emit-metadata': '1',
+                'data-theme': 'preferred_color_scheme',
+                'data-lang': 'zh-CN',
+                'data-input-position': 'bottom',
+                'data-loading': 'not-lazy',
+                'crossorigin': 'anonymous',
+                'async': true
+            }
+            const giscusScript = document.createElement('script');
+            for (const key in giscusConfig) {
+                giscusScript.setAttribute(key, giscusConfig[key]);
+            }
+            document.getElementById('giscus-container').appendChild(giscusScript);
+        }
+        if ('true') {
+            let loadGiscusTimeout = setTimeout(() => {
+                loadGiscus();
+                clearTimeout(loadGiscusTimeout);
+            }, 1000);
+        } else {
+            document.addEventListener('DOMContentLoaded', loadGiscus);
+        }
+    </script>
+
+
+        
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">深渊 第零章</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E2%80%94%E2%80%94%E6%99%AE%E5%BA%A6%E4%BC%97%E7%94%9F"><span class="nav-text">序——普度众生</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#18%E4%B8%96%E7%BA%AA%EF%BC%8C%E8%8B%B1%E6%A0%BC%E5%85%B0"><span class="nav-text">18世纪，英格兰</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20%E4%B8%96%E7%BA%AA%EF%BC%8C%E4%B8%AD%E5%9B%BD"><span class="nav-text">20世纪，中国</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">BY·Wled</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 8 篇文章
+                    </span>
+                    
+                        <span>
+                            共 23.6k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/main.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/localSearch.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/runtime.js" ></script>
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/assets/odometer-theme-minimal.css">
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/anime.min.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/bookmarkNav.js" ></script>
+
+	
+	<div id="aplayer"></div>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>

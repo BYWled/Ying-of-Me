@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Wled">
+    
+    <meta name="author" content="BY·Wled">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://www.wled.top/2025/12/16/getgoogleone/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="白嫖Google One学生会员的末班车">
+<meta property="og:url" content="https://www.wled.top/2025/12/16/GetGoogleOne/index.html">
+<meta property="og:site_name" content="莺之驿站">
+<meta property="og:description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-12-16T03:00:00.000Z">
+<meta property="article:modified_time" content="2025-12-17T02:17:17.452Z">
+<meta property="article:author" content="BY·Wled">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.wled.top/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/Oz-Vessalius-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/Oz-Vessalius-favicon.svg">
+    <meta name="theme-color" content="#21DEDB">
+    <link rel="shortcut icon" href="/images/Oz-Vessalius-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            白嫖Google One学生会员的末班车 | 伴莺の小窝
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.wled.top","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","delete_mask":true,"headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#21DEDB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"欢迎访问伴莺の小窝 | Welcome ~"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"伴莺の小窝","subtitle":{"text":["Wled's Relay Station"],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":{"github":"https://github.com/BYWled","bilibili":"https://space.bilibili.com/128746094","fa-solid fa-people-group":"./Dozer-Esports/index.html","fa-solid fa-basket-shopping":"https://store.wled.top/"},"qrs":null}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Something Just Like This","artist":"Coldplay","url":"https://evan.beee.top/music/Something%20Just%20Like%20This%20-%20The%20Chainsmokers%E3%80%81Coldplay.mp3","cover":"https://evan.beee.top/music/covers/Something_Just_Like_This.png","lrc":"/songs/SJLT.lrc"},{"name":"演","artist":"ChiliChill/三无Marblue","url":"/songs/yan.mp3","cover":"/songs/yan.jpg","lrc":"/songs/yan.lrc"},{"name":"サイエンス (feat. 重音テト)","artist":"MIMI/重音テト","url":"/songs/MIMI.mp3","cover":"/songs/MIMI.jpg","lrc":"/songs/MIMI.lrc"},{"name":"Sunshine","artist":"OneRepublic","url":"/songs/sun.mp3","cover":"/songs/sun.jpg","lrc":"/songs/sun.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"path":"/","icon":"fa-solid fa-home"},"MC":{"path":"/Ying","icon":"fa-solid fa-cube"},"小说":{"path":"/novel","icon":"fa-solid fa-book"},"关于":{"icon":"fa-regular fa-user","submenus":{"我":"/about","源代码":"https://github.com/BYWled/Ying-of-Me"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"流年间，途游光景伴莺随","show_on_mobile":false,"links":{"动态":{"path":"/archives","icon":"fa-regular fa-archive"},"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"类别":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/9/13 11:45:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                伴莺の小窝
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-home fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/Ying"
+                                        >
+                                    <i class="fa-solid fa-cube fa-fw"></i>
+                                    MC
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/novel"
+                                        >
+                                    <i class="fa-solid fa-book fa-fw"></i>
+                                    小说
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    我
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">
+                                                    源代码
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-solid fa-home fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/Ying"
+                        >
+                            <span>
+                                MC
+                            </span>
+                            
+                                <i class="fa-solid fa-cube fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/novel"
+                        >
+                            <span>
+                                小说
+                            </span>
+                            
+                                <i class="fa-solid fa-book fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-关于"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">我</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">源代码</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">白嫖Google One学生会员的末班车</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/Oz-Vessalius-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">BY·Wled</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-12-16 11:00</span>
+        <span class="mobile">2025-12-16 11:00</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-12-17 10:17:17</span>
+            <span class="mobile">2025-12-17 10:17:17</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">计算机从入门到入土</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.6k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<details class="blue" data-header-exclude>
+    <summary><i class="fa-solid fa-chevron-right"></i>写在之前 </summary>
+    <div class='content markdown-body'>
+      <p><strong><font color=green>Thank you for your visit.</font></strong></p>
+<p>由于谷歌dddd的原因，再加上谷歌本身奇奇怪怪的验证失败的问题，这篇教程我是不想写出来的，参考价值极其有限。</p>
+<p>我在实践的时候有遇到的问题，本篇教程中会提供这些问题的解决方案。但既是如此，仍有很多失败的情况我没提及<del class="mask">，就需要自己摸索了。</del></p>
+  <div class="note p-4 mb-4 rounded-small markdown-body danger">
+    <p>本内容首发<font color=green>伴莺の小窝</font>，未经授权<font color=red>禁止搬运！</font></p>
+
+  </div>
+
+  <div class="note p-4 mb-4 rounded-small markdown-body warning">
+    <p>作品中包含部分AI内容，用于校正、完善文章，如有错误请向管理员反馈。</p>
+
+  </div>
+
+  <div class="note p-4 mb-4 rounded-small markdown-body info">
+    <p>本教程的故障处理有限，请以实际操作为准。</p>
+
+  </div>
+    </div>
+  </details>
+
+<hr>
+<h2 id="1-检查谷歌账户是否拥有学生会员资格"><a href="#1-检查谷歌账户是否拥有学生会员资格" class="headerlink" title="1 检查谷歌账户是否拥有学生会员资格"></a>1 检查谷歌账户是否拥有学生会员资格</h2><h3 id="1-1-检查访问的IP"><a href="#1-1-检查访问的IP" class="headerlink" title="1.1 检查访问的IP"></a>1.1 检查访问的IP</h3>
+  <div class="note p-4 mb-4 rounded-small markdown-body danger">
+    <p>如果现在你的网络环境可以访问Google，请<font color=red>立即关闭</font>，原因见下文。</p>
+
+  </div>
+
+<blockquote>
+<p>即使平常你通过一些方法能够正常使用Google，也务必检查你访问Google的<strong>IP是否符合要求</strong>！</p>
+</blockquote>
+<p><strong>Google One 的学生计划会检查你的IP是否为受支持的地区，并且会检查<em>有问题</em> 的账号的IP纯净度。</strong></p>
+<p>因此，你需要检查你的IP是否满足以上两个条件。确保你的网络环境为全局生效，访问 <a class="link"   target="_blank" rel="noopener" href="https://ipin.io/zh" >IP检查网站<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 查看是否符合这两个标准：</p>
+<div class="tabs" id="tab-ip"><ul class="nav-tabs"><li class="tab active"><a class="#ip-1">指定地区</a></li><li class="tab"><a class="#ip-2">纯净程度</a></li></ul><div class="tab-content"><div class="tab-pane active" id="ip-1"><p>网页左半部分可以看到你的IP归属地：</p>
+<details class="green" data-header-exclude>
+    <summary><i class="fa-solid fa-chevron-right"></i>例图 </summary>
+    <div class='content markdown-body'>
+      <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/IPfrom.png"
+                      alt="ip"
+                ></p>
+
+<pre><code>&lt;/div&gt;
+</code></pre>
+  </details>
+
+<p>确保你的IP地址归属地位于<strong>台湾、新加坡、美国</strong>等支持地区完整的列表见此：</p>
+<p><a class="button center large" target="_blank" rel="noopener" href='https://support.google.com/gemini/answer/16275805#zippy=%2Cgoogle-ai-pro-%E5%92%8C-google-ai-ultra-%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%9B%BD%E5%AE%B6%E5%9C%B0%E5%8C%BA%E6%8E%A8%E5%87%BA' title='支持的地区（谷歌环境访问）'><i class='fa-solid fa-globe'></i> 支持的地区（谷歌环境访问）</a></p></div><div class="tab-pane" id="ip-2"><p>网页右半部分可以看到你的IP纯净度：</p>
+<details class="green" data-header-exclude>
+    <summary><i class="fa-solid fa-chevron-right"></i>例图 </summary>
+    <div class='content markdown-body'>
+      <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/IPmean.png"
+                      alt="IPmean"
+                ></p>
+
+<pre><code>&lt;/div&gt;
+</code></pre>
+  </details>
+
+<p>确保你的IP地址的ASN风险评分低，并且尽可能保证是原生IP<del class="mask">（我用数据中心IP也成功了，这个应该和账号有关系，<a href="./#1-2-%E6%A3%80%E6%9F%A5%E8%B4%A6%E5%8F%B7">步骤1.2</a> 会说明）</del></p></div></div></div>
+
+<p>如果你的IP不符合以上的标准，在<a href="./#2-%E8%8E%B7%E5%8F%96%E5%B9%B6%E9%80%9A%E8%BF%87%E5%AD%A6%E7%94%9F%E9%AA%8C%E8%AF%81">步骤2</a> 中可能会出现以下问题：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/./img/GetGoole/noIP.png"
+                      alt="noIP"
+                ></p>
+<p>如果因为IP未达到要求而发生该问题，那么除了更换你的IP，否则无法解决。</p>
+<h3 id="1-2-检查账号"><a href="#1-2-检查账号" class="headerlink" title="1.2 检查账号"></a>1.2 检查账号</h3><p><del class="mask">由于天朝地区薅羊毛的情况过于严重，</del>谷歌会对账号信息位于大陆内的情况进行风控，包括但不限于：</p>
+<ol>
+<li>注册谷歌账号时使用了+86手机号码</li>
+<li>当前谷歌账号绑定了大陆的+86手机号码、@qq.com或@163.com邮箱等账户信息</li>
+<li>当前谷歌账号绑定了大陆的支付地址、VISA卡、Paypal等支付信息</li>
+<li>注册谷歌账号时使用了香港、澳门、国内漏网之鱼以及高风险的IP</li>
+<li>当前账号已经开通过 Google One 免费计划或者之前其他优惠</li>
+<li>登录谷歌账号时的IP地址频繁切换</li>
+<li>……</li>
+</ol>
+<p>只要满足以上情况之一的，或者后续步骤将账户改为以上情况的，都有可能导致<a href="./#2-%E8%8E%B7%E5%8F%96%E5%B9%B6%E9%80%9A%E8%BF%87%E5%AD%A6%E7%94%9F%E9%AA%8C%E8%AF%81">步骤2</a> 出现以下问题：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/IPBanned.png"
+                      alt="IPBanned"
+                ></p>
+<p>如果看到该页面，请放弃当前账号。无论如何，哪怕通过一些手段进入了验证页，验证也无法成功。</p>
+<p>如果需要注册一个新账号以获取Google One免费会员，确保满足以下条件后再重新尝试：</p>
+<ol>
+<li>注册时IP归属地位于Google One 会员受支持的地区（所有地区列表<a class="link"   target="_blank" rel="noopener" href="https://support.google.com/gemini/answer/16275805#zippy=%2Cgoogle-ai-pro-%E5%92%8C-google-ai-ultra-%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%9B%BD%E5%AE%B6%E5%9C%B0%E5%8C%BA%E6%8E%A8%E5%87%BA" >点此<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>）</li>
+<li>注册时避免上述的情况</li>
+<li>注册后3-7天再尝试</li>
+</ol>
+<p><del class="mask">由于我没有发生这个情况，但是该情况确实存在。以上解决方案仅为网上收集的线索，不排除仍无法解决该问题。</del></p>
+<hr>
+<p>除此之外，账号还有三种情况，会导致<a href="./#1-1-%E6%A3%80%E6%9F%A5%E8%AE%BF%E9%97%AE%E7%9A%84IP">步骤1.1</a>的同款报错。不必担心，这两种情况可以无需更换谷歌账号：</p>
+<div class="tabs" id="tab-acc"><ul class="nav-tabs"><li class="tab active"><a class="#acc-1">账号位置</a></li><li class="tab"><a class="#acc-2">账号年龄</a></li></ul><div class="tab-content"><div class="tab-pane active" id="acc-1"><blockquote>
+<p>新账号在一般情况下，注册时使用的IP归属地即是账号的位置。</p>
+</blockquote>
+<p>账号位置<strong>不是在账户信息里编辑的地址位置</strong>，而是谷歌根据账号习惯<strong>自动切换</strong>的位置。</p>
+<p>如果账号所处位置不在Google One 会员受支持的地区，则也有概率出现报错，你可以自行查看：</p>
+<p><a class="button center large" target="_blank" rel="noopener" href='https://policies.google.com/terms' title='隐私条款（谷歌环境访问）'><i class='fa-solid fa-user'></i> 隐私条款（谷歌环境访问）</a></p>
+<details class="green" data-header-exclude>
+    <summary><i class="fa-solid fa-chevron-right"></i>例图 </summary>
+    <div class='content markdown-body'>
+      <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/googleTerms.png"
+                      alt="googleTerms"
+                ></p>
+<p>想要切换这个地区，必须向谷歌发送工单。主包也尝试将自己的账号切换至美国，但截止到撰写这篇文章时，我也没收到谷歌的回复。</p>
+<p>并且如你所见，即使我没有切换账号位置，最后也成功拿下了Google One 会员。所以建议先排查其他问题，若确认是该问题，你可以<a class="link"   target="_blank" rel="noopener" href="https://support.google.com/googleplay/answer/7431675" >点此跳转<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>至谷歌对此问题的帮助页面。</p>
+
+<pre><code>&lt;/div&gt;
+</code></pre>
+  </details></div><div class="tab-pane" id="acc-2"><p>顾名思义，就是在谷歌账号的个人中心中设置的生日。</p>
+<p>需要注意的是，账户生日在成年状态下可以随便设置。但是一旦设为了未成年（即生日推算到现在未满十八周岁）的情况下， 谷歌会限制账号的部分服务，包括Google One 会员服务。</p>
+<p>账号处于未成年状态时，仍可以设置大于十八周岁的生日，但必须需要进行验证。不必担心，验证时选择有效证件即可，<strong>大陆的身份证可用</strong>。</p>
+<p>你可以自行查看你的个人信息，生日是否为已成年：</p>
+<p><a class="button center large" target="_blank" rel="noopener" href='https://myaccount.google.com/personal-info' title='个人信息（谷歌环境访问）'><i class='fa-solid fa-cake-candles'></i> 个人信息（谷歌环境访问）</a></p>
+<details class="green" data-header-exclude>
+    <summary><i class="fa-solid fa-chevron-right"></i>例图 </summary>
+    <div class='content markdown-body'>
+      <blockquote>
+<p>最好也不要设置年龄太大的生日，毕竟是学生会员，不排除年龄太大也会咩有资格（bushi）</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/googleMy.png"
+                      alt="googleMy"
+                ></p>
+
+<pre><code>&lt;/div&gt;
+</code></pre>
+  </details></div></div></div>
+
+<hr>
+<h3 id="1-3-一切就绪之前…"><a href="#1-3-一切就绪之前…" class="headerlink" title="1.3 一切就绪之前…"></a>1.3 一切就绪之前…</h3><p>是的，还有一种情况。在一些特殊环境下，你的浏览器会导致Google阻止你访问学生会员，清除缓存以及阻止追踪效果甚微。</p>
+<p>因此，建议在进行下一步之前，我建议先切换到特殊的网络环境，再打开浏览器的隐私浏览<del class="mask">（洋葱浏览器不能用！！！）</del>，确保你访问Google时干净无邪。</p>
+<h2 id="2-获取并通过学生验证"><a href="#2-获取并通过学生验证" class="headerlink" title="2 获取并通过学生验证"></a>2 获取并通过学生验证</h2><p>若确保一切准备就绪，现在打开该链接<a target="_blank" rel="noopener" href="https://goo.gle/freepro"><code>https://goo.gle/freepro</code></a></p>
+<p>一切正常的话，你就可以点击<code>验证资格条件</code>进入学生验证了。</p>
+<p>进入学生验证页面，<font color=red>什么都不要填写</font>，检查现在的网址域名是否是<code>service.sheerid.com</code>或<code>sheerid</code>相关的域名页。如果正确，直接复制当前页面的网址留作备用。</p>
+<p>以下将提供多种验证方法进行验证：</p>
+<div class="tabs" id="tab-stu"><ul class="nav-tabs"><li class="tab active"><a class="#stu-1">方法一[推荐]</a></li><li class="tab"><a class="#stu-2">方法二</a></li></ul><div class="tab-content"><div class="tab-pane active" id="stu-1"><p><del class="mask">推荐原因很简单，因为我就是这么验证成功的</del></p>
+<p>注册并登录Telegram，随后点击该链接添加验证机器人：<a target="_blank" rel="noopener" href="https://t.me/auto_sheerid_bot?start=6736464559"><code>https://t.me/auto_sheerid_bot?start=6736464559</code></a></p>
+<p>添加机器人后依次输入以下指令：</p>
+<p><code>/qd</code></p>
+<p><code>/verify https://services.sheerid.com/verify/xxx/?verificationId=xxx</code></p>
+<p>这个<code>services.sheerid.com</code>开头的链接就是刚刚复制下来的页面网址。</p>
+<p>随后等待机器人验证。</p></div><div class="tab-pane" id="stu-2"><p>其实Telegram的机器人就是调用方法二的网站实现的验证，因此我们可以直接去该网站：<a target="_blank" rel="noopener" href="https://1key.me/"><code>https://1key.me/</code></a></p>
+<p>在输入框中输入<code>https://services.sheerid.com/verify/xxx/?verificationId=xxx</code>，这个<code>services.sheerid.com</code>开头的链接就是刚刚复制下来的页面网址。</p>
+<p>随后等待网站验证。</p></div></div></div>
+
+<p>按照以上验证方法完成后，回到学生验证页面，<font color=red>直接刷新</font>页面。</p>
+<p>如果正常跳转的话，回到Google One 页面，如下图显示：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/su.jpeg"
+                      alt="su"
+                ></p>
+<p>点击<code>订阅 Google AI Pro</code>你就可以回到优惠页，准备下一步骤了。</p>
+<h2 id="3-绑定支付方式"><a href="#3-绑定支付方式" class="headerlink" title="3 绑定支付方式"></a>3 绑定支付方式</h2><blockquote>
+<p>请再次确认账户上没有已绑定的<strong>国内VISA</strong>或其他<strong>国内的银行卡</strong>！</p>
+</blockquote>
+<p>回到先前的页面，点击<code>畅享学生优惠</code>，等待片刻，就会显示Google添加支付选项的窗口了。</p>
+<p>这里推荐绑定虚拟银行卡，黄色的鱼￥10以内就能搞定。</p>
+<p>如果不想花钱，你也可以查找其他攻略绑定免费的海外虚拟银行卡，请注意信息安全。</p>
+<p>或者你有一定的准备，拥有海外的VISA卡或其它海外银行卡，也可以直接用这张卡绑定，生成一个海外的地址即可，<strong>不要用大陆的地址！</strong></p>
+<hr>
+<p>无论使用的是不是自己的银行卡，都建议在绑定完成后，回到支付方式页进行解绑：<a class="button regular" target="_blank" rel="noopener" href='https://payments.google.com/gp/w/home/paymentmethods' title='支付方式（谷歌环境访问）'><i class='fa-solid fa-play-circle'></i> 支付方式（谷歌环境访问）</a></p>
+<p>原因如下：</p>
+<ol>
+<li>非自己的无余额银行卡会导致账号发生安全问题（可能会用0元账单进行找回）</li>
+<li>非自己的银行卡可能会导致信用卡欠费或银行扣款退回而导致账户封禁</li>
+<li>自己的银行卡可能导致误扣费</li>
+<li>…</li>
+</ol>
+<p>即使删除了支付方式，后续若需使用，你也可以很快加回来。</p>
+<hr>
+<p><del class="mask">跑题了</del></p>
+<p>在绑定银行卡后，如果一切正常，现在你就已经白嫖到Google One 的Pro会员了。</p>
+<p>在确认账号已经是Pro会员后，就无需及其严苛的网络环境和账号条件了。</p>
+<p>访问<a target="_blank" rel="noopener" href="https://gemini.google.com/app"><code>https://gemini.google.com/app</code></a>，选择思考（3 Pro）皆可畅享Gemini 3 Pro了（完结散花❀）</p>
+<h2 id="附加：表现效果"><a href="#附加：表现效果" class="headerlink" title="附加：表现效果"></a>附加：表现效果</h2><p>在文章最后，我通过先前的一个实例，向你直观的展示Google Gemini 3.0 Pro 的强力之处。</p>
+<p>我通过一个预览图和一致的提示词，让目前最强的几个AI各写了一次前端项目的demo，以下是对比详情。</p>
+<p>示例图为我写的乐购商城demo首页：</p>
+<a class="button center large" target="_blank" rel="noopener" href='https://store.wled.top' title='乐购商城'><i class='fa-solid fa-store'></i> 乐购商城</a>
+
+<h3 id="ChatGPT-5-2-Thinking"><a href="#ChatGPT-5-2-Thinking" class="headerlink" title="ChatGPT 5.2 Thinking"></a>ChatGPT 5.2 Thinking</h3><p> 下图为ChatGPT 5.2 Thinking生成的页面效果，只能说一言难尽了XD</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/gpt.png"
+                      alt="gpt"
+                ></p>
+<h3 id="Claude-Sonnet-4-5"><a href="#Claude-Sonnet-4-5" class="headerlink" title="Claude Sonnet 4.5"></a>Claude Sonnet 4.5</h3><ul>
+<li>下图为Claude Sonnet 4.5生成的页面效果，基本的布局都能还原，商品也做了对应的样式。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/Claude.jpeg"
+                      alt="Claude"
+                ></p>
+<h3 id="Gemini-3-Pro"><a href="#Gemini-3-Pro" class="headerlink" title="Gemini 3 Pro"></a>Gemini 3 Pro</h3><ul>
+<li>下图为Gemini 3 Pro生成的页面效果，页面结构完全还原，排版、布局、颜色基本无误，部分有些小瑕疵。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GetGoole/gemini.jpeg"
+                      alt="gemini"
+                ></p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 白嫖Google One学生会员的末班车</li>
+        <li><strong>作者:</strong> BY·Wled</li>
+        <li><strong>创建于
+                :</strong> 2025-12-16 11:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-12-17 10:17:17
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.wled.top/2025/12/16/GetGoogleOne/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/12/01/BuildWeb/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">从入门到入土教你如何搭建网站</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        async function loadGiscus() {
+            const giscusConfig = {
+                'src': 'https://giscus.app/client.js',
+                'data-repo': 'BYWled/Takling',
+                'data-repo-id': 'R_kgDOM2X6Kg',
+                'data-category': 'Announcements',
+                'data-category-id': 'DIC_kwDOM2X6Ks4Civf9',
+                'data-mapping': 'pathname',
+                'data-strict': '0',
+                'data-reactions-enabled': '1',
+                'data-emit-metadata': '1',
+                'data-theme': 'preferred_color_scheme',
+                'data-lang': 'zh-CN',
+                'data-input-position': 'bottom',
+                'data-loading': 'not-lazy',
+                'crossorigin': 'anonymous',
+                'async': true
+            }
+            const giscusScript = document.createElement('script');
+            for (const key in giscusConfig) {
+                giscusScript.setAttribute(key, giscusConfig[key]);
+            }
+            document.getElementById('giscus-container').appendChild(giscusScript);
+        }
+        if ('true') {
+            let loadGiscusTimeout = setTimeout(() => {
+                loadGiscus();
+                clearTimeout(loadGiscusTimeout);
+            }, 1000);
+        } else {
+            document.addEventListener('DOMContentLoaded', loadGiscus);
+        }
+    </script>
+
+
+        
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">白嫖Google One学生会员的末班车</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A3%80%E6%9F%A5%E8%B0%B7%E6%AD%8C%E8%B4%A6%E6%88%B7%E6%98%AF%E5%90%A6%E6%8B%A5%E6%9C%89%E5%AD%A6%E7%94%9F%E4%BC%9A%E5%91%98%E8%B5%84%E6%A0%BC"><span class="nav-text">1 检查谷歌账户是否拥有学生会员资格</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A3%80%E6%9F%A5%E8%AE%BF%E9%97%AE%E7%9A%84IP"><span class="nav-text">1.1 检查访问的IP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%A3%80%E6%9F%A5%E8%B4%A6%E5%8F%B7"><span class="nav-text">1.2 检查账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%B8%80%E5%88%87%E5%B0%B1%E7%BB%AA%E4%B9%8B%E5%89%8D%E2%80%A6"><span class="nav-text">1.3 一切就绪之前…</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%8E%B7%E5%8F%96%E5%B9%B6%E9%80%9A%E8%BF%87%E5%AD%A6%E7%94%9F%E9%AA%8C%E8%AF%81"><span class="nav-text">2 获取并通过学生验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%91%E5%AE%9A%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F"><span class="nav-text">3 绑定支付方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%EF%BC%9A%E8%A1%A8%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="nav-text">附加：表现效果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ChatGPT-5-2-Thinking"><span class="nav-text">ChatGPT 5.2 Thinking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Claude-Sonnet-4-5"><span class="nav-text">Claude Sonnet 4.5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gemini-3-Pro"><span class="nav-text">Gemini 3 Pro</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">BY·Wled</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 8 篇文章
+                    </span>
+                    
+                        <span>
+                            共 23.6k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/main.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/localSearch.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/runtime.js" ></script>
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/assets/odometer-theme-minimal.css">
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/anime.min.js" ></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/bookmarkNav.js" ></script>
+
+	
+	<div id="aplayer"></div>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>
