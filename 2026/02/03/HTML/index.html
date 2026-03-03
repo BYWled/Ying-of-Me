@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Wled">
+    
+    
+    <meta name="author" content="BY·Wled">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://www.wled.top/2026/02/03/html/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端入门开发 | 从能写到懂原理">
+<meta property="og:url" content="https://www.wled.top/2026/02/03/HTML/index.html">
+<meta property="og:site_name" content="莺之驿站">
+<meta property="og:description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-02-03T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-03T12:18:30.111Z">
+<meta property="article:author" content="BY·Wled">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.wled.top/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/Oz-Vessalius-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/Oz-Vessalius-favicon.svg">
+    <meta name="theme-color" content="#21DEDB">
+    <link rel="shortcut icon" href="/images/Oz-Vessalius-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            前端入门开发 | 从能写到懂原理 | 伴莺の小窝
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.wled.top","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","delete_mask":true,"headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#21DEDB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"欢迎访问伴莺の小窝 | Welcome ~"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"伴莺の小窝","subtitle":{"text":["Wled's Relay Station"],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":[{"icon":"fa-brands fa-github","url":"https://github.com/BYWled"},{"icon":"fa-brands fa-bilibili","url":"https://space.bilibili.com/128746094"},{"icon":"fa-solid fa-people-group","url":"./Dozer-Esports/index.html"},{"icon":"fa-solid fa-basket-shopping","url":"https://store.wled.top/"},{"icon":"fa-solid fa-gear","url":"https://admin.wled.top/"}],"qrs":null}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Something Just Like This","artist":"Coldplay","url":"https://evan.beee.top/music/Something%20Just%20Like%20This%20-%20The%20Chainsmokers%E3%80%81Coldplay.mp3","cover":"https://evan.beee.top/music/covers/Something_Just_Like_This.png","lrc":"/songs/SJLT.lrc"},{"name":"演","artist":"ChiliChill/三无Marblue","url":"/songs/yan.mp3","cover":"/songs/yan.jpg","lrc":"/songs/yan.lrc"},{"name":"サイエンス (feat. 重音テト)","artist":"MIMI/重音テト","url":"/songs/MIMI.mp3","cover":"/songs/MIMI.jpg","lrc":"/songs/MIMI.lrc"},{"name":"Sunshine","artist":"OneRepublic","url":"/songs/sun.mp3","cover":"/songs/sun.jpg","lrc":"/songs/sun.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"path":"/","icon":"fa-solid fa-home"},"前端":{"path":"/categories/计算机从入门到入土/前端如此简单","icon":"fa-solid fa-code"},"Demos":{"icon":"fa-solid fa-diagram-project","submenus":{"镜像站":"https://mirror.wled.top/","乐购商城":"https://store.wled.top/","管理系统":"https://admin.wled.top/","状态监控":"https://status.wled.top/status"}},"娱乐":{"icon":"fa-solid fa-face-grin-beam","submenus":{"MC":"/Ying","小说":"/novel"}},"关于":{"icon":"fa-regular fa-user","submenus":{"我":"/about","源代码":"https://github.com/BYWled/Ying-of-Me"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"流年间，途游光景伴莺随","show_on_mobile":false,"links":{"动态":{"path":"/archives","icon":"fa-regular fa-archive"},"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"类别":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2024/9/13 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2024/9/13 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.i18n = {"search":"站内搜索您需要的内容...","toc":"目录","prev":"上一页","next":"下一页","prev_posts":"上一篇","next_posts":"下一篇","page":"第 %d 页","recent_posts":"最新文章","share":"分享","powered_by":"由 %s 驱动","theme":"主题","rss_feed":"RSS Feed","category":"分类","categories":"分类","tag":"标签","tags":"标签","post":"文章","posts":"文章","tagcloud":"标签云","comment":"评论","comments":"评论","top":"置顶","sticky":"置顶","go-back-home":"回到首页","masonry_loading":"照片加载中...","image_viewer":"图片查看器","close":"关闭","exif":{"title":"EXIF","cards":{"camera":"相机","lens":"镜头","exposure":"曝光","other":"其他"},"fields":{"make":"品牌","model":"机型","date_taken":"拍摄时间","lens_model":"镜头","focal_length":"焦距","focus_mode":"对焦模式","shutter":"快门","aperture":"光圈","iso":"感光度","exposure_program":"曝光程序","exposure_compensation":"曝光补偿","metering_mode":"测光模式","flash":"闪光灯","white_balance":"白平衡","latitude":"纬度","longitude":"经度","altitude":"海拔"},"status":{"loading":"加载中...","no_exif":"无 EXIF 信息","library_missing":"EXIF 库未加载","image_source_missing":"图片地址不可用","unavailable":"EXIF 不可用（可能被 CORS 阻止或缺少元数据）","flag_unavailable":"EXIF 不可用"}},"home":"首页","archive":"归档","archives":"归档","about":"关于","links":"链接","link":"链接","friends":"友情链接","friend":"友情链接","timeline":"时间轴","shuoshuo":"说说","bookmarks":"书签","site_uv":"访问人数","site_pv":"总访问量","read_more":"阅读全文","wordcount":"字","min2read":"分钟","changelog":"更新日志","status":"状态","runtime":"博客已运行","days":"天","hours":"小时","minutes":"分钟","seconds":"秒","optimized_by":"并由 Evan 进行优化","rights":"版权所有","site_posts":"共撰写了 %s 篇文章","site_wordcount":"共 %s 字","copyright":{"title":"标题","author":"作者","link":"链接","create_time":"创建于","update_time":"更新于","license_title":"版权声明","license_content":"本文章采用 %s 进行许可。","all_rights_reserved":"版权所有 &#169 %s，禁止转载。","public_domain":"本文为公有领域作品，可自由转载、引用。"},"ago":{"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"},"create_time":"创建","update_time":"更新","expired":"这篇文章最后更新于 %s 天前，内容可能已经过时。"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                伴莺の小窝
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-home fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                                        >
+                                    <i class="fa-solid fa-code fa-fw"></i>
+                                    前端
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-diagram-project fa-fw"></i>
+                                    DEMOS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://mirror.wled.top/">
+                                                    镜像站
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://store.wled.top/">
+                                                    乐购商城
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://admin.wled.top/">
+                                                    管理系统
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://status.wled.top/status">
+                                                    状态监控
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-face-grin-beam fa-fw"></i>
+                                    娱乐
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/Ying">
+                                                    MC
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/novel">
+                                                    小说
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    我
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">
+                                                    源代码
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-solid fa-home fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                        >
+                            <span>
+                                前端
+                            </span>
+                            
+                                <i class="fa-solid fa-code fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Demos"
+                        >
+                            <span>
+                                DEMOS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Demos">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://mirror.wled.top/">镜像站</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://store.wled.top/">乐购商城</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://admin.wled.top/">管理系统</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://status.wled.top/status">状态监控</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-娱乐"
+                        >
+                            <span>
+                                娱乐
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-娱乐">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/Ying">MC</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/novel">小说</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-关于"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">我</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">源代码</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">前端入门开发 | 从能写到懂原理</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/Oz-Vessalius-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">BY·Wled</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-02-03 20:00</span>
+        <span class="mobile">2026-02-03 20:00</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-03-03 20:18:30</span>
+            <span class="mobile">2026-03-03 20:18:30</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">计算机从入门到入土</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95/">前端如此简单</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>6.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>24 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  blue" data-header-exclude=""><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>写在之前</summary><div class="content p-4 "><p><strong>
+<p>这篇文章写给<strong>完全零基础</strong>的读者：</p>
+<ul>
+<li>你可能还没写过代码；</li>
+<li>你可能只知道“前端就是做网页”；</li>
+<li>你希望能先做出东西，再慢慢理解底层原理。</li>
+</ul>
+<p>所以本文会按这个顺序来：</p>
+<ol>
+<li>先准备开发环境（以 VS Code 为例）</li>
+<li>再做出一个能跑的页面</li>
+<li>然后逐步加样式、加交互</li>
+<li>把核心原理放在靠后位置集中讲解</li>
+<li>最后给你一个典型实例 + 逐段解析</li>
+</ol>
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>本文强调“先上手，再吃透”。<br>如果某个术语第一次没看懂很正常，先跟着做，后面原理章节会回收解释。</p></div></div>
+<div class="callout callout--simple danger mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>本内容首发
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>作品中包含部分AI内容，用于校正、完善文章，如有错误请向管理员反馈。</p></div></div>
+</p></div></div></strong></p></div></details>
+
+<hr>
+<h2 id="一、前端到底在做什么？（一句话版）"><a href="#一、前端到底在做什么？（一句话版）" class="headerlink" title="一、前端到底在做什么？（一句话版）"></a>一、前端到底在做什么？（一句话版）</h2><p>前端开发，就是把“产品需求”变成用户在浏览器里看到并能操作的界面。</p>
+<p>你每天点的按钮、看的卡片、输入框里的提示、页面上的动画，几乎都属于前端。</p>
+<p>对应三件套：</p>
+<ul>
+<li><strong>HTML</strong>：页面结构（骨架）</li>
+<li><strong>CSS</strong>：页面样式（皮肤）</li>
+<li><strong>JavaScript</strong>：页面行为（神经系统）</li>
+</ul>
+<hr>
+<h2 id="二、开发前环境准备（以-VS-Code-为例）"><a href="#二、开发前环境准备（以-VS-Code-为例）" class="headerlink" title="二、开发前环境准备（以 VS Code 为例）"></a>二、开发前环境准备（以 VS Code 为例）</h2><h3 id="2-1-你需要安装什么"><a href="#2-1-你需要安装什么" class="headerlink" title="2.1 你需要安装什么"></a>2.1 你需要安装什么</h3><ol>
+<li><strong>浏览器</strong>：推荐 Chrome（Edge 也可以）</li>
+<li><strong>编辑器</strong>：VS Code</li>
+<li><strong>（可选）Node.js</strong>：不是必须，但后续工程化会用到</li>
+</ol>
+<div class="callout callout--simple info mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>零基础第一阶段不需要先学会 Node.js，也能写页面。<br>先把 HTML/CSS/JS 跑起来更重要。</p></div></div>
+
+<h3 id="2-2-VS-Code-扩展配置建议"><a href="#2-2-VS-Code-扩展配置建议" class="headerlink" title="2.2 VS Code 扩展配置建议"></a>2.2 VS Code 扩展配置建议</h3><blockquote>
+<p>建议关闭自动保存：设置 - 搜索<code>auto save</code> - 设置为<code>off</code></p>
+</blockquote>
+<p>安装这几个扩展就够用：</p>
+<ul>
+<li><strong>Chinese-Simplified</strong>：中文语言包（按需）</li>
+</ul>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/HTML/pul1.png" alt="中文语言包插件"></p>
+<ul>
+<li><strong>Live Server</strong>：本地启动网页预览</li>
+</ul>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/HTML/pul2.png" alt="本地服务器"></p>
+<ul>
+<li><strong>Prettier</strong>：自动格式化代码</li>
+</ul>
+<h3 id="2-3-建一个最小项目目录"><a href="#2-3-建一个最小项目目录" class="headerlink" title="2.3 建一个最小项目目录"></a>2.3 建一个最小项目目录</h3><p>在任意位置新建文件夹，例如 <code>html-demo</code>，目录如下：</p>
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 项目根目录（你在 VS Code 中打开的就是这个文件夹）</span><br><span class="line">html-demo/</span><br><span class="line">    ├─ index.html   # 页面入口文件：浏览器最先读取它</span><br><span class="line">    ├─ style.css    # 样式文件：控制页面外观（颜色、布局、间距等）</span><br><span class="line">    └─ main.js      # 脚本文件：控制页面交互（点击、输入、动态更新）</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>第二层注释（原理补充）</strong></p>
+<ul>
+<li><code>index.html</code> 是“装配中心”：把结构、样式、脚本串起来。</li>
+<li><code>style.css</code> 与 <code>main.js</code> 分文件管理，是为了可维护性（后续项目会越来越大）。</li>
+<li>这三文件模式是最小前端工程形态，后面学框架时本质仍是这三层。</li>
+</ul>
+<p>在 VS Code 中打开这个文件夹，可以通过以下几种方式打开：</p>
+<div class="tabs relative my-4 bg-second-background-color border border-border-color rounded-md" id="tab-openfile"><div role="tablist" aria-orientation="horizontal" class="flex gap-3.5 overflow-x-auto px-4 not-markdown scrollbar-hide" tabindex="0"><button type="button" role="tab" aria-selected="true" data-state="active" data-tab="openfile-1" class="inline-flex items-center gap-2 whitespace-nowrap text-third-text-color border-b-2 border-transparent py-2 text-sm font-medium transition-colors hover:text-second-text-color data-[state=active]:border-primary data-[state=active]:text-primary" tabindex="0">VSCode</button><button type="button" role="tab" aria-selected="false" data-state="inactive" data-tab="openfile-2" class="inline-flex items-center gap-2 whitespace-nowrap text-third-text-color border-b-2 border-transparent py-2 text-sm font-medium transition-colors hover:text-second-text-color data-[state=active]:border-primary data-[state=active]:text-primary" tabindex="-1"><font color="gray">拖拽</font></button><button type="button" role="tab" aria-selected="false" data-state="inactive" data-tab="openfile-3" class="inline-flex items-center gap-2 whitespace-nowrap text-third-text-color border-b-2 border-transparent py-2 text-sm font-medium transition-colors hover:text-second-text-color data-[state=active]:border-primary data-[state=active]:text-primary" tabindex="-1"><font color="green">控制台</font></button></div><div class="tab-content p-4 bg-background-color/70 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)]"><div class="tab-pane" data-state="active" id="openfile-1"><p>直接通过 VS Code 中 <code>文件-打开文件夹</code> 选择 <code>html-demo</code> 文件夹</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/HTML/openF1.png" alt="VSCode打开"></p></div><div class="tab-pane" data-state="inactive" id="openfile-2" hidden=""><p>将文件夹拖拽至 VS Code 图标上打开</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/HTML/openF2.gif" alt="拖拽"></p></div><div class="tab-pane" data-state="inactive" id="openfile-3" hidden=""><p>在 <em>文件管理器</em> 里进入文件夹，并在地址栏输入 <code>cmd</code> 打开命令行</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/HTML/openF3.png" alt="打开CMD"></p>
+<hr>
+<p>输入 <code>code .</code> 打开 VS Code</p>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/HTML/openF4.png" alt="打开Code"></p></div></div></div>
+
+<h3 id="2-4-第一次运行页面"><a href="#2-4-第一次运行页面" class="headerlink" title="2.4 第一次运行页面"></a>2.4 第一次运行页面</h3><ol>
+<li>在 <code>index.html</code> 写入最小 HTML 模板（<a href="./#3-1-HTML%EF%BC%9A%E5%85%88%E6%90%AD%E9%AA%A8%E6%9E%B6">章节3.1</a> 给）</li>
+<li>右键 <code>index.html</code> -&gt; <code>Open with Live Server</code></li>
+<li>浏览器会自动打开本地地址（通常是 <code>http://127.0.0.1:5500</code>）</li>
+</ol>
+<p>如果你看到了页面内容，说明环境成功。</p>
+<hr>
+<h2 id="三、做出你的第一个页面"><a href="#三、做出你的第一个页面" class="headerlink" title="三、做出你的第一个页面"></a>三、做出你的第一个页面</h2><h3 id="3-1-HTML：先搭骨架"><a href="#3-1-HTML：先搭骨架" class="headerlink" title="3.1 HTML：先搭骨架"></a>3.1 HTML：先搭骨架</h3><p>在开始写代码前，先用一句话理解 HTML：</p>
+<blockquote>
+<p>HTML 负责定义“页面里有什么”。</p>
+</blockquote>
+<p>你可以把它理解为房子的结构图：哪里是标题、哪里是段落、哪里是按钮。</p>
+<p>在 <code>index.html</code> 中写入以下内容：</p>
+<div class="code-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 声明文档类型为 HTML5，告诉浏览器用标准模式解析页面 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 根标签；lang="zh-CN" 表示页面主要语言是简体中文 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- head 内放“页面配置”，一般不直接显示给用户 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 字符编码：UTF-8，避免中文乱码 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 视口设置：让移动端按设备宽度渲染，初始缩放为 1 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的第一个前端页面<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 浏览器标签页上显示的标题 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./style.css"</span> /&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 引入外部 CSS 文件：./ 代表当前目录 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- body 内放“用户可见内容” --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>你好，前端！<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 一级标题：页面主标题，语义上权重最高 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是我写的第一个网页。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 段落标签：用于普通文本 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn"</span>&gt;</span>点我试试<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 按钮标签：id="btn" 供 JS 精确找到这个按钮 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./main.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 在 body 底部引入 JS：可避免脚本执行时 DOM 还没加载完成 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>原理补充</strong></p>
+<ul>
+<li><code>head</code> 里的配置会影响浏览器“如何解析和显示页面”，例如编码和视口。</li>
+<li><code>link</code> 和 <code>script</code> 本质是在告诉浏览器“继续请求并加载其他资源文件”。</li>
+<li>把 <code>script</code> 放在 <code>body</code> 底部，是最朴素且稳定的加载策略：先有页面结构，再执行交互脚本。</li>
+<li><code>id="btn"</code> 的意义是给 JS 一个稳定的“定位锚点”，后续做事件绑定会更可靠。</li>
+</ul>
+<p>这段代码里有几个关键点：</p>
+<ul>
+<li><code>&lt;!DOCTYPE html&gt;</code>：声明这是 HTML5 文档。</li>
+<li><code>&lt;head&gt;</code>：存放页面配置（字符集、标题、样式文件引用等）。</li>
+<li><code>&lt;body&gt;</code>：用户真正看到的页面内容。</li>
+<li><code>&lt;link rel="stylesheet" href="./style.css" /&gt;</code>：把 <code>style.css</code> 引入到页面。</li>
+<li><code>&lt;script src="./main.js"&gt;&lt;/script&gt;</code>：把 <code>main.js</code> 引入到页面。</li>
+</ul>
+<div class="callout callout--simple info mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>零基础常见误区：HTML 不是“编程逻辑”，而是“内容结构”。<br>先把结构写清楚，再用 CSS 和 JS 补样式与行为。</p></div></div>
+
+<h3 id="3-2-CSS：给页面加衣服"><a href="#3-2-CSS：给页面加衣服" class="headerlink" title="3.2 CSS：给页面加衣服"></a>3.2 CSS：给页面加衣服</h3><p>CSS 的核心作用是：</p>
+<blockquote>
+<p>控制页面“长什么样”。</p>
+</blockquote>
+<p>如果 HTML 是骨架，CSS 就是皮肤、衣服和排版规则。</p>
+<p>在 <code>style.css</code> 中写入以下内容：</p>
+<div class="code-container" data-rel="Css"><figure class="iseeu highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 通配选择器：匹配页面中所有元素 */</span></span><br><span class="line">* {</span><br><span class="line">    <span class="attribute">box-sizing</span>: border-box;</span><br><span class="line">    <span class="comment">/* 盒模型计算改为“包含边框和内边距”，更利于尺寸控制 */</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* body 是页面可见内容的外层容器 */</span></span><br><span class="line"><span class="selector-tag">body</span> {</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="comment">/* 去掉浏览器默认外边距，避免四周出现空白 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">min-height</span>: <span class="number">100vh</span>;</span><br><span class="line">    <span class="comment">/* 最小高度 = 视口高度（vh：视窗单位），保证至少占满一屏 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">    <span class="comment">/* 开启 Flex 布局，让子元素更容易居中和排版 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">flex-direction</span>: column;</span><br><span class="line">    <span class="comment">/* 主轴方向为纵向：子元素从上到下排列 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">justify-content</span>: center;</span><br><span class="line">    <span class="comment">/* 主轴（纵向）居中 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">align-items</span>: center;</span><br><span class="line">    <span class="comment">/* 交叉轴（横向）居中 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">gap</span>: <span class="number">12px</span>;</span><br><span class="line">    <span class="comment">/* 子元素之间统一间距 12px */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">font-family</span>: Arial, sans-serif;</span><br><span class="line">    <span class="comment">/* 字体优先 Arial，不存在时回退无衬线字体 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#f5f6fa</span>;</span><br><span class="line">    <span class="comment">/* 页面背景色 */</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 普通按钮样式 */</span></span><br><span class="line"><span class="selector-tag">button</span> {</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">8px</span> <span class="number">16px</span>;</span><br><span class="line">    <span class="comment">/* 内边距：上下 8px，左右 16px */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">border</span>: none;</span><br><span class="line">    <span class="comment">/* 去掉默认边框 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">8px</span>;</span><br><span class="line">    <span class="comment">/* 圆角 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#3b82f6</span>;</span><br><span class="line">    <span class="comment">/* 按钮背景色 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">    <span class="comment">/* 按钮文字颜色 */</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">cursor</span>: pointer;</span><br><span class="line">    <span class="comment">/* 鼠标移上去显示手型，提示“可点击” */</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 伪类：鼠标悬停时触发 */</span></span><br><span class="line"><span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> {</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#2563eb</span>;</span><br><span class="line">    <span class="comment">/* 悬停时颜色加深，给用户视觉反馈 */</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>原理补充</strong></p>
+<ul>
+<li><code>box-sizing: border-box</code> 能显著减少“我写了宽度却超出”的新手布局问题。</li>
+<li><code>min-height: 100vh</code> 比 <code>height: 100vh</code> 更安全：内容变多时页面还能自然撑开。</li>
+<li><code>display: flex</code> + 双轴对齐是最常见的居中方案，比老式定位更易维护。</li>
+<li><code>:hover</code> 属于状态伪类，体现了“同一个元素在不同交互状态下样式不同”的思想。</li>
+</ul>
+<p>先看这段样式中的基础知识：</p>
+<ul>
+<li><code>* { box-sizing: border-box; }</code>：统一盒模型计算方式，后面布局更稳定。</li>
+<li><code>body { ... }</code>：给整个页面设置基础布局和背景。</li>
+<li><code>display: flex</code> + <code>justify-content</code> + <code>align-items</code>：让内容水平/垂直居中。</li>
+<li><code>button:hover</code>：当鼠标悬停按钮时改变样式，这叫“状态样式”。</li>
+</ul>
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>写 CSS 时建议保持“从外到内”的顺序：先布局（位置、宽高），再文字，再颜色和细节。</p></div></div>
+
+<h3 id="3-3-JavaScript：加一点交互"><a href="#3-3-JavaScript：加一点交互" class="headerlink" title="3.3 JavaScript：加一点交互"></a>3.3 JavaScript：加一点交互</h3><p>JavaScript 的核心作用是：</p>
+<blockquote>
+<p>让页面“动起来并响应用户操作”。</p>
+</blockquote>
+<p>在 <code>main.js</code> 中写入以下内容：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一步：通过 id 精确获取按钮元素</span></span><br><span class="line"><span class="keyword">const</span> button = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">'btn'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二步：给按钮绑定点击事件</span></span><br><span class="line">button.<span class="title function_">addEventListener</span>(<span class="string">'click'</span>, <span class="function">() =&gt;</span> {</span><br><span class="line">    <span class="comment">// 第三步：点击后执行逻辑，这里用 alert 做最直观反馈</span></span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">'恭喜你，已经完成前端三件套联动！'</span>);</span><br><span class="line">});</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>原理补充</strong></p>
+<ul>
+<li>DOM 操作的核心前提是：先拿到元素引用，再对这个引用做监听或修改。</li>
+<li><code>addEventListener</code> 让行为与结构解耦，比直接写行内事件（如 <code>onclick</code>）更规范。</li>
+<li>回调函数会在事件发生时执行，这就是“事件驱动编程”的基本模型。</li>
+<li>真实项目里通常把 <code>alert</code> 换成更新 DOM（如改文案、加类名、显示弹窗）。</li>
+</ul>
+<p>在这个最小示例里，我们做了三件事：</p>
+<ol>
+<li><code>getElementById('btn')</code>：先拿到页面上的按钮节点。</li>
+<li><code>addEventListener('click', ...)</code>：监听按钮的点击事件。</li>
+<li><code>alert(...)</code>：点击后给出反馈，证明交互逻辑生效。</li>
+</ol>
+<p>你可以先记住一个通用模式：</p>
+<blockquote>
+<p>找到元素 -&gt; 监听事件 -&gt; 执行逻辑</p>
+</blockquote>
+<p>后续几乎所有前端交互，都是这个模式的变形。</p>
+<hr>
+<p>如果你想进一步练手，可以做这 3 个任务：</p>
+<ol>
+<li>增加一个文案为“开始学习”的按钮；</li>
+<li>把页面背景改成你喜欢的颜色；</li>
+<li>为“开始学习”的按钮增加点击弹窗提示“我可以控制页面行为了！”。</li>
+</ol>
+<p>到这里你已经完成了最关键的一步：<br><strong>你能独立创建、运行并修改一个前端页面了。</strong></p>
+<hr>
+<h2 id="四、从“会写”到“写对”"><a href="#四、从“会写”到“写对”" class="headerlink" title="四、从“会写”到“写对”"></a>四、从“会写”到“写对”</h2><h3 id="4-1-盒模型（Box-Model）"><a href="#4-1-盒模型（Box-Model）" class="headerlink" title="4.1 盒模型（Box Model）"></a>4.1 盒模型（Box Model）</h3><p>一个元素在页面占据的空间 =</p>
+<blockquote>
+<p>content（内容） + padding（内边距） + border（边框） + margin（外边距）</p>
+</blockquote>
+<p>这也是为什么“我明明写了宽 100px，看起来却比 100px 大”。</p>
+<h3 id="4-2-常见元素分类"><a href="#4-2-常见元素分类" class="headerlink" title="4.2 常见元素分类"></a>4.2 常见元素分类</h3><ul>
+<li><strong>块级元素</strong>：默认独占一行（如 <code>div</code>、<code>p</code>、<code>h1</code>）</li>
+<li><strong>行内元素</strong>：默认可在一行排列（如 <code>span</code>、<code>a</code>）</li>
+</ul>
+<h3 id="4-3-选择器先学常用够了"><a href="#4-3-选择器先学常用够了" class="headerlink" title="4.3 选择器先学常用够了"></a>4.3 选择器先学常用够了</h3><ul>
+<li>基本<ul>
+<li><code>div</code> —— <em>指向所有该元素</em></li>
+<li><code>.class</code> —— <em>指向具有名字同为 class 属性的所有元素</em></li>
+<li><code>#id</code> —— <em>指向具有名字同为 id 属性的所有元素</em></li>
+</ul>
+</li>
+<li>层级<ul>
+<li><code>A B</code> —— <em>指向 A 元素内部的所有 B 元素</em></li>
+<li><code>A &gt; B</code> —— <em>指向 A 元素直接子元素中所有 B 元素</em></li>
+</ul>
+</li>
+<li>状态<ul>
+<li><code>:hover</code> —— <em>当鼠标悬停时</em></li>
+<li><code>:focus</code> —— <em>当元素获得焦点时</em></li>
+</ul>
+</li>
+<li>结构<ul>
+<li><code>:first-child</code> —— <em>在父节点下的第一个子节点</em></li>
+<li><code>:nth-child(2n)</code> —— <em>在父节点下的偶数子节点</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="4-4-Flex-布局（前端初期最高频）"><a href="#4-4-Flex-布局（前端初期最高频）" class="headerlink" title="4.4 Flex 布局（前端初期最高频）"></a>4.4 Flex 布局（前端初期最高频）</h3><p>容器常用属性：</p>
+<ul>
+<li><code>display: flex</code> —— <em>显示</em></li>
+<li><code>flex-direction</code> —— <em>主轴方向</em></li>
+<li><code>justify-content</code> —— <em>主轴对齐</em></li>
+<li><code>align-items</code> —— <em>交叉轴对齐</em></li>
+<li><code>flex-wrap</code> —— <em>换行</em></li>
+</ul>
+<p>项目常用属性：</p>
+<ul>
+<li><code>flex</code> —— <em>弹性伸缩</em></li>
+<li><code>order</code> —— <em>顺序</em></li>
+<li><code>align-self</code> —— <em>单项对齐</em></li>
+</ul>
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>给零基础同学的实践建议：<br>90% 的常见页面排版（导航栏、卡片区、左右布局）都能先用 Flex 解决。</p></div></div>
+
+<hr>
+<h2 id="五、核心原理"><a href="#五、核心原理" class="headerlink" title="五、核心原理"></a>五、核心原理</h2><p>下面这部分是本文的“底层理解区”。</p>
+<p>你可以把前端看成三层：</p>
+<ol>
+<li><strong>HTML</strong>：定义信息结构与语义</li>
+<li><strong>CSS</strong>：定义视觉规则与布局算法</li>
+<li><strong>浏览器渲染引擎</strong>：把前两者变成真实像素</li>
+</ol>
+<hr>
+<h3 id="5-1-HTML-深入：-不只是“标签拼接”"><a href="#5-1-HTML-深入：-不只是“标签拼接”" class="headerlink" title="5.1 HTML 深入： 不只是“标签拼接”"></a>5.1 HTML 深入： 不只是“标签拼接”</h3><h4 id="5-1-1-语义化"><a href="#5-1-1-语义化" class="headerlink" title="5.1.1 语义化"></a>5.1.1 语义化</h4><p>语义化的核心不是“好看”，而是让不同系统都能正确理解你的内容：</p>
+<ul>
+<li>浏览器：知道哪里是导航、正文、页脚</li>
+<li>搜索引擎：更容易抽取页面结构</li>
+<li>屏幕阅读器：能读出更准确的页面层次</li>
+</ul>
+<p>常见语义标签（翻译即功能）：<code>header</code>、<code>nav</code>、<code>main</code>、<code>section</code>、<code>article</code>、<code>aside</code>、<code>footer</code>。</p>
+<h4 id="5-1-2-文档树（DOM）与节点关系"><a href="#5-1-2-文档树（DOM）与节点关系" class="headerlink" title="5.1.2 文档树（DOM）与节点关系"></a>5.1.2 文档树（DOM）与节点关系</h4><p>HTML 解析后不是字符串，而是树：</p>
+<ul>
+<li>父子关系：影响样式继承和选择器命中</li>
+<li>兄弟关系：影响相邻选择器与布局流</li>
+<li>节点顺序：影响键盘导航顺序与可访问性</li>
+</ul>
+<h4 id="5-1-3-块级-行内-行内块的本质"><a href="#5-1-3-块级-行内-行内块的本质" class="headerlink" title="5.1.3 块级 / 行内 / 行内块的本质"></a>5.1.3 块级 / 行内 / 行内块的本质</h4><ul>
+<li>块级：默认独占一行，参与普通文档流的块格式化</li>
+<li>行内：在文本行内排布，主要受行盒模型约束</li>
+<li>行内块：兼具“可同排 + 可设宽高”特性</li>
+</ul>
+<p>这决定了“元素为什么换行 / 为什么宽高不生效”。</p>
+<h4 id="5-1-4-表单与可访问性（A11y）基础"><a href="#5-1-4-表单与可访问性（A11y）基础" class="headerlink" title="5.1.4 表单与可访问性（A11y）基础"></a>5.1.4 表单与可访问性（A11y）基础</h4><p>很多人只会写 <code>&lt;input&gt;</code>，但可用的表单还需要：</p>
+<ul>
+<li>合理设置 <code>type</code>（如 <code>email</code>、<code>number</code>）以获得原生校验与移动端键盘优化</li>
+<li>使用 <code>button</code> 的语义类型（<code>submit</code>、<code>button</code>）避免误提交</li>
+<li><code>placeholder</code> 是提示，不是标签本身</li>
+</ul>
+<h4 id="5-1-5-资源加载机制（脚本、样式、图片）"><a href="#5-1-5-资源加载机制（脚本、样式、图片）" class="headerlink" title="5.1.5 资源加载机制（脚本、样式、图片）"></a>5.1.5 资源加载机制（脚本、样式、图片）</h4><ul>
+<li>CSS 会影响首屏渲染，通常应尽早加载</li>
+<li>JS 默认会阻塞解析（外链脚本尤其明显）</li>
+<li>图片天然懒解析，但会影响布局稳定性（需关注尺寸占位）</li>
+</ul>
+<p>简化理解：</p>
+<blockquote>
+<p>谁会阻塞“页面可见”，谁就优先优化。</p>
+</blockquote>
+<h4 id="5-1-6-为什么“结构正确”比“样式漂亮”更重要"><a href="#5-1-6-为什么“结构正确”比“样式漂亮”更重要" class="headerlink" title="5.1.6 为什么“结构正确”比“样式漂亮”更重要"></a>5.1.6 为什么“结构正确”比“样式漂亮”更重要</h4><p>当项目变大后，结构错误会导致：</p>
+<ul>
+<li>选择器越来越复杂</li>
+<li>脚本定位不稳定</li>
+<li>重构成本大幅上升</li>
+</ul>
+<p>所以 HTML 最重要的是：<strong>层次清楚、语义准确、命名稳定</strong>。</p>
+<hr>
+<h3 id="5-2-CSS-深入：不只是“装饰语法”"><a href="#5-2-CSS-深入：不只是“装饰语法”" class="headerlink" title="5.2 CSS 深入：不只是“装饰语法”"></a>5.2 CSS 深入：不只是“装饰语法”</h3><h4 id="5-2-1-层叠-——-CSS-的核心运行机制"><a href="#5-2-1-层叠-——-CSS-的核心运行机制" class="headerlink" title="5.2.1 层叠 —— CSS 的核心运行机制"></a>5.2.1 层叠 —— CSS 的核心运行机制</h4><p>最终样式由四件事共同决定：</p>
+<ol>
+<li>来源（浏览器默认样式、作者样式、用户样式）</li>
+<li>优先级（specificity）</li>
+<li>书写顺序（后写覆盖先写）</li>
+<li><code>!important</code>（强制提升优先权）</li>
+</ol>
+<p>常见简化优先级认知：</p>
+<p><code>!important</code> &gt; 内联样式 &gt; <code>#id</code> &gt; <code>.class</code> / <code>[attr]</code> / <code>:pseudo-class</code> &gt; <code>tag</code> / <code>::pseudo-element</code></p>
+<h4 id="5-2-2-继承与初始值"><a href="#5-2-2-继承与初始值" class="headerlink" title="5.2.2 继承与初始值"></a>5.2.2 继承与初始值</h4><p>并非所有属性都会继承：</p>
+<ul>
+<li>常继承：<code>color</code>、<code>font-*</code>、<code>line-height</code></li>
+<li>常不继承：<code>margin</code>、<code>padding</code>、<code>border</code>、<code>width</code>、<code>height</code></li>
+</ul>
+<p>你会经常用到这些值：</p>
+<ul>
+<li><code>inherit</code>：继承父元素</li>
+<li><code>initial</code>：回到规范初始值</li>
+<li><code>unset</code>：可继承属性等价 <code>inherit</code>，不可继承属性等价 <code>initial</code></li>
+</ul>
+<h4 id="5-2-3-盒模型与尺寸计算"><a href="#5-2-3-盒模型与尺寸计算" class="headerlink" title="5.2.3 盒模型与尺寸计算"></a>5.2.3 盒模型与尺寸计算</h4><p>元素真实占位通常由这套公式决定：</p>
+<p><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.466ex;" xmlns="http://www.w3.org/2000/svg" width="55.613ex" height="2.036ex" role="img" focusable="false" viewBox="0 -694 24580.9 900"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="mi" transform="translate(466,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mi" transform="translate(1038,0)"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1399,0)"><g data-mml-node="mi"><path data-c="1D45C" d="M201 -11Q126 -11 80 38T34 156Q34 221 64 279T146 380Q222 441 301 441Q333 441 341 440Q354 437 367 433T402 417T438 387T464 338T476 268Q476 161 390 75T201 -11ZM121 120Q121 70 147 48T206 26Q250 26 289 58T351 142Q360 163 374 216T388 308Q388 352 370 375Q346 405 306 405Q243 405 195 347Q158 303 140 230T121 120Z"></path></g><g data-mml-node="mi" transform="translate(485,0)"><path data-c="1D450" d="M34 159Q34 268 120 355T306 442Q362 442 394 418T427 355Q427 326 408 306T360 285Q341 285 330 295T319 325T330 359T352 380T366 386H367Q367 388 361 392T340 400T306 404Q276 404 249 390Q228 381 206 359Q162 315 142 235T121 119Q121 73 147 50Q169 26 205 26H209Q321 26 394 111Q403 121 406 121Q410 121 419 112T429 98T420 83T391 55T346 25T282 0T202 -11Q127 -11 81 37T34 159Z"></path></g><g data-mml-node="mi" transform="translate(918,0)"><path data-c="1D450" d="M34 159Q34 268 120 355T306 442Q362 442 394 418T427 355Q427 326 408 306T360 285Q341 285 330 295T319 325T330 359T352 380T366 386H367Q367 388 361 392T340 400T306 404Q276 404 249 390Q228 381 206 359Q162 315 142 235T121 119Q121 73 147 50Q169 26 205 26H209Q321 26 394 111Q403 121 406 121Q410 121 419 112T429 98T420 83T391 55T346 25T282 0T202 -11Q127 -11 81 37T34 159Z"></path></g><g data-mml-node="mi" transform="translate(1351,0)"><path data-c="1D462" d="M21 287Q21 295 30 318T55 370T99 420T158 442Q204 442 227 417T250 358Q250 340 216 246T182 105Q182 62 196 45T238 27T291 44T328 78L339 95Q341 99 377 247Q407 367 413 387T427 416Q444 431 463 431Q480 431 488 421T496 402L420 84Q419 79 419 68Q419 43 426 35T447 26Q469 29 482 57T512 145Q514 153 532 153Q551 153 551 144Q550 139 549 130T540 98T523 55T498 17T462 -8Q454 -10 438 -10Q372 -10 347 46Q345 45 336 36T318 21T296 6T267 -6T233 -11Q189 -11 155 7Q103 38 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(1923,0)"><path data-c="1D45D" d="M23 287Q24 290 25 295T30 317T40 348T55 381T75 411T101 433T134 442Q209 442 230 378L240 387Q302 442 358 442Q423 442 460 395T497 281Q497 173 421 82T249 -10Q227 -10 210 -4Q199 1 187 11T168 28L161 36Q160 35 139 -51T118 -138Q118 -144 126 -145T163 -148H188Q194 -155 194 -157T191 -175Q188 -187 185 -190T172 -194Q170 -194 161 -194T127 -193T65 -192Q-5 -192 -24 -194H-32Q-39 -187 -39 -183Q-37 -156 -26 -148H-6Q28 -147 33 -136Q36 -130 94 103T155 350Q156 355 156 364Q156 405 131 405Q109 405 94 377T71 316T59 280Q57 278 43 278H29Q23 284 23 287ZM178 102Q200 26 252 26Q282 26 310 49T356 107Q374 141 392 215T411 325V331Q411 405 350 405Q339 405 328 402T306 393T286 380T269 365T254 350T243 336T235 326L232 322Q232 321 229 308T218 264T204 212Q178 106 178 102Z"></path></g><g data-mml-node="mi" transform="translate(2426,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(2771,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="mi" transform="translate(3237,0)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mi" transform="translate(3757,0)"><path data-c="1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path></g><g data-mml-node="mi" transform="translate(4226,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(4571,0)"><path data-c="1D467" d="M347 338Q337 338 294 349T231 360Q211 360 197 356T174 346T162 335T155 324L153 320Q150 317 138 317Q117 317 117 325Q117 330 120 339Q133 378 163 406T229 440Q241 442 246 442Q271 442 291 425T329 392T367 375Q389 375 411 408T434 441Q435 442 449 442H462Q468 436 468 434Q468 430 463 420T449 399T432 377T418 358L411 349Q368 298 275 214T160 106L148 94L163 93Q185 93 227 82T290 71Q328 71 360 90T402 140Q406 149 409 151T424 153Q443 153 443 143Q443 138 442 134Q425 72 376 31T278 -11Q252 -11 232 6T193 40T155 57Q111 57 76 -3Q70 -11 59 -11H54H41Q35 -5 35 -2Q35 13 93 84Q132 129 225 214T340 322Q352 338 347 338Z"></path></g><g data-mml-node="mi" transform="translate(5036,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g></g><g data-mml-node="mo" transform="translate(7178.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mtext" transform="translate(8234.6,0)"><path data-c="63" d="M370 305T349 305T313 320T297 358Q297 381 312 396Q317 401 317 402T307 404Q281 408 258 408Q209 408 178 376Q131 329 131 219Q131 137 162 90Q203 29 272 29Q313 29 338 55T374 117Q376 125 379 127T395 129H409Q415 123 415 120Q415 116 411 104T395 71T366 33T318 2T249 -11Q163 -11 99 53T34 214Q34 318 99 383T250 448T370 421T404 357Q404 334 387 320Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(444,0)"></path><path data-c="6E" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q450 438 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(944,0)"></path><path data-c="74" d="M27 422Q80 426 109 478T141 600V615H181V431H316V385H181V241Q182 116 182 100T189 68Q203 29 238 29Q282 29 292 100Q293 108 293 146V181H333V146V134Q333 57 291 17Q264 -10 221 -10Q187 -10 162 2T124 33T105 68T98 100Q97 107 97 248V385H18V422H27Z" transform="translate(1500,0)"></path><path data-c="65" d="M28 218Q28 273 48 318T98 391T163 433T229 448Q282 448 320 430T378 380T406 316T415 245Q415 238 408 231H126V216Q126 68 226 36Q246 30 270 30Q312 30 342 62Q359 79 369 104L379 128Q382 131 395 131H398Q415 131 415 121Q415 117 412 108Q393 53 349 21T250 -11Q155 -11 92 58T28 218ZM333 275Q322 403 238 411H236Q228 411 220 410T195 402T166 381T143 340T127 274V267H333V275Z" transform="translate(1889,0)"></path><path data-c="6E" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q450 438 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(2333,0)"></path><path data-c="74" d="M27 422Q80 426 109 478T141 600V615H181V431H316V385H181V241Q182 116 182 100T189 68Q203 29 238 29Q282 29 292 100Q293 108 293 146V181H333V146V134Q333 57 291 17Q264 -10 221 -10Q187 -10 162 2T124 33T105 68T98 100Q97 107 97 248V385H18V422H27Z" transform="translate(2889,0)"></path></g><g data-mml-node="mo" transform="translate(11734.8,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mtext" transform="translate(12735,0)"><path data-c="70" d="M36 -148H50Q89 -148 97 -134V-126Q97 -119 97 -107T97 -77T98 -38T98 6T98 55T98 106Q98 140 98 177T98 243T98 296T97 335T97 351Q94 370 83 376T38 385H20V408Q20 431 22 431L32 432Q42 433 61 434T98 436Q115 437 135 438T165 441T176 442H179V416L180 390L188 397Q247 441 326 441Q407 441 464 377T522 216Q522 115 457 52T310 -11Q242 -11 190 33L182 40V-45V-101Q182 -128 184 -134T195 -145Q216 -148 244 -148H260V-194H252L228 -193Q205 -192 178 -192T140 -191Q37 -191 28 -194H20V-148H36ZM424 218Q424 292 390 347T305 402Q234 402 182 337V98Q222 26 294 26Q345 26 384 80T424 218Z"></path><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z" transform="translate(556,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1056,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1612,0)"></path><path data-c="69" d="M69 609Q69 637 87 653T131 669Q154 667 171 652T188 609Q188 579 171 564T129 549Q104 549 87 564T69 609ZM247 0Q232 3 143 3Q132 3 106 3T56 1L34 0H26V46H42Q70 46 91 49Q100 53 102 60T104 102V205V293Q104 345 102 359T88 378Q74 385 41 385H30V408Q30 431 32 431L42 432Q52 433 70 434T106 436Q123 437 142 438T171 441T182 442H185V62Q190 52 197 50T232 46H255V0H247Z" transform="translate(2168,0)"></path><path data-c="6E" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q450 438 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(2446,0)"></path><path data-c="67" d="M329 409Q373 453 429 453Q459 453 472 434T485 396Q485 382 476 371T449 360Q416 360 412 390Q410 404 415 411Q415 412 416 414V415Q388 412 363 393Q355 388 355 386Q355 385 359 381T368 369T379 351T388 325T392 292Q392 230 343 187T222 143Q172 143 123 171Q112 153 112 133Q112 98 138 81Q147 75 155 75T227 73Q311 72 335 67Q396 58 431 26Q470 -13 470 -72Q470 -139 392 -175Q332 -206 250 -206Q167 -206 107 -175Q29 -140 29 -75Q29 -39 50 -15T92 18L103 24Q67 55 67 108Q67 155 96 193Q52 237 52 292Q52 355 102 398T223 442Q274 442 318 416L329 409ZM299 343Q294 371 273 387T221 404Q192 404 171 388T145 343Q142 326 142 292Q142 248 149 227T179 192Q196 182 222 182Q244 182 260 189T283 207T294 227T299 242Q302 258 302 292T299 343ZM403 -75Q403 -50 389 -34T348 -11T299 -2T245 0H218Q151 0 138 -6Q118 -15 107 -34T95 -74Q95 -84 101 -97T122 -127T170 -155T250 -167Q319 -167 361 -139T403 -75Z" transform="translate(3002,0)"></path></g><g data-mml-node="mo" transform="translate(16459.2,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mtext" transform="translate(17459.4,0)"><path data-c="62" d="M307 -11Q234 -11 168 55L158 37Q156 34 153 28T147 17T143 10L138 1L118 0H98V298Q98 599 97 603Q94 622 83 628T38 637H20V660Q20 683 22 683L32 684Q42 685 61 686T98 688Q115 689 135 690T165 693T176 694H179V543Q179 391 180 391L183 394Q186 397 192 401T207 411T228 421T254 431T286 439T323 442Q401 442 461 379T522 216Q522 115 458 52T307 -11ZM182 98Q182 97 187 90T196 79T206 67T218 55T233 44T250 35T271 29T295 26Q330 26 363 46T412 113Q424 148 424 212Q424 287 412 323Q385 405 300 405Q270 405 239 390T188 347L182 339V98Z"></path><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(556,0)"></path><path data-c="72" d="M36 46H50Q89 46 97 60V68Q97 77 97 91T98 122T98 161T98 203Q98 234 98 269T98 328L97 351Q94 370 83 376T38 385H20V408Q20 431 22 431L32 432Q42 433 60 434T96 436Q112 437 131 438T160 441T171 442H174V373Q213 441 271 441H277Q322 441 343 419T364 373Q364 352 351 337T313 322Q288 322 276 338T263 372Q263 381 265 388T270 400T273 405Q271 407 250 401Q234 393 226 386Q179 341 179 207V154Q179 141 179 127T179 101T180 81T180 66V61Q181 59 183 57T188 54T193 51T200 49T207 48T216 47T225 47T235 46T245 46H276V0H267Q249 3 140 3Q37 3 28 0H20V46H36Z" transform="translate(1056,0)"></path><path data-c="64" d="M376 495Q376 511 376 535T377 568Q377 613 367 624T316 637H298V660Q298 683 300 683L310 684Q320 685 339 686T376 688Q393 689 413 690T443 693T454 694H457V390Q457 84 458 81Q461 61 472 55T517 46H535V0Q533 0 459 -5T380 -11H373V44L365 37Q307 -11 235 -11Q158 -11 96 50T34 215Q34 315 97 378T244 442Q319 442 376 393V495ZM373 342Q328 405 260 405Q211 405 173 369Q146 341 139 305T131 211Q131 155 138 120T173 59Q203 26 251 26Q322 26 373 103V342Z" transform="translate(1448,0)"></path><path data-c="65" d="M28 218Q28 273 48 318T98 391T163 433T229 448Q282 448 320 430T378 380T406 316T415 245Q415 238 408 231H126V216Q126 68 226 36Q246 30 270 30Q312 30 342 62Q359 79 369 104L379 128Q382 131 395 131H398Q415 131 415 121Q415 117 412 108Q393 53 349 21T250 -11Q155 -11 92 58T28 218ZM333 275Q322 403 238 411H236Q228 411 220 410T195 402T166 381T143 340T127 274V267H333V275Z" transform="translate(2004,0)"></path><path data-c="72" d="M36 46H50Q89 46 97 60V68Q97 77 97 91T98 122T98 161T98 203Q98 234 98 269T98 328L97 351Q94 370 83 376T38 385H20V408Q20 431 22 431L32 432Q42 433 60 434T96 436Q112 437 131 438T160 441T171 442H174V373Q213 441 271 441H277Q322 441 343 419T364 373Q364 352 351 337T313 322Q288 322 276 338T263 372Q263 381 265 388T270 400T273 405Q271 407 250 401Q234 393 226 386Q179 341 179 207V154Q179 141 179 127T179 101T180 81T180 66V61Q181 59 183 57T188 54T193 51T200 49T207 48T216 47T225 47T235 46T245 46H276V0H267Q249 3 140 3Q37 3 28 0H20V46H36Z" transform="translate(2448,0)"></path></g><g data-mml-node="mo" transform="translate(20521.7,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mtext" transform="translate(21521.9,0)"><path data-c="6D" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q351 442 364 440T387 434T406 426T421 417T432 406T441 395T448 384T452 374T455 366L457 361L460 365Q463 369 466 373T475 384T488 397T503 410T523 422T546 432T572 439T603 442Q729 442 740 329Q741 322 741 190V104Q741 66 743 59T754 49Q775 46 803 46H819V0H811L788 1Q764 2 737 2T699 3Q596 3 587 0H579V46H595Q656 46 656 62Q657 64 657 200Q656 335 655 343Q649 371 635 385T611 402T585 404Q540 404 506 370Q479 343 472 315T464 232V168V108Q464 78 465 68T468 55T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z"></path><path data-c="61" d="M137 305T115 305T78 320T63 359Q63 394 97 421T218 448Q291 448 336 416T396 340Q401 326 401 309T402 194V124Q402 76 407 58T428 40Q443 40 448 56T453 109V145H493V106Q492 66 490 59Q481 29 455 12T400 -6T353 12T329 54V58L327 55Q325 52 322 49T314 40T302 29T287 17T269 6T247 -2T221 -8T190 -11Q130 -11 82 20T34 107Q34 128 41 147T68 188T116 225T194 253T304 268H318V290Q318 324 312 340Q290 411 215 411Q197 411 181 410T156 406T148 403Q170 388 170 359Q170 334 154 320ZM126 106Q126 75 150 51T209 26Q247 26 276 49T315 109Q317 116 318 175Q318 233 317 233Q309 233 296 232T251 223T193 203T147 166T126 106Z" transform="translate(833,0)"></path><path data-c="72" d="M36 46H50Q89 46 97 60V68Q97 77 97 91T98 122T98 161T98 203Q98 234 98 269T98 328L97 351Q94 370 83 376T38 385H20V408Q20 431 22 431L32 432Q42 433 60 434T96 436Q112 437 131 438T160 441T171 442H174V373Q213 441 271 441H277Q322 441 343 419T364 373Q364 352 351 337T313 322Q288 322 276 338T263 372Q263 381 265 388T270 400T273 405Q271 407 250 401Q234 393 226 386Q179 341 179 207V154Q179 141 179 127T179 101T180 81T180 66V61Q181 59 183 57T188 54T193 51T200 49T207 48T216 47T225 47T235 46T245 46H276V0H267Q249 3 140 3Q37 3 28 0H20V46H36Z" transform="translate(1333,0)"></path><path data-c="67" d="M329 409Q373 453 429 453Q459 453 472 434T485 396Q485 382 476 371T449 360Q416 360 412 390Q410 404 415 411Q415 412 416 414V415Q388 412 363 393Q355 388 355 386Q355 385 359 381T368 369T379 351T388 325T392 292Q392 230 343 187T222 143Q172 143 123 171Q112 153 112 133Q112 98 138 81Q147 75 155 75T227 73Q311 72 335 67Q396 58 431 26Q470 -13 470 -72Q470 -139 392 -175Q332 -206 250 -206Q167 -206 107 -175Q29 -140 29 -75Q29 -39 50 -15T92 18L103 24Q67 55 67 108Q67 155 96 193Q52 237 52 292Q52 355 102 398T223 442Q274 442 318 416L329 409ZM299 343Q294 371 273 387T221 404Q192 404 171 388T145 343Q142 326 142 292Q142 248 149 227T179 192Q196 182 222 182Q244 182 260 189T283 207T294 227T299 242Q302 258 302 292T299 343ZM403 -75Q403 -50 389 -34T348 -11T299 -2T245 0H218Q151 0 138 -6Q118 -15 107 -34T95 -74Q95 -84 101 -97T122 -127T170 -155T250 -167Q319 -167 361 -139T403 -75Z" transform="translate(1725,0)"></path><path data-c="69" d="M69 609Q69 637 87 653T131 669Q154 667 171 652T188 609Q188 579 171 564T129 549Q104 549 87 564T69 609ZM247 0Q232 3 143 3Q132 3 106 3T56 1L34 0H26V46H42Q70 46 91 49Q100 53 102 60T104 102V205V293Q104 345 102 359T88 378Q74 385 41 385H30V408Q30 431 32 431L42 432Q52 433 70 434T106 436Q123 437 142 438T171 441T182 442H185V62Q190 52 197 50T232 46H255V0H247Z" transform="translate(2225,0)"></path><path data-c="6E" d="M41 46H55Q94 46 102 60V68Q102 77 102 91T102 122T103 161T103 203Q103 234 103 269T102 328V351Q99 370 88 376T43 385H25V408Q25 431 27 431L37 432Q47 433 65 434T102 436Q119 437 138 438T167 441T178 442H181V402Q181 364 182 364T187 369T199 384T218 402T247 421T285 437Q305 442 336 442Q450 438 463 329Q464 322 464 190V104Q464 66 466 59T477 49Q498 46 526 46H542V0H534L510 1Q487 2 460 2T422 3Q319 3 310 0H302V46H318Q379 46 379 62Q380 64 380 200Q379 335 378 343Q372 371 358 385T334 402T308 404Q263 404 229 370Q202 343 195 315T187 232V168V108Q187 78 188 68T191 55T200 49Q221 46 249 46H265V0H257L234 1Q210 2 183 2T145 3Q42 3 33 0H25V46H41Z" transform="translate(2503,0)"></path></g></g></g></svg></mjx-container></p>
+<p><code>box-sizing: border-box</code> 是现代开发默认选项，它让宽高计算更直觉。</p>
+<h4 id="5-2-4-格式化上下文（BFC-IFC）"><a href="#5-2-4-格式化上下文（BFC-IFC）" class="headerlink" title="5.2.4 格式化上下文（BFC / IFC）"></a>5.2.4 格式化上下文（BFC / IFC）</h4><p>这是很多布局“玄学问题”的根源：</p>
+<ul>
+<li><strong>BFC（块级格式化上下文）</strong>：可隔离浮动影响、避免外边距重叠干扰</li>
+<li><strong>IFC（行内格式化上下文）</strong>：文本和行内元素在同一行盒中布局</li>
+</ul>
+<p>理解它后，你会明白为什么某些“清除浮动”技巧有效。</p>
+<h4 id="5-2-5-定位体系（position）"><a href="#5-2-5-定位体系（position）" class="headerlink" title="5.2.5 定位体系（position）"></a>5.2.5 定位体系（position）</h4><ul>
+<li><code>static</code>：默认，按文档流</li>
+<li><code>relative</code>：保留原位置，再偏移自身</li>
+<li><code>absolute</code>：脱离文档流，相对最近定位祖先</li>
+<li><code>fixed</code>：相对视口固定</li>
+<li><code>sticky</code>：在阈值前后切换流内/固定行为</li>
+</ul>
+<h4 id="5-2-6-层叠上下文与-z-index"><a href="#5-2-6-层叠上下文与-z-index" class="headerlink" title="5.2.6 层叠上下文与 z-index"></a>5.2.6 层叠上下文与 z-index</h4><p><code>z-index</code> 不是“值大就一定在最上面”，它受层叠上下文限制。</p>
+<p>常见会创建新层叠上下文的场景：</p>
+<ul>
+<li>定位元素 + 非 <code>auto</code> 的 <code>z-index</code></li>
+<li><code>opacity &lt; 1</code></li>
+<li><code>transform</code> / <code>filter</code> 等属性</li>
+</ul>
+<p>这就是 <em>z-index 写到 9999 仍盖不住</em>的根因之一。</p>
+<h4 id="5-2-7-现代布局：Flex-与-Grid-的边界"><a href="#5-2-7-现代布局：Flex-与-Grid-的边界" class="headerlink" title="5.2.7 现代布局：Flex 与 Grid 的边界"></a>5.2.7 现代布局：Flex 与 Grid 的边界</h4><ul>
+<li><strong>Flex</strong>：一维布局（行或列），适合组件内部对齐</li>
+<li><strong>Grid</strong>：二维布局（行和列），适合页面级区域划分</li>
+</ul>
+<p>常见策略：</p>
+<ul>
+<li>页面骨架用 Grid（或大块 Flex）</li>
+<li>组件内部用 Flex</li>
+</ul>
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>如果你对布局有些了解，可能还听说过 CSS Float、Table、甚至定位布局等老方法。<br>这些方法在现代开发中已经很少使用了，建议先专注于 Flex 和 Grid。</p></div></div>
+
+<h4 id="5-2-8-响应式设计"><a href="#5-2-8-响应式设计" class="headerlink" title="5.2.8 响应式设计"></a>5.2.8 响应式设计</h4><p>核心不是“手机端单独写一套”，而是“同一套结构在不同视口渐进适配”：</p>
+<ul>
+<li>相对单位：<code>%</code>、<code>em</code>、<code>rem</code>、<code>vw</code>、<code>vh</code></li>
+<li>媒体查询：<code>@media (max-width: ...)</code></li>
+<li>流式布局：弹性宽度 + 自动换行</li>
+</ul>
+<h4 id="5-2-9-动画与性能"><a href="#5-2-9-动画与性能" class="headerlink" title="5.2.9 动画与性能"></a>5.2.9 动画与性能</h4><p>动画属性大致分两类：</p>
+<ul>
+<li>更容易触发重排：<code>width</code>、<code>height</code>、<code>top</code>、<code>left</code> 等</li>
+<li>更易合成加速：<code>transform</code>、<code>opacity</code></li>
+</ul>
+<p>经验法则：</p>
+<blockquote>
+<p>动画尽量优先用 <code>transform</code> / <code>opacity</code>。</p>
+</blockquote>
+<h4 id="5-2-10-工程化-CSS-思维"><a href="#5-2-10-工程化-CSS-思维" class="headerlink" title="5.2.10 工程化 CSS 思维"></a>5.2.10 工程化 CSS 思维</h4><p>当页面变大后，关键不是“能写样式”，而是“能维护样式”：</p>
+<ul>
+<li>命名体系（如 BEM 思路）</li>
+<li>组件级样式边界（避免全局污染）</li>
+<li>设计变量（颜色、间距、字号统一管理）</li>
+<li>减少过深选择器（降低耦合）</li>
+</ul>
+<hr>
+<h3 id="5-3-浏览器渲染与性能：从“写对”到“跑快”"><a href="#5-3-浏览器渲染与性能：从“写对”到“跑快”" class="headerlink" title="5.3 浏览器渲染与性能：从“写对”到“跑快”"></a>5.3 浏览器渲染与性能：从“写对”到“跑快”</h3><h4 id="5-3-1-渲染主流程（高频考点）"><a href="#5-3-1-渲染主流程（高频考点）" class="headerlink" title="5.3.1 渲染主流程（高频考点）"></a>5.3.1 渲染主流程（高频考点）</h4><ol>
+<li>HTML -&gt; DOM</li>
+<li>CSS -&gt; CSSOM</li>
+<li>DOM + CSSOM -&gt; Render Tree</li>
+<li>Layout（几何计算）</li>
+<li>Paint（绘制）</li>
+<li>Composite（图层合成）</li>
+</ol>
+<h4 id="5-3-2-重排（Reflow）与重绘（Repaint）"><a href="#5-3-2-重排（Reflow）与重绘（Repaint）" class="headerlink" title="5.3.2 重排（Reflow）与重绘（Repaint）"></a>5.3.2 重排（Reflow）与重绘（Repaint）</h4><ul>
+<li>重排：元素几何信息变化（位置/尺寸）导致布局重新计算，成本更高</li>
+<li>重绘：仅视觉变化（如颜色）不改几何，通常成本较低</li>
+</ul>
+<h4 id="5-3-3-常见性能问题"><a href="#5-3-3-常见性能问题" class="headerlink" title="5.3.3 常见性能问题"></a>5.3.3 常见性能问题</h4><ul>
+<li>频繁读写布局信息（如循环里多次触发强制布局）</li>
+<li>大量复杂选择器导致样式计算压力上升</li>
+<li>图片无尺寸占位导致布局抖动</li>
+</ul>
+<h4 id="5-3-4-可执行优化清单（一般可直接用）"><a href="#5-3-4-可执行优化清单（一般可直接用）" class="headerlink" title="5.3.4 可执行优化清单（一般可直接用）"></a>5.3.4 可执行优化清单（一般可直接用）</h4><ul>
+<li>优先简化 DOM 结构，减少无意义嵌套</li>
+<li>统一使用 <code>border-box</code></li>
+<li>动画优先 <code>transform</code> / <code>opacity</code></li>
+<li>图片提前给宽高，降低页面跳动</li>
+<li>样式分层组织，避免一处改动牵连全局</li>
+</ul>
+<hr>
+<h3 id="5-4-一套通用排错框架（HTML-CSS）"><a href="#5-4-一套通用排错框架（HTML-CSS）" class="headerlink" title="5.4 一套通用排错框架（HTML/CSS）"></a>5.4 一套通用排错框架（HTML/CSS）</h3><p>当页面“不对劲”时，按这个顺序排查：</p>
+<ol>
+<li><strong>先确认结构</strong>：标签闭合、层级、语义是否合理</li>
+<li><strong>再看选择器</strong>：是否选中目标元素</li>
+<li><strong>再看层叠</strong>：是否被更高优先级覆盖</li>
+<li><strong>再看布局模型</strong>：当前是普通流 / Flex / Grid / 定位哪一种</li>
+<li><strong>最后看渲染细节</strong>：是否有尺寸塌陷、图层遮挡、滚动容器影响</li>
+</ol>
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>把改代码改为控制变量法：每次只改一个变量，再观察结果。<br>这是从初学者走向工程化开发的关键习惯。</p></div></div>
+
+<hr>
+<h2 id="六、实例：移动端首页骨架"><a href="#六、实例：移动端首页骨架" class="headerlink" title="六、实例：移动端首页骨架"></a>六、实例：移动端首页骨架</h2><p>这个例子综合了你前面学到的内容：</p>
+<ul>
+<li>页面结构（HTML）</li>
+<li>布局（Flex）</li>
+<li>基础交互（JS）</li>
+</ul>
+<h3 id="6-1-完整代码"><a href="#6-1-完整代码" class="headerlink" title="6.1 完整代码"></a>6.1 完整代码</h3><div class="code-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- HTML5 文档声明 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 页面主语言：简体中文 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 文档字符编码，解决中文乱码问题 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 移动端视口：按设备宽度渲染，初始缩放 1 倍 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 浏览器标签标题 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>移动端首页骨架<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 直接将样式写进html文件内，达到“单页面文件”书写需求 */</span></span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 1) 全局重置：统一盒模型计算 */</span></span></span><br><span class="line"><span class="language-css">        * {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">box-sizing</span>: border-box;</span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 2) 页面基础样式 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">html</span>,</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 去掉浏览器默认外边距 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 去掉浏览器默认内边距 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 占满可视区域宽度 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 高度占满，方便做整屏布局 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 基础字体设置 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#f6f6f6</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 页面浅灰背景 */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 3) 页面主容器：纵向 Flex，把头部/内容/底部串起来 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.page</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">min-height</span>: <span class="number">100vh</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 至少占满一屏，避免内容少时底部悬空 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">justify-content</span>: space-between;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 三段区域上下拉开：头部在上、底部在下 */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 4) 顶部栏：横向排布“菜单 + 搜索框 + 登录” */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.header</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">52px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#ff5454</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#fff</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">align-items</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 垂直居中 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">justify-content</span>: space-between;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 三个元素拉开 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">gap</span>: <span class="number">8px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 元素最小间距，防止太挤 */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 5) 顶部输入框：占据剩余空间 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.header</span> <span class="selector-tag">input</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex</span>: <span class="number">1</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 让输入框自动吃掉中间可用宽度 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">32px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">16px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 半高圆角，形成胶囊输入框 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">outline</span>: none;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 去掉默认 focus 外框（演示场景） */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 6) 主内容区：卡片网格布局 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.main</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex</span>: <span class="number">1</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 占据头部与底部之间的剩余高度 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex-wrap</span>: wrap;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 卡片可换行 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">gap</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 卡片之间的行列间距 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">align-content</span>: flex-start;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 多行卡片整体从顶部开始堆叠 */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 7) 商品卡片：每行两列 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.card</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="built_in">calc</span>(<span class="number">50%</span> - <span class="number">6px</span>);</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 两列平分：总 gap=12，所以每列减 6 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#fff</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">10px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">10px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 标题、价格、按钮纵向排列 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">gap</span>: <span class="number">8px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">2px</span> <span class="number">8px</span> <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.05</span>);</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 轻微阴影，增加层次感 */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 8) 价格样式：电商常用红色 + 加粗 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.price</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#e1251b</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-weight</span>: <span class="number">700</span>;</span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 9) 购买按钮样式 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.buy</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">16px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">32px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="built_in">linear-gradient</span>(to right, <span class="number">#ff7e7e</span>, <span class="number">#f52a2b</span>);</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 渐变强调可点击性 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#fff</span>;</span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 10) 底部导航栏 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.footer</span> {</span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#fff</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">align-items</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">justify-content</span>: space-around;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 四个入口均匀分布 */</span></span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-top</span>: <span class="number">1px</span> solid <span class="number">#eee</span>;</span></span><br><span class="line"><span class="language-css">            <span class="comment">/* 与内容区分隔 */</span></span></span><br><span class="line"><span class="language-css">        }</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 页面总容器 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"page"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 顶部搜索栏区域 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span> <span class="attr">class</span>=<span class="string">"header"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>菜单<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"keyword"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">placeholder</span>=<span class="string">"搜索商品"</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"login"</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 主内容区：商品卡片列表 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">main</span> <span class="attr">class</span>=<span class="string">"main"</span> <span class="attr">id</span>=<span class="string">"goodsList"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">"card"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h3</span>&gt;</span>蓝牙耳机<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"price"</span>&gt;</span>￥199<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"buy"</span>&gt;</span>立即购买<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">"card"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h3</span>&gt;</span>机械键盘<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"price"</span>&gt;</span>￥299<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"buy"</span>&gt;</span>立即购买<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">"card"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h3</span>&gt;</span>显示器支架<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"price"</span>&gt;</span>￥149<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"buy"</span>&gt;</span>立即购买<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">"card"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h3</span>&gt;</span>桌面音箱<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"price"</span>&gt;</span>￥259<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"buy"</span>&gt;</span>立即购买<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 底部导航区域 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">footer</span> <span class="attr">class</span>=<span class="string">"footer"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>分类<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>购物车<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>我的<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// A. 获取需要交互的元素</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> login = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">'login'</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> keyword = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">'keyword'</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// B. 点击“登录”文字时，给出演示提示</span></span></span><br><span class="line"><span class="language-javascript">        login.<span class="title function_">addEventListener</span>(<span class="string">'click'</span>, <span class="function">() =&gt;</span> {</span></span><br><span class="line"><span class="language-javascript">            <span class="title function_">alert</span>(<span class="string">'这里通常会跳转到登录页'</span>);</span></span><br><span class="line"><span class="language-javascript">        });</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// C. 监听搜索框键盘事件：按下 Enter 触发“搜索”反馈</span></span></span><br><span class="line"><span class="language-javascript">        keyword.<span class="title function_">addEventListener</span>(<span class="string">'keydown'</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> {</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// event.key 表示当前按下的键名</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">if</span> (event.<span class="property">key</span> === <span class="string">'Enter'</span>) {</span></span><br><span class="line"><span class="language-javascript">                <span class="comment">// keyword.value 是输入框当前内容；空值时显示“（空）”</span></span></span><br><span class="line"><span class="language-javascript">                <span class="title function_">alert</span>(<span class="string">`你搜索了：<span class="subst">${keyword.value || <span class="string">'（空）'</span>}</span>`</span>);</span></span><br><span class="line"><span class="language-javascript">            }</span></span><br><span class="line"><span class="language-javascript">        });</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// D. 为所有“立即购买”按钮批量绑定点击事件</span></span></span><br><span class="line"><span class="language-javascript">        <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">'.buy'</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">button</span>) =&gt;</span> {</span></span><br><span class="line"><span class="language-javascript">            button.<span class="title function_">addEventListener</span>(<span class="string">'click'</span>, <span class="function">() =&gt;</span> {</span></span><br><span class="line"><span class="language-javascript">                <span class="title function_">alert</span>(<span class="string">'已加入购物车（演示）'</span>);</span></span><br><span class="line"><span class="language-javascript">            });</span></span><br><span class="line"><span class="language-javascript">        });</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>第二层注释（原理补充）</strong></p>
+<ul>
+<li>这是一个“完整但最小”的业务页：结构层（HTML）、表现层（CSS）、行为层（JS）全部具备。</li>
+<li>布局上使用了两层 Flex：外层控制页面三段式，内层控制卡片流式换行。</li>
+<li>事件上覆盖了三类高频交互：点击（login/buy）、键盘输入（Enter 搜索）、批量绑定（多个按钮）。</li>
+<li><code>querySelectorAll('.buy').forEach(...)</code> 体现了“同类元素批处理”思想，后续做列表功能会频繁使用。</li>
+<li>这个示例已经接近真实项目骨架，只差数据来源（后续可替换为接口返回数据）。</li>
+</ul>
+<h3 id="6-2-这个实例为什么典型"><a href="#6-2-这个实例为什么典型" class="headerlink" title="6.2 这个实例为什么典型"></a>6.2 这个实例为什么典型</h3><ul>
+<li>有头部、内容区、底部：覆盖常见业务页面骨架</li>
+<li>内容区使用 <code>flex-wrap</code>：模拟电商卡片流式排列</li>
+<li>有输入、点击、回车事件：覆盖基础交互</li>
+</ul>
+<h3 id="6-3-逐段解析"><a href="#6-3-逐段解析" class="headerlink" title="6.3 逐段解析"></a>6.3 逐段解析</h3><ol>
+<li><code>page</code> 用纵向 Flex，把页面分成上中下三段。</li>
+<li><code>header</code> 用横向 Flex，把菜单、搜索框、登录排在一行。</li>
+<li><code>main</code> 设置 <code>flex-wrap: wrap</code>，让商品卡片可以自动换行。</li>
+<li><code>.card</code> 本身也用 Flex，保证标题、价格、按钮垂直排列且间距稳定。</li>
+<li>JS 里给登录、搜索、购买分别绑定事件，形成最小可交互页面。这里的JS如果没有编程基础，语法上可能不太理解，但先记住“找到元素 -&gt; 监听事件 -&gt; 执行逻辑”这个模式，后续学完 JS 基础语法后再回来看会更清晰。</li>
+</ol>
+<hr>
+<h2 id="下一步…"><a href="#下一步…" class="headerlink" title="下一步…"></a>下一步…</h2><p>如果你已经读到这里，建议按这个节奏继续：</p>
+<ol>
+<li>把本文示例手写 2 次（不要复制）</li>
+<li>自己改 3 处样式（颜色、间距、卡片列数）</li>
+<li>再加 1 个交互（比如“收藏”按钮）</li>
+<li>学会用浏览器开发者工具(F12)看 DOM 和 CSS</li>
+</ol>
+<p>当你能“改得动、讲得清”，前端入门就稳了。</p>
+<div class="callout callout--simple success mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>前端不是记语法比赛，而是“结构 + 样式 + 交互 + 原理”的持续组合训练。<br>先做出来，再做规范，最后做性能。</p></div></div>
+<div class="callout callout--simple danger mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>关于AI的使用：</p>
+<p>你可以用 AI 来辅助理解和查找资料，但<strong>不要<font color="red">直接复制</font> AI 生成的代码</strong>，要自己动手写一遍。</p>
+<p>后期部分章节会介绍一些 AI 辅助工具的使用方法，帮助你更高效地学习和开发。</p>
+<p>现在如果遇到问题，全然可以问 AI，但不要让 AI 替你完成练习，在 AI 给出解决方案后，务必自己动手实现一遍。</p></div></div>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 前端入门开发 | 从能写到懂原理</li>
+        <li><strong>作者:</strong> BY·Wled</li>
+        <li><strong>创建于
+                :</strong> 2026-02-03 20:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2026-03-03 20:18:30
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.wled.top/2026/02/03/HTML/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/12/16/GetGoogleOne/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">白嫖Google One学生会员的末班车</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        (function() {
+            const containerId = "giscus-container";
+            const mapping = "pathname";
+            const lang = "zh-CN";
+            const inputPosition = "bottom";
+            const reactionsEnabled = "1" === "1";
+            const emitMetadata = "1" === "1";
+            const strict = "0" === "1";
+            const loading = "lazy";
+
+            const getTerm = () => {
+                if (mapping === "pathname") return location.pathname;
+                if (mapping === "url") return location.href;
+                if (mapping === "title") return document.title;
+                if (mapping === "og:title") {
+                    const ogTitle = document.querySelector("meta[property='og:title']");
+                    return ogTitle?.content || document.title;
+                }
+                return "";
+            };
+
+            const sendUpdate = () => {
+                const iframe = document.querySelector("iframe.giscus-frame");
+                if (!iframe) {
+                    return;
+                }
+
+                const setConfig = {
+                    theme: "preferred_color_scheme",
+                    lang,
+                    inputPosition,
+                    reactionsEnabled,
+                    emitMetadata,
+                    strict,
+                };
+
+                if (mapping !== "number") {
+                    const term = getTerm();
+                    if (term) {
+                        setConfig.term = term;
+                    }
+                }
+
+                iframe.contentWindow.postMessage(
+                    { giscus: { setConfig } },
+                    "https://giscus.app",
+                );
+            };
+
+            const loadGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                const iframe = container.querySelector("iframe.giscus-frame");
+                if (iframe) {
+                    sendUpdate();
+                    return;
+                }
+
+                if (container.dataset.giscusInit === "true") {
+                    return;
+                }
+
+                const giscusConfig = {
+                    src: "https://giscus.app/client.js",
+                    "data-repo": "BYWled/Takling",
+                    "data-repo-id": "R_kgDOM2X6Kg",
+                    "data-category": "Announcements",
+                    "data-category-id": "DIC_kwDOM2X6Ks4Civf9",
+                    "data-mapping": mapping,
+                    "data-strict": "0",
+                    "data-reactions-enabled": "1",
+                    "data-emit-metadata": "1",
+                    "data-theme": "preferred_color_scheme",
+                    "data-lang": lang,
+                    "data-input-position": inputPosition,
+                    "data-loading": loading,
+                    crossorigin: "anonymous",
+                    async: true,
+                };
+
+                const giscusScript = document.createElement("script");
+                for (const key in giscusConfig) {
+                    giscusScript.setAttribute(key, giscusConfig[key]);
+                }
+                container.appendChild(giscusScript);
+                container.dataset.giscusInit = "true";
+            };
+
+            const runGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                if (container.querySelector("iframe.giscus-frame")) {
+                    sendUpdate();
+                    return;
+                }
+
+                loadGiscus();
+            };
+
+            runGiscus();
+        })();
+    </script>
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">前端入门开发 | 从能写到懂原理</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E7%AB%AF%E5%88%B0%E5%BA%95%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%EF%BC%88%E4%B8%80%E5%8F%A5%E8%AF%9D%E7%89%88%EF%BC%89"><span class="nav-text">一、前端到底在做什么？（一句话版）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%BC%80%E5%8F%91%E5%89%8D%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87%EF%BC%88%E4%BB%A5-VS-Code-%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="nav-text">二、开发前环境准备（以 VS Code 为例）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%BD%A0%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85%E4%BB%80%E4%B9%88"><span class="nav-text">2.1 你需要安装什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-VS-Code-%E6%89%A9%E5%B1%95%E9%85%8D%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="nav-text">2.2 VS Code 扩展配置建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%80%E5%B0%8F%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95"><span class="nav-text">2.3 建一个最小项目目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%BF%90%E8%A1%8C%E9%A1%B5%E9%9D%A2"><span class="nav-text">2.4 第一次运行页面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%81%9A%E5%87%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%A1%B5%E9%9D%A2"><span class="nav-text">三、做出你的第一个页面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-HTML%EF%BC%9A%E5%85%88%E6%90%AD%E9%AA%A8%E6%9E%B6"><span class="nav-text">3.1 HTML：先搭骨架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-CSS%EF%BC%9A%E7%BB%99%E9%A1%B5%E9%9D%A2%E5%8A%A0%E8%A1%A3%E6%9C%8D"><span class="nav-text">3.2 CSS：给页面加衣服</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-JavaScript%EF%BC%9A%E5%8A%A0%E4%B8%80%E7%82%B9%E4%BA%A4%E4%BA%92"><span class="nav-text">3.3 JavaScript：加一点交互</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BB%8E%E2%80%9C%E4%BC%9A%E5%86%99%E2%80%9D%E5%88%B0%E2%80%9C%E5%86%99%E5%AF%B9%E2%80%9D"><span class="nav-text">四、从“会写”到“写对”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%9B%92%E6%A8%A1%E5%9E%8B%EF%BC%88Box-Model%EF%BC%89"><span class="nav-text">4.1 盒模型（Box Model）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%B8%B8%E8%A7%81%E5%85%83%E7%B4%A0%E5%88%86%E7%B1%BB"><span class="nav-text">4.2 常见元素分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E9%80%89%E6%8B%A9%E5%99%A8%E5%85%88%E5%AD%A6%E5%B8%B8%E7%94%A8%E5%A4%9F%E4%BA%86"><span class="nav-text">4.3 选择器先学常用够了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Flex-%E5%B8%83%E5%B1%80%EF%BC%88%E5%89%8D%E7%AB%AF%E5%88%9D%E6%9C%9F%E6%9C%80%E9%AB%98%E9%A2%91%EF%BC%89"><span class="nav-text">4.4 Flex 布局（前端初期最高频）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="nav-text">五、核心原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-HTML-%E6%B7%B1%E5%85%A5%EF%BC%9A-%E4%B8%8D%E5%8F%AA%E6%98%AF%E2%80%9C%E6%A0%87%E7%AD%BE%E6%8B%BC%E6%8E%A5%E2%80%9D"><span class="nav-text">5.1 HTML 深入： 不只是“标签拼接”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-1-%E8%AF%AD%E4%B9%89%E5%8C%96"><span class="nav-text">5.1.1 语义化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-2-%E6%96%87%E6%A1%A3%E6%A0%91%EF%BC%88DOM%EF%BC%89%E4%B8%8E%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB"><span class="nav-text">5.1.2 文档树（DOM）与节点关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-3-%E5%9D%97%E7%BA%A7-%E8%A1%8C%E5%86%85-%E8%A1%8C%E5%86%85%E5%9D%97%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-text">5.1.3 块级 &#x2F; 行内 &#x2F; 行内块的本质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-4-%E8%A1%A8%E5%8D%95%E4%B8%8E%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7%EF%BC%88A11y%EF%BC%89%E5%9F%BA%E7%A1%80"><span class="nav-text">5.1.4 表单与可访问性（A11y）基础</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-5-%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6%EF%BC%88%E8%84%9A%E6%9C%AC%E3%80%81%E6%A0%B7%E5%BC%8F%E3%80%81%E5%9B%BE%E7%89%87%EF%BC%89"><span class="nav-text">5.1.5 资源加载机制（脚本、样式、图片）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-6-%E4%B8%BA%E4%BB%80%E4%B9%88%E2%80%9C%E7%BB%93%E6%9E%84%E6%AD%A3%E7%A1%AE%E2%80%9D%E6%AF%94%E2%80%9C%E6%A0%B7%E5%BC%8F%E6%BC%82%E4%BA%AE%E2%80%9D%E6%9B%B4%E9%87%8D%E8%A6%81"><span class="nav-text">5.1.6 为什么“结构正确”比“样式漂亮”更重要</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-CSS-%E6%B7%B1%E5%85%A5%EF%BC%9A%E4%B8%8D%E5%8F%AA%E6%98%AF%E2%80%9C%E8%A3%85%E9%A5%B0%E8%AF%AD%E6%B3%95%E2%80%9D"><span class="nav-text">5.2 CSS 深入：不只是“装饰语法”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-1-%E5%B1%82%E5%8F%A0-%E2%80%94%E2%80%94-CSS-%E7%9A%84%E6%A0%B8%E5%BF%83%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6"><span class="nav-text">5.2.1 层叠 —— CSS 的核心运行机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-2-%E7%BB%A7%E6%89%BF%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%80%BC"><span class="nav-text">5.2.2 继承与初始值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-3-%E7%9B%92%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%B0%BA%E5%AF%B8%E8%AE%A1%E7%AE%97"><span class="nav-text">5.2.3 盒模型与尺寸计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-4-%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88BFC-IFC%EF%BC%89"><span class="nav-text">5.2.4 格式化上下文（BFC &#x2F; IFC）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-5-%E5%AE%9A%E4%BD%8D%E4%BD%93%E7%B3%BB%EF%BC%88position%EF%BC%89"><span class="nav-text">5.2.5 定位体系（position）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-6-%E5%B1%82%E5%8F%A0%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B8%8E-z-index"><span class="nav-text">5.2.6 层叠上下文与 z-index</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-7-%E7%8E%B0%E4%BB%A3%E5%B8%83%E5%B1%80%EF%BC%9AFlex-%E4%B8%8E-Grid-%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="nav-text">5.2.7 现代布局：Flex 与 Grid 的边界</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-8-%E5%93%8D%E5%BA%94%E5%BC%8F%E8%AE%BE%E8%AE%A1"><span class="nav-text">5.2.8 响应式设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-9-%E5%8A%A8%E7%94%BB%E4%B8%8E%E6%80%A7%E8%83%BD"><span class="nav-text">5.2.9 动画与性能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-10-%E5%B7%A5%E7%A8%8B%E5%8C%96-CSS-%E6%80%9D%E7%BB%B4"><span class="nav-text">5.2.10 工程化 CSS 思维</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E4%B8%8E%E6%80%A7%E8%83%BD%EF%BC%9A%E4%BB%8E%E2%80%9C%E5%86%99%E5%AF%B9%E2%80%9D%E5%88%B0%E2%80%9C%E8%B7%91%E5%BF%AB%E2%80%9D"><span class="nav-text">5.3 浏览器渲染与性能：从“写对”到“跑快”</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-1-%E6%B8%B2%E6%9F%93%E4%B8%BB%E6%B5%81%E7%A8%8B%EF%BC%88%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%EF%BC%89"><span class="nav-text">5.3.1 渲染主流程（高频考点）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-2-%E9%87%8D%E6%8E%92%EF%BC%88Reflow%EF%BC%89%E4%B8%8E%E9%87%8D%E7%BB%98%EF%BC%88Repaint%EF%BC%89"><span class="nav-text">5.3.2 重排（Reflow）与重绘（Repaint）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-3-%E5%B8%B8%E8%A7%81%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98"><span class="nav-text">5.3.3 常见性能问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-4-%E5%8F%AF%E6%89%A7%E8%A1%8C%E4%BC%98%E5%8C%96%E6%B8%85%E5%8D%95%EF%BC%88%E4%B8%80%E8%88%AC%E5%8F%AF%E7%9B%B4%E6%8E%A5%E7%94%A8%EF%BC%89"><span class="nav-text">5.3.4 可执行优化清单（一般可直接用）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E4%B8%80%E5%A5%97%E9%80%9A%E7%94%A8%E6%8E%92%E9%94%99%E6%A1%86%E6%9E%B6%EF%BC%88HTML-CSS%EF%BC%89"><span class="nav-text">5.4 一套通用排错框架（HTML&#x2F;CSS）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%A6%96%E9%A1%B5%E9%AA%A8%E6%9E%B6"><span class="nav-text">六、实例：移动端首页骨架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-text">6.1 完整代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E8%BF%99%E4%B8%AA%E5%AE%9E%E4%BE%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E5%85%B8%E5%9E%8B"><span class="nav-text">6.2 这个实例为什么典型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E9%80%90%E6%AE%B5%E8%A7%A3%E6%9E%90"><span class="nav-text">6.3 逐段解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E2%80%A6"><span class="nav-text">下一步…</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">BY·Wled</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 9 篇文章
+                    </span>
+                    
+                        <span>
+                            共 29.9k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="图片查看器">
+	<button class="image-viewer-close" type="button" aria-label="关闭">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="上一页">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="关闭">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="下一页">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/main.js" ></script>
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Typed.min.js" ></script>
+
+
+
+
+
+
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+
+
+	
+	<div id="aplayer"></div>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>
