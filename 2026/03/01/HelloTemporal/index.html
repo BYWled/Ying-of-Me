@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Wled">
+    
+    
+    <meta name="author" content="BY·Wled">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://www.wled.top/2026/03/01/hellotemporal/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="告别 Date | JavaScript Temporal API 使用教程">
+<meta property="og:url" content="https://www.wled.top/2026/03/01/HelloTemporal/index.html">
+<meta property="og:site_name" content="莺之驿站">
+<meta property="og:description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-03-01T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-06T11:24:32.994Z">
+<meta property="article:author" content="BY·Wled">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.wled.top/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/Oz-Vessalius-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/Oz-Vessalius-favicon.svg">
+    <meta name="theme-color" content="#21DEDB">
+    <link rel="shortcut icon" href="/images/Oz-Vessalius-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            告别 Date | JavaScript Temporal API 使用教程 | 伴莺の小窝
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.wled.top","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","delete_mask":true,"headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#21DEDB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"欢迎访问伴莺の小窝 | Welcome ~"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"伴莺の小窝","subtitle":{"text":["Wled's Relay Station"],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":[{"icon":"fa-brands fa-github","url":"https://github.com/BYWled"},{"icon":"fa-brands fa-bilibili","url":"https://space.bilibili.com/128746094"},{"icon":"fa-solid fa-people-group","url":"./Dozer-Esports/index.html"},{"icon":"fa-solid fa-basket-shopping","url":"https://store.wled.top/"},{"icon":"fa-solid fa-gear","url":"https://admin.wled.top/"}],"qrs":null}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"サイエンス (feat. 重音テト)","artist":"MIMI/重音テト","url":"/songs/MIMI.mp3","cover":"/songs/MIMI.jpg","lrc":"/songs/MIMI.lrc"},{"name":"痛いの痛いの飛んでいけっ (feat. saewool)","artist":"歌手：MIMI/saewool","url":"/songs/MIMI2.flac","cover":"/songs/MIMI2.jpg","lrc":"/songs/MIMI2.lrc"},{"name":"星降る海 (Starry Sea)","artist":"Aqu3ra/早見沙織","url":"/songs/Starry Sea.flac","cover":"/songs/Starry Sea.jpg","lrc":"/songs/Starry Sea.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"path":"/","icon":"fa-solid fa-home"},"前端":{"path":"/categories/计算机从入门到入土/前端如此简单","icon":"fa-solid fa-code"},"Demos":{"icon":"fa-solid fa-diagram-project","submenus":{"镜像站":"https://mirror.wled.top/","乐购商城":"https://store.wled.top/","管理系统":"https://admin.wled.top/","状态监控":"https://status.wled.top/status"}},"娱乐":{"icon":"fa-solid fa-face-grin-beam","submenus":{"MC":"/Ying","小说":"/novel"}},"关于":{"icon":"fa-regular fa-user","submenus":{"我":"/about","源代码":"https://github.com/BYWled/Ying-of-Me"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"流年间，途游光景伴莺随","show_on_mobile":false,"links":{"动态":{"path":"/archives","icon":"fa-regular fa-archive"},"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"类别":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2024/9/13 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2024/9/13 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.i18n = {"search":"站内搜索您需要的内容...","toc":"目录","prev":"上一页","next":"下一页","prev_posts":"上一篇","next_posts":"下一篇","page":"第 %d 页","recent_posts":"最新文章","share":"分享","powered_by":"由 %s 驱动","theme":"主题","rss_feed":"RSS Feed","category":"分类","categories":"分类","tag":"标签","tags":"标签","post":"文章","posts":"文章","tagcloud":"标签云","comment":"评论","comments":"评论","top":"置顶","sticky":"置顶","go-back-home":"回到首页","masonry_loading":"照片加载中...","image_viewer":"图片查看器","close":"关闭","exif":{"title":"EXIF","cards":{"camera":"相机","lens":"镜头","exposure":"曝光","other":"其他"},"fields":{"make":"品牌","model":"机型","date_taken":"拍摄时间","lens_model":"镜头","focal_length":"焦距","focus_mode":"对焦模式","shutter":"快门","aperture":"光圈","iso":"感光度","exposure_program":"曝光程序","exposure_compensation":"曝光补偿","metering_mode":"测光模式","flash":"闪光灯","white_balance":"白平衡","latitude":"纬度","longitude":"经度","altitude":"海拔"},"status":{"loading":"加载中...","no_exif":"无 EXIF 信息","library_missing":"EXIF 库未加载","image_source_missing":"图片地址不可用","unavailable":"EXIF 不可用（可能被 CORS 阻止或缺少元数据）","flag_unavailable":"EXIF 不可用"}},"home":"首页","archive":"归档","archives":"归档","about":"关于","links":"链接","link":"链接","friends":"友情链接","friend":"友情链接","timeline":"时间轴","shuoshuo":"说说","bookmarks":"书签","site_uv":"访问人数","site_pv":"总访问量","read_more":"阅读全文","wordcount":"字","min2read":"分钟","changelog":"更新日志","status":"状态","runtime":"博客已运行","days":"天","hours":"小时","minutes":"分钟","seconds":"秒","optimized_by":"并由 Evan 进行优化","rights":"版权所有","site_posts":"共撰写了 %s 篇文章","site_wordcount":"共 %s 字","copyright":{"title":"标题","author":"作者","link":"链接","create_time":"创建于","update_time":"更新于","license_title":"版权声明","license_content":"本文章采用 %s 进行许可。","all_rights_reserved":"版权所有 &#169 %s，禁止转载。","public_domain":"本文为公有领域作品，可自由转载、引用。"},"ago":{"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"},"create_time":"创建","update_time":"更新","expired":"这篇文章最后更新于 %s 天前，内容可能已经过时。"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                伴莺の小窝
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-home fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                                        >
+                                    <i class="fa-solid fa-code fa-fw"></i>
+                                    前端
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-diagram-project fa-fw"></i>
+                                    DEMOS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://mirror.wled.top/">
+                                                    镜像站
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://store.wled.top/">
+                                                    乐购商城
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://admin.wled.top/">
+                                                    管理系统
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://status.wled.top/status">
+                                                    状态监控
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-face-grin-beam fa-fw"></i>
+                                    娱乐
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/Ying">
+                                                    MC
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/novel">
+                                                    小说
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    我
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">
+                                                    源代码
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-solid fa-home fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                        >
+                            <span>
+                                前端
+                            </span>
+                            
+                                <i class="fa-solid fa-code fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Demos"
+                        >
+                            <span>
+                                DEMOS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Demos">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://mirror.wled.top/">镜像站</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://store.wled.top/">乐购商城</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://admin.wled.top/">管理系统</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://status.wled.top/status">状态监控</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-娱乐"
+                        >
+                            <span>
+                                娱乐
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-娱乐">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/Ying">MC</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/novel">小说</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-关于"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">我</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">源代码</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">告别 Date | JavaScript Temporal API 使用教程</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/Oz-Vessalius-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">BY·Wled</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-03-01 20:00</span>
+        <span class="mobile">2026-03-01 20:00</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-03-06 19:24:32</span>
+            <span class="mobile">2026-03-06 19:24:32</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">计算机从入门到入土</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95/">前端如此简单</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>6.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>28 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  blue" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>写在之前</summary><div class="content p-4 "><p><strong><font color="green">JavaScript 终于有了靠谱的日期时间 API。</font></strong></p>
+<p>如果你写过前端，大概率被 <code>Date</code> 折磨过：</p>
+<ul>
+<li>月份从 0 开始（1 月是 <code>0</code>，12 月是 <code>11</code>）；</li>
+<li>没有原生时区支持，跨时区计算全靠手搓；</li>
+<li>对象可变，一不小心就改了原始值；</li>
+<li>想做”加一天”这种简单操作，还要自己算毫秒。</li>
+</ul>
+<p><strong>Temporal</strong> 就是为了彻底解决这些问题而设计的新一代日期时间 API。</p>
+<p>本文会按这个顺序来：</p>
+<ol>
+<li>先看 <code>Date</code> 到底有什么问题</li>
+<li>快速上手 Temporal 核心类型</li>
+<li>逐个讲解常用方法与实战</li>
+<li>把原理放在靠后位置集中梳理</li>
+<li>最后给你一个完整实例 + 逐段解析</li>
+</ol>
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>本文强调”先上手，再吃透”。<br>如果某个类型第一次没完全理解，先跟着写，后面原理章节会回收解释。</p></div></div>
+
+<div class="callout callout--simple danger mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>本内容首发<font color="green">伴莺の小窝</font>，未经授权<font color="red">禁止搬运！</font></p></div></div>
+
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>作品中包含部分AI内容，用于校正、完善文章，如有错误请向管理员反馈。</p></div></div>
+</div></details>
+
+<hr>
+<h2 id="一、Date-到底有什么问题？"><a href="#一、Date-到底有什么问题？" class="headerlink" title="一、Date 到底有什么问题？"></a>一、Date 到底有什么问题？</h2><p>在正式学 Temporal 之前，先快速过一遍 <code>Date</code> 的经典坑，这样你才会理解 Temporal 的设计动机。</p>
+<h3 id="1-1-月份从-0-开始"><a href="#1-1-月份从-0-开始" class="headerlink" title="1.1 月份从 0 开始"></a>1.1 月份从 0 开始</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> d = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">2026</span>, <span class="number">2</span>, <span class="number">6</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(d.<span class="title function_">toISOString</span>());</span><br><span class="line"><span class="comment">// 输出：2026-03-06T...  而不是 2026-02-06</span></span><br><span class="line"><span class="comment">// 第二个参数 2 代表三月，不是二月</span></span><br></pre></td></tr></table></figure></div>
+
+<p>这是几乎所有 JS 初学者都会踩的坑。</p>
+<h3 id="1-2-对象可变（Mutable）"><a href="#1-2-对象可变（Mutable）" class="headerlink" title="1.2 对象可变（Mutable）"></a>1.2 对象可变（Mutable）</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> start = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">2026</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">const</span> end = start; <span class="comment">// 你以为复制了一份？</span></span><br><span class="line">end.<span class="title function_">setMonth</span>(<span class="number">11</span>);  <span class="comment">// 实际上 start 也被改了！</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(start.<span class="title function_">getMonth</span>()); <span class="comment">// 11，不是 0</span></span><br></pre></td></tr></table></figure></div>
+
+<p><code>Date</code> 是引用类型且可变，赋值只是复制引用，不是复制值。</p>
+<h3 id="1-3-没有原生时区支持"><a href="#1-3-没有原生时区支持" class="headerlink" title="1.3 没有原生时区支持"></a>1.3 没有原生时区支持</h3><p>想知道东京当前时间？<br>Date 只能拿到<strong>本地时间</strong>和 <strong>UTC</strong>，其它时区全靠<font color="red">手动偏移</font>或第三方库</p>
+<h3 id="1-4-日期运算靠手搓"><a href="#1-4-日期运算靠手搓" class="headerlink" title="1.4 日期运算靠手搓"></a>1.4 日期运算靠手搓</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &quot;今天加 30 天&quot;</span></span><br><span class="line"><span class="keyword">const</span> today = <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">today.<span class="title function_">setDate</span>(today.<span class="title function_">getDate</span>() + <span class="number">30</span>);</span><br><span class="line"><span class="comment">// 能用，但可读性差，且修改了原对象</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple info mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>正是这些问题，催生了 <a target="_blank" rel="noopener" href="https://momentjs.cn/"><code>moment.js</code></a>、<a target="_blank" rel="noopener" href="https://day.js.org/"><code>dayjs</code></a>、<a target="_blank" rel="noopener" href="https://date-fns.org/"><code>date-fns</code></a> 等第三方库。<br>而 Temporal 的目标就是在语言层面一次性解决它们。</p></div></div>
+
+<hr>
+<h2 id="二、Temporal-是什么？"><a href="#二、Temporal-是什么？" class="headerlink" title="二、Temporal 是什么？"></a>二、Temporal 是什么？</h2><p><strong>Temporal</strong> (<em>&#x2F;ˈtempərəl&#x2F;</em>) 是 TC39（JavaScript 标准委员会）提出的新日期时间 API，目前处于 Stage 3 阶段，已被主流浏览器逐步实现。</p>
+<p>它的核心设计原则：</p>
+<ul>
+<li><strong>不可变（Immutable）</strong>：所有操作返回新对象，不修改原值</li>
+<li><strong>类型明确</strong>：日期、时间、日期时间、时区时间各有专属类型</li>
+<li><strong>原生时区支持</strong>：内置 IANA 时区数据库</li>
+<li><strong>无歧义</strong>：月份从 1 开始，API 命名直观</li>
+</ul>
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>截至文档编辑时间，仅 <strong>Safari</strong> 暂不支持。<br>Chrome 129+、Firefox 139+、Safari 的预览版已支持 Temporal。<br>如果你的浏览器暂不支持，可以升级浏览器内核或使用 polyfill：<code>@js-temporal/polyfill</code>。</p></div></div>
+
+<h3 id="Temporal-类型一览"><a href="#Temporal-类型一览" class="headerlink" title="Temporal 类型一览"></a>Temporal 类型一览</h3><p>先记住这张一图流，后面每个类型会逐一讲解：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Temporal.PlainDate</code></td>
+<td>纯日期（无时间、无时区）</td>
+<td>2026-03-06</td>
+</tr>
+<tr>
+<td><code>Temporal.PlainTime</code></td>
+<td>纯时间（无日期、无时区）</td>
+<td>14:30:00</td>
+</tr>
+<tr>
+<td><code>Temporal.PlainDateTime</code></td>
+<td>日期 + 时间（无时区）</td>
+<td>2026-03-06T14:30:00</td>
+</tr>
+<tr>
+<td><code>Temporal.ZonedDateTime</code></td>
+<td>日期 + 时间 + 时区（完整）</td>
+<td>2026-03-06T14:30:00+08:00[Asia&#x2F;Shanghai]</td>
+</tr>
+<tr>
+<td><code>Temporal.Instant</code></td>
+<td>时间刻（UTC）</td>
+<td>YYYY-MM-DD T HH:mm:ss.sssssssss Z&#x2F;±HH:mm[TimeZone]</td>
+</tr>
+<tr>
+<td><code>Temporal.Duration</code></td>
+<td>时间段&#x2F;持续时间</td>
+<td>2 小时 30 分</td>
+</tr>
+<tr>
+<td><code>Temporal.PlainYearMonth</code></td>
+<td>年月</td>
+<td>2026-03</td>
+</tr>
+<tr>
+<td><code>Temporal.PlainMonthDay</code></td>
+<td>月日</td>
+<td>03-06</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>一句话总结：<strong>需要时区就用 <code>ZonedDateTime</code>，不需要就用 <code>Plain*</code> 系列。</strong></p>
+</blockquote>
+<hr>
+<h2 id="三、快速上手：核心类型逐个写"><a href="#三、快速上手：核心类型逐个写" class="headerlink" title="三、快速上手：核心类型逐个写"></a>三、快速上手：核心类型逐个写</h2><h3 id="3-1-Temporal-PlainDate-—-纯日期"><a href="#3-1-Temporal-PlainDate-—-纯日期" class="headerlink" title="3.1 Temporal.PlainDate — 纯日期"></a>3.1 Temporal.PlainDate — 纯日期</h3><p>表示”某一天”，不关心具体时间和时区。适用于生日、纪念日、排班日期等场景。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式一：from 字符串</span></span><br><span class="line"><span class="keyword">const</span> date1 = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date1.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-03-06&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式二：from 对象</span></span><br><span class="line"><span class="keyword">const</span> date2 = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(&#123; <span class="attr">year</span>: <span class="number">2026</span>, <span class="attr">month</span>: <span class="number">3</span>, <span class="attr">day</span>: <span class="number">6</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date2.<span class="property">year</span>);  <span class="comment">// 2026</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date2.<span class="property">month</span>); <span class="comment">// 3  ← 终于是 3 了，不是 2！</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date2.<span class="property">day</span>);   <span class="comment">// 6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式三：获取今天的日期</span></span><br><span class="line"><span class="keyword">const</span> today = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainDateISO</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(today.<span class="title function_">toString</span>()); <span class="comment">// 当前日期，如 &quot;2026-03-06&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>原理补充</strong></p>
+<ul>
+<li><code>PlainDate</code> 没有时间信息，所以不会出现”跨时区日期变了”的问题。</li>
+<li><code>from()</code> 是 Temporal 所有类型的统一构造方式，支持字符串和对象两种入参。</li>
+<li>月份从 1 开始，这是 Temporal 最直观的改进之一。</li>
+</ul>
+<h4 id="日期运算"><a href="#日期运算" class="headerlink" title="日期运算"></a>日期运算</h4><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加 10 天</span></span><br><span class="line"><span class="keyword">const</span> later = date.<span class="title function_">add</span>(&#123; <span class="attr">days</span>: <span class="number">10</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(later.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-03-16&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 减 1 个月</span></span><br><span class="line"><span class="keyword">const</span> earlier = date.<span class="title function_">subtract</span>(&#123; <span class="attr">months</span>: <span class="number">1</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(earlier.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-02-06&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 原始对象不变！</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-03-06&quot; ← 不可变</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>Temporal 的运算方法（如 <code>add()</code>、<code>subtract()</code>）都<strong>返回新对象</strong>，原始值保持不变，详情请看 <a href="#4-2-%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7">章节4.2</a>。<br>因此，你可以放心地链式调用或传参，不用担心被意外修改。<del class="mask">（它的便利程度不亚于map）</del></p></div></div>
+
+<h4 id="日期比较"><a href="#日期比较" class="headerlink" title="日期比较"></a>日期比较</h4><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-01-01&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> b = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-12-31&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">compare</span>(a, b)); <span class="comment">// -1（a 在 b 之前）</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">compare</span>(b, a)); <span class="comment">// 1（b 在 a 之后）</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">compare</span>(a, a)); <span class="comment">// 0（相等）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 更直观的方式：计算两个日期的差</span></span><br><span class="line"><span class="keyword">const</span> diff = a.<span class="title function_">until</span>(b);</span><br><span class="line"><span class="keyword">const</span> diff2 = b.<span class="title function_">since</span>(a);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(diff.<span class="title function_">toString</span>()); <span class="comment">// &quot;P365D&quot;-&gt; P 指示 Period（期间），365D 表示 365 天</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(diff2.<span class="title function_">toString</span>()); <span class="comment">// &quot;P365D&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h3 id="3-2-Temporal-PlainTime-—-纯时间"><a href="#3-2-Temporal-PlainTime-—-纯时间" class="headerlink" title="3.2 Temporal.PlainTime — 纯时间"></a>3.2 Temporal.PlainTime — 纯时间</h3><p>表示”某个时刻的时间”，没有日期、没有时区。适合表达营业时间、闹钟等。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> time = <span class="title class_">Temporal</span>.<span class="property">PlainTime</span>.<span class="title function_">from</span>(<span class="string">&#x27;14:30:00&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(time.<span class="property">hour</span>);   <span class="comment">// 14</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(time.<span class="property">minute</span>); <span class="comment">// 30</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(time.<span class="property">second</span>); <span class="comment">// 0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 加 2 小时 15 分</span></span><br><span class="line"><span class="keyword">const</span> later = time.<span class="title function_">add</span>(&#123; <span class="attr">hours</span>: <span class="number">2</span>, <span class="attr">minutes</span>: <span class="number">15</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(later.<span class="title function_">toString</span>()); <span class="comment">// &quot;16:45:00&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取当前时间</span></span><br><span class="line"><span class="keyword">const</span> now = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainTimeISO</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(now.<span class="title function_">toString</span>()); <span class="comment">// 如 &quot;20:15:30.123456789&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p><code>PlainTime</code> 精度可达纳秒级（9 位小数），比 <code>Date</code> 的毫秒精度高得多。</p></div></div>
+
+<hr>
+<h3 id="3-3-Temporal-PlainDateTime-—-日期-时间"><a href="#3-3-Temporal-PlainDateTime-—-日期-时间" class="headerlink" title="3.3 Temporal.PlainDateTime — 日期 + 时间"></a>3.3 Temporal.PlainDateTime — 日期 + 时间</h3><p>把日期和时间组合在一起，但仍然<strong>没有时区</strong>。适合表达”本地事件”，比如会议安排。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dt = <span class="title class_">Temporal</span>.<span class="property">PlainDateTime</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06T14:30:00&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(dt.<span class="property">year</span>);   <span class="comment">// 2026</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(dt.<span class="property">hour</span>);   <span class="comment">// 14</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以从对象创建</span></span><br><span class="line"><span class="keyword">const</span> dt2 = <span class="title class_">Temporal</span>.<span class="property">PlainDateTime</span>.<span class="title function_">from</span>(&#123;</span><br><span class="line">    <span class="attr">year</span>: <span class="number">2026</span>, <span class="attr">month</span>: <span class="number">3</span>, <span class="attr">day</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="attr">hour</span>: <span class="number">14</span>, <span class="attr">minute</span>: <span class="number">30</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运算：加 1 天 2 小时</span></span><br><span class="line"><span class="keyword">const</span> result = dt.<span class="title function_">add</span>(&#123; <span class="attr">days</span>: <span class="number">1</span>, <span class="attr">hours</span>: <span class="number">2</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-03-07T16:30:00&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>原理补充</strong></p>
+<ul>
+<li><code>PlainDateTime</code> 不包含时区信息，所以它表示的是一个”挂在墙上的钟看到的时间”。</li>
+<li>如果同一个会议需要让不同时区的人看到各自的本地时间，应该用 <code>ZonedDateTime</code>。</li>
+</ul>
+<hr>
+<h3 id="3-4-Temporal-ZonedDateTime-—-完整时间（带时区）"><a href="#3-4-Temporal-ZonedDateTime-—-完整时间（带时区）" class="headerlink" title="3.4 Temporal.ZonedDateTime — 完整时间（带时区）"></a>3.4 Temporal.ZonedDateTime — 完整时间（带时区）</h3><p>这是最<strong>重量级</strong>的类型：日期 + 时间 + 时区，三者缺一不可。<br>适合表达：<em>全球统一</em>的某个精确时刻在某个时区的表现。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个上海时区的时间</span></span><br><span class="line"><span class="keyword">const</span> zdt = <span class="title class_">Temporal</span>.<span class="property">ZonedDateTime</span>.<span class="title function_">from</span>(&#123;</span><br><span class="line">    <span class="attr">year</span>: <span class="number">2026</span>, <span class="attr">month</span>: <span class="number">3</span>, <span class="attr">day</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="attr">hour</span>: <span class="number">14</span>, <span class="attr">minute</span>: <span class="number">30</span>,</span><br><span class="line">    <span class="attr">timeZone</span>: <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zdt.<span class="title function_">toString</span>());</span><br><span class="line"><span class="comment">// &quot;2026-03-06T14:30:00+08:00[Asia/Shanghai]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取当前时区的当前时间</span></span><br><span class="line"><span class="keyword">const</span> now = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">zonedDateTimeISO</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(now.<span class="title function_">toString</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看同一时刻在东京是几点</span></span><br><span class="line"><span class="keyword">const</span> tokyo = now.<span class="title function_">withTimeZone</span>(<span class="string">&#x27;Asia/Tokyo&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(tokyo.<span class="title function_">toString</span>());</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="时区转换实战"><a href="#时区转换实战" class="headerlink" title="时区转换实战"></a>时区转换实战</h4><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 场景：北京时间 2026-03-06 20:00 开播，纽约观众看几点？</span></span><br><span class="line"><span class="keyword">const</span> beijing = <span class="title class_">Temporal</span>.<span class="property">ZonedDateTime</span>.<span class="title function_">from</span>(&#123;</span><br><span class="line">    <span class="attr">year</span>: <span class="number">2026</span>, <span class="attr">month</span>: <span class="number">3</span>, <span class="attr">day</span>: <span class="number">6</span>,</span><br><span class="line">    <span class="attr">hour</span>: <span class="number">20</span>, <span class="attr">minute</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">timeZone</span>: <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> newYork = beijing.<span class="title function_">withTimeZone</span>(<span class="string">&#x27;America/New_York&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(newYork.<span class="title function_">toString</span>());</span><br><span class="line"><span class="comment">// &quot;2026-03-06T07:00:00-05:00[America/New_York]&quot;</span></span><br><span class="line"><span class="comment">// 纽约是早上 7 点</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple info mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p><code>withTimeZone()</code> 不会改变”时间线上的那个点”，只是换一种时区来表达同一个瞬间。<br>这和 <code>Date</code> 完全不同——<code>Date</code> 根本没有时区切换的概念。</p></div></div>
+
+<hr>
+<h3 id="3-5-Temporal-Instant-—-时间轴上的一刻"><a href="#3-5-Temporal-Instant-—-时间轴上的一刻" class="headerlink" title="3.5 Temporal.Instant — 时间轴上的一刻"></a>3.5 Temporal.Instant — 时间轴上的一刻</h3><p><code>Instant</code> 代表时间线上的一个精确点，不关心时区，类似 Unix 时间戳。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当前瞬间</span></span><br><span class="line"><span class="keyword">const</span> now = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">instant</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(now.<span class="title function_">toString</span>()); <span class="comment">// 如 &quot;2026-03-06T12:30:00Z&quot;（UTC）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从纪元毫秒数创建</span></span><br><span class="line"><span class="keyword">const</span> fromMs = <span class="title class_">Temporal</span>.<span class="property">Instant</span>.<span class="title function_">fromEpochMilliseconds</span>(<span class="number">1772582400000</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fromMs.<span class="title function_">toString</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换为特定时区的 ZonedDateTime</span></span><br><span class="line"><span class="keyword">const</span> zdt = now.<span class="title function_">toZonedDateTimeISO</span>(<span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zdt.<span class="title function_">toString</span>());</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>原理补充</strong></p>
+<ul>
+<li><code>Instant</code> 只代表”时间线上的点”，没有年月日时分秒的概念。</li>
+<li>想要年月日，必须给它一个时区，通过 <code>toZonedDateTimeISO()</code> 转换。</li>
+<li>它和 <code>Date.now()</code> 本质类似，但精度更高（纳秒级）。</li>
+</ul>
+<hr>
+<h3 id="3-6-Temporal-Duration-—-持续时间"><a href="#3-6-Temporal-Duration-—-持续时间" class="headerlink" title="3.6 Temporal.Duration — 持续时间"></a>3.6 Temporal.Duration — 持续时间</h3><p>表示一段时间长度，比如”2 小时 30 分”或”3 年 6 个月”。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 Duration</span></span><br><span class="line"><span class="keyword">const</span> d1 = <span class="title class_">Temporal</span>.<span class="property">Duration</span>.<span class="title function_">from</span>(&#123; <span class="attr">hours</span>: <span class="number">2</span>, <span class="attr">minutes</span>: <span class="number">30</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(d1.<span class="title function_">toString</span>()); <span class="comment">// &quot;PT2H30M&quot; -&gt; T 表示分隔日期部分和时间部分</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> d2 = <span class="title class_">Temporal</span>.<span class="property">Duration</span>.<span class="title function_">from</span>(<span class="string">&#x27;P1Y6M&#x27;</span>); <span class="comment">// 1 年 6 个月</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(d2.<span class="property">months</span>); <span class="comment">// 6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 两个日期之间的差距</span></span><br><span class="line"><span class="keyword">const</span> start = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-01-01&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> end = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> diff = start.<span class="title function_">until</span>(end);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(diff.<span class="title function_">toString</span>()); <span class="comment">// &quot;P64D&quot;（64 天）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定更大单位</span></span><br><span class="line"><span class="keyword">const</span> diff2 = start.<span class="title function_">until</span>(end, &#123; <span class="attr">largestUnit</span>: <span class="string">&#x27;month&#x27;</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(diff2.<span class="title function_">toString</span>()); <span class="comment">// &quot;P2M5D&quot;（2 个月 5 天）</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="Duration-运算"><a href="#Duration-运算" class="headerlink" title="Duration 运算"></a>Duration 运算</h4><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> meeting = <span class="title class_">Temporal</span>.<span class="property">Duration</span>.<span class="title function_">from</span>(&#123; <span class="attr">hours</span>: <span class="number">1</span>, <span class="attr">minutes</span>: <span class="number">30</span> &#125;);</span><br><span class="line"><span class="keyword">const</span> breakTime = <span class="title class_">Temporal</span>.<span class="property">Duration</span>.<span class="title function_">from</span>(&#123; <span class="attr">minutes</span>: <span class="number">15</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Duration 相加</span></span><br><span class="line"><span class="keyword">const</span> total = meeting.<span class="title function_">add</span>(breakTime);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(total.<span class="title function_">toString</span>()); <span class="comment">// &quot;PT1H45M&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 取绝对值（处理可能的负值）</span></span><br><span class="line"><span class="keyword">const</span> neg = <span class="title class_">Temporal</span>.<span class="property">Duration</span>.<span class="title function_">from</span>(&#123; <span class="attr">hours</span>: -<span class="number">3</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(neg.<span class="title function_">abs</span>().<span class="title function_">toString</span>()); <span class="comment">// &quot;PT3H&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h3 id="3-7-Temporal-PlainYearMonth-与-PlainMonthDay"><a href="#3-7-Temporal-PlainYearMonth-与-PlainMonthDay" class="headerlink" title="3.7 Temporal.PlainYearMonth 与 PlainMonthDay"></a>3.7 Temporal.PlainYearMonth 与 PlainMonthDay</h3><p>这两个是<em>精简类型</em>，分别表示”年月”和”月日”。</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 年月：适合表示账单月、学期等</span></span><br><span class="line"><span class="keyword">const</span> ym = <span class="title class_">Temporal</span>.<span class="property">PlainYearMonth</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ym.<span class="property">daysInMonth</span>); <span class="comment">// 31</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ym.<span class="property">inLeapYear</span>);  <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 月日：适合表示生日（不含年份）、纪念日等</span></span><br><span class="line"><span class="keyword">const</span> md = <span class="title class_">Temporal</span>.<span class="property">PlainMonthDay</span>.<span class="title function_">from</span>(<span class="string">&#x27;03-06&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(md.<span class="title function_">toString</span>()); <span class="comment">// &quot;--03-06&quot;（ISO 8601 格式）</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="四、从”会用”到”用对”"><a href="#四、从”会用”到”用对”" class="headerlink" title="四、从”会用”到”用对”"></a>四、从”会用”到”用对”</h2><h3 id="4-1-类型选择指南"><a href="#4-1-类型选择指南" class="headerlink" title="4.1 类型选择指南"></a>4.1 类型选择指南</h3><p>不确定该用哪个类型？看这个决策流程：</p>
+<ol>
+<li><strong>需要时区吗？</strong><ul>
+<li>是 → <code>ZonedDateTime</code></li>
+<li>否 → 继续</li>
+</ul>
+</li>
+<li><strong>需要日期和时间都有吗？</strong><ul>
+<li>都要 → <code>PlainDateTime</code></li>
+<li>只要日期 → <code>PlainDate</code></li>
+<li>只要时间 → <code>PlainTime</code></li>
+</ul>
+</li>
+<li><strong>只需要年月或月日？</strong><ul>
+<li>年月 → <code>PlainYearMonth</code></li>
+<li>月日 → <code>PlainMonthDay</code></li>
+</ul>
+</li>
+<li><strong>只关心时间轴上的精确时刻？</strong><ul>
+<li>→ <code>Instant</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="4-2-不可变性"><a href="#4-2-不可变性" class="headerlink" title="4.2 不可变性"></a>4.2 不可变性</h3><p>Temporal 所有类型都是<strong>不可变的</strong>——告别”改着改着原值没了”。每次运算都返回新对象：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> next = date.<span class="title function_">add</span>(&#123; <span class="attr">days</span>: <span class="number">1</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// date 完全不变</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-03-06&quot;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(next.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-03-07&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>这意味着你可以放心传参、存储，不用担心被意外修改。</p>
+<h3 id="4-3-with-—-修改部分字段"><a href="#4-3-with-—-修改部分字段" class="headerlink" title="4.3 with() — 修改部分字段"></a>4.3 with() — 修改部分字段</h3><p>所有 <code>Plain*</code> 类型都支持 <code>with()</code> 方法，用于”只改一部分”：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只改月份</span></span><br><span class="line"><span class="keyword">const</span> july = date.<span class="title function_">with</span>(&#123; <span class="attr">month</span>: <span class="number">7</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(july.<span class="title function_">toString</span>()); <span class="comment">// &quot;2026-07-06&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 只改年份</span></span><br><span class="line"><span class="keyword">const</span> nextYear = date.<span class="title function_">with</span>(&#123; <span class="attr">year</span>: <span class="number">2027</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(nextYear.<span class="title function_">toString</span>()); <span class="comment">// &quot;2027-03-06&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// PlainTime 同理</span></span><br><span class="line"><span class="keyword">const</span> time = <span class="title class_">Temporal</span>.<span class="property">PlainTime</span>.<span class="title function_">from</span>(<span class="string">&#x27;14:30:00&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> evening = time.<span class="title function_">with</span>(&#123; <span class="attr">hour</span>: <span class="number">20</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(evening.<span class="title function_">toString</span>()); <span class="comment">// &quot;20:30:00&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-4-until-与-since-—-计算时间差"><a href="#4-4-until-与-since-—-计算时间差" class="headerlink" title="4.4 until() 与 since() — 计算时间差"></a>4.4 until() 与 since() — 计算时间差</h3><p>这两个方法互为反向：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> start = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-01-01&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> end = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// until：从 start 到 end 的距离（正值）</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(start.<span class="title function_">until</span>(end).<span class="title function_">toString</span>()); <span class="comment">// &quot;P64D&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// since：从 end 回看 start 的距离（也是正值，方向相反）</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(end.<span class="title function_">since</span>(start).<span class="title function_">toString</span>()); <span class="comment">// &quot;P64D&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>常用选项：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 指定最大单位为月</span></span><br><span class="line">start.<span class="title function_">until</span>(end, &#123; <span class="attr">largestUnit</span>: <span class="string">&#x27;month&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// &quot;P2M5D&quot; → 2 个月零 5 天</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定最小单位为小时（PlainDateTime 场景）</span></span><br><span class="line"><span class="keyword">const</span> dt1 = <span class="title class_">Temporal</span>.<span class="property">PlainDateTime</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06T08:00&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> dt2 = <span class="title class_">Temporal</span>.<span class="property">PlainDateTime</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06T14:45&#x27;</span>);</span><br><span class="line">dt1.<span class="title function_">until</span>(dt2, &#123; <span class="attr">largestUnit</span>: <span class="string">&#x27;hour&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// &quot;PT6H45M&quot; → 6 小时 45 分</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>需要注意的是，<code>until()</code> 和 <code>since()</code> 是互为反向的，以下是MDN的说明：</p>
+<blockquote>
+<p><code>since()</code> method does this - other. To do other - this, use the <code>until()</code> method.</p>
+<p><code>until()</code> method does other - this. To do this - other, use the <code>since()</code> method.</p>
+</blockquote>
+<p>按照MDN建议，<code>until()</code> 作用的是其它时间点到当前时间的方法。按照上述<code>start</code>和<code>end</code>的值举例，<code>start.until(end)</code> 需改为 <code>end.since(start)</code>，反之亦然</p></div></div>
+
+<h3 id="4-5-比较与排序"><a href="#4-5-比较与排序" class="headerlink" title="4.5 比较与排序"></a>4.5 比较与排序</h3><p>Temporal 提供静态 <code>compare()</code> 方法，可直接配合 <code>Array.sort()</code>：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dates = [</span><br><span class="line">    <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-12-25&#x27;</span>),</span><br><span class="line">    <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-01-01&#x27;</span>),</span><br><span class="line">    <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-07-04&#x27;</span>),</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">dates.<span class="title function_">sort</span>(<span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="property">compare</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(dates.<span class="title function_">map</span>(<span class="function"><span class="params">d</span> =&gt;</span> d.<span class="title function_">toString</span>()));</span><br><span class="line"><span class="comment">// [&quot;2026-01-01&quot;, &quot;2026-07-04&quot;, &quot;2026-12-25&quot;]</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p><code>compare(a, b)</code> 返回 -1 &#x2F; 0 &#x2F; 1，和 <code>Array.sort()</code> 的比较函数签名完全兼容，直接传入即可。</p></div></div>
+
+<hr>
+<h2 id="五、核心原理"><a href="#五、核心原理" class="headerlink" title="五、核心原理"></a>五、核心原理</h2><h3 id="5-1-为什么需要这么多类型？"><a href="#5-1-为什么需要这么多类型？" class="headerlink" title="5.1 为什么需要这么多类型？"></a>5.1 为什么需要这么多类型？</h3><p>传统 <code>Date</code> 只有一个类型，试图同时表示”本地时间”和”UTC 时间”，结果两头都做不好。</p>
+<p>Temporal 的设计哲学是：</p>
+<blockquote>
+<p><strong>不同场景用不同类型，类型本身就是文档。</strong></p>
+</blockquote>
+<p>当你看到代码里用了 <code>PlainDate</code>，你立刻知道这里不涉及时区。<br>当你看到 <code>ZonedDateTime</code>，你知道这个时间是带时区的精确时刻。</p>
+<p>这种”类型即文档”的思路，能在编码阶段就避免大量歧义。</p>
+<h3 id="5-2-ISO-8601-字符串格式"><a href="#5-2-ISO-8601-字符串格式" class="headerlink" title="5.2 ISO 8601 字符串格式"></a>5.2 ISO 8601 字符串格式</h3><p>Temporal 遵循 ISO 8601 标准，常见格式：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>2026-03-06</code></td>
+<td>纯日期</td>
+</tr>
+<tr>
+<td><code>14:30:00</code></td>
+<td>纯时间</td>
+</tr>
+<tr>
+<td><code>2026-03-06T14:30:00</code></td>
+<td>日期时间（无时区）</td>
+</tr>
+<tr>
+<td><code>2026-03-06T14:30:00+08:00[Asia/Shanghai]</code></td>
+<td>日期时间 + 时区</td>
+</tr>
+<tr>
+<td><code>2026-03-06T06:30:00Z</code></td>
+<td>UTC 时间</td>
+</tr>
+<tr>
+<td><code>P1Y2M3DT4H5M6S</code></td>
+<td>持续时间：1年2月3天4时5分6秒</td>
+</tr>
+</tbody></table>
+<p>Duration 格式说明：<code>P</code> 开头，<code>T</code> 分隔日期部分和时间部分。</p>
+<h3 id="5-3-Temporal-Now-—-获取当前时间的统一入口"><a href="#5-3-Temporal-Now-—-获取当前时间的统一入口" class="headerlink" title="5.3 Temporal.Now — 获取当前时间的统一入口"></a>5.3 Temporal.Now — 获取当前时间的统一入口</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">instant</span>()            <span class="comment">// 当前 Instant（UTC 精确时刻）</span></span><br><span class="line"><span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">zonedDateTimeISO</span>()   <span class="comment">// 当前 ZonedDateTime（系统时区）</span></span><br><span class="line"><span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainDateISO</span>()       <span class="comment">// 当前 PlainDate</span></span><br><span class="line"><span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainTimeISO</span>()       <span class="comment">// 当前 PlainTime</span></span><br><span class="line"><span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainDateTimeISO</span>()   <span class="comment">// 当前 PlainDateTime</span></span><br></pre></td></tr></table></figure></div>
+
+<p>所有方法都可以传入时区参数来获取特定时区的当前时间：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取东京当前日期</span></span><br><span class="line"><span class="keyword">const</span> tokyoDate = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainDateISO</span>(<span class="string">&#x27;Asia/Tokyo&#x27;</span>);</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="5-4-溢出处理（overflow）"><a href="#5-4-溢出处理（overflow）" class="headerlink" title="5.4 溢出处理（overflow）"></a>5.4 溢出处理（overflow）</h3><p>当你创建一个不合法的日期（比如 2 月 30 日），Temporal 提供两种策略：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 默认：constrain（约束到合法范围）</span></span><br><span class="line"><span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(&#123; <span class="attr">year</span>: <span class="number">2026</span>, <span class="attr">month</span>: <span class="number">2</span>, <span class="attr">day</span>: <span class="number">30</span> &#125;, &#123; <span class="attr">overflow</span>: <span class="string">&#x27;constrain&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// → &quot;2026-02-28&quot;（约束到该月最后一天）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 严格模式：reject（直接报错）</span></span><br><span class="line"><span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(&#123; <span class="attr">year</span>: <span class="number">2026</span>, <span class="attr">month</span>: <span class="number">2</span>, <span class="attr">day</span>: <span class="number">30</span> &#125;, &#123; <span class="attr">overflow</span>: <span class="string">&#x27;reject&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// → 抛出 RangeError</span></span><br></pre></td></tr></table></figure></div>
+
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>默认行为是 <code>constrain</code>（静默纠正），不是报错。<br>如果你的业务需要严格校验输入，记得显式传入 <code>{ overflow: &#39;reject&#39; }</code>。</p></div></div>
+
+<h3 id="5-5-和-Date-的互操作"><a href="#5-5-和-Date-的互操作" class="headerlink" title="5.5 和 Date 的互操作"></a>5.5 和 Date 的互操作</h3><p>在迁移过渡期，你可能需要在 <code>Date</code> 和 <code>Temporal</code> 之间转换：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Date → Temporal.Instant</span></span><br><span class="line"><span class="keyword">const</span> legacy = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="string">&#x27;2026-03-06T12:00:00Z&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> instant = <span class="title class_">Temporal</span>.<span class="property">Instant</span>.<span class="title function_">fromEpochMilliseconds</span>(legacy.<span class="title function_">getTime</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">// Temporal.Instant → Date</span></span><br><span class="line"><span class="keyword">const</span> back = <span class="keyword">new</span> <span class="title class_">Date</span>(instant.<span class="property">epochMilliseconds</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Temporal.Instant → ZonedDateTime</span></span><br><span class="line"><span class="keyword">const</span> zdt = instant.<span class="title function_">toZonedDateTimeISO</span>(<span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zdt.<span class="title function_">toString</span>());</span><br><span class="line"><span class="comment">// &quot;2026-03-06T20:00:00+08:00[Asia/Shanghai]&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="六、模拟实战：倒计时组件"><a href="#六、模拟实战：倒计时组件" class="headerlink" title="六、模拟实战：倒计时组件"></a>六、模拟实战：倒计时组件</h2><p>这个例子综合了你前面学到的核心类型和方法，实现一个简单的倒计时页面。</p>
+<h3 id="6-1-完整代码"><a href="#6-1-完整代码" class="headerlink" title="6.1 完整代码"></a>6.1 完整代码</h3><div class="code-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh-CN&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Temporal 倒计时<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        * &#123; <span class="attribute">box-sizing</span>: border-box; &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">min-height</span>: <span class="number">100vh</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">justify-content</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">align-items</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">gap</span>: <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#0f172a</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#e2e8f0</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">h1</span> &#123; <span class="attribute">font-size</span>: <span class="number">1.4rem</span>; <span class="attribute">font-weight</span>: <span class="number">400</span>; &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 倒计时数字容器 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.countdown</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">gap</span>: <span class="number">16px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 每个时间块 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.block</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">align-items</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">gap</span>: <span class="number">6px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 数字样式 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.number</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-size</span>: <span class="number">3rem</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-weight</span>: <span class="number">700</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#1e293b</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">12px</span> <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">min-width</span>: <span class="number">90px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#38bdf8</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 标签文字 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.label</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-size</span>: <span class="number">0.85rem</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#94a3b8</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="comment">/* 状态提示 */</span></span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.status</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-size</span>: <span class="number">1rem</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#facc15</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>距离 2027 年元旦还有<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;countdown&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;block&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;number&quot;</span> <span class="attr">id</span>=<span class="string">&quot;days&quot;</span>&gt;</span>--<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;label&quot;</span>&gt;</span>天<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;block&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;number&quot;</span> <span class="attr">id</span>=<span class="string">&quot;hours&quot;</span>&gt;</span>--<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;label&quot;</span>&gt;</span>时<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;block&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;number&quot;</span> <span class="attr">id</span>=<span class="string">&quot;mins&quot;</span>&gt;</span>--<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;label&quot;</span>&gt;</span>分<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;block&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;number&quot;</span> <span class="attr">id</span>=<span class="string">&quot;secs&quot;</span>&gt;</span>--<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;label&quot;</span>&gt;</span>秒<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;status&quot;</span> <span class="attr">id</span>=<span class="string">&quot;status&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 1. 定义目标时间：2027-01-01 00:00:00 上海时区</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> target = <span class="title class_">Temporal</span>.<span class="property">ZonedDateTime</span>.<span class="title function_">from</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">year</span>: <span class="number">2027</span>, <span class="attr">month</span>: <span class="number">1</span>, <span class="attr">day</span>: <span class="number">1</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">hour</span>: <span class="number">0</span>, <span class="attr">minute</span>: <span class="number">0</span>, <span class="attr">second</span>: <span class="number">0</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">timeZone</span>: <span class="string">&#x27;Asia/Shanghai&#x27;</span></span></span><br><span class="line"><span class="language-javascript">        &#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 2. 获取 DOM 元素引用</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> elDays  = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;days&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> elHours = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;hours&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> elMins  = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;mins&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> elSecs  = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;secs&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> elStatus = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;status&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 3. 核心更新函数</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">function</span> <span class="title function_">tick</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 获取当前时区时间</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> now = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">zonedDateTimeISO</span>(<span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 比较：如果已经过了目标时间</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">if</span> (<span class="title class_">Temporal</span>.<span class="property">ZonedDateTime</span>.<span class="title function_">compare</span>(now, target) &gt;= <span class="number">0</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                elDays.<span class="property">textContent</span>  = <span class="string">&#x27;00&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                elHours.<span class="property">textContent</span> = <span class="string">&#x27;00&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                elMins.<span class="property">textContent</span>  = <span class="string">&#x27;00&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                elSecs.<span class="property">textContent</span>  = <span class="string">&#x27;00&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                elStatus.<span class="property">textContent</span> = <span class="string">&#x27;🎉 新年快乐！&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">return</span>; <span class="comment">// 停止计时</span></span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 计算剩余时间，指定各单位</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> remaining = now.<span class="title function_">until</span>(target, &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">largestUnit</span>: <span class="string">&#x27;day&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">smallestUnit</span>: <span class="string">&#x27;second&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">roundingMode</span>: <span class="string">&#x27;floor&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 更新页面</span></span></span><br><span class="line"><span class="language-javascript">            elDays.<span class="property">textContent</span>  = <span class="title class_">String</span>(remaining.<span class="property">days</span>).<span class="title function_">padStart</span>(<span class="number">2</span>, <span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">            elHours.<span class="property">textContent</span> = <span class="title class_">String</span>(remaining.<span class="property">hours</span>).<span class="title function_">padStart</span>(<span class="number">2</span>, <span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">            elMins.<span class="property">textContent</span>  = <span class="title class_">String</span>(remaining.<span class="property">minutes</span>).<span class="title function_">padStart</span>(<span class="number">2</span>, <span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">            elSecs.<span class="property">textContent</span>  = <span class="title class_">String</span>(remaining.<span class="property">seconds</span>).<span class="title function_">padStart</span>(<span class="number">2</span>, <span class="string">&#x27;0&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 4. 启动：立即执行一次 + 每秒更新</span></span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">tick</span>();</span></span><br><span class="line"><span class="language-javascript">        <span class="built_in">setInterval</span>(tick, <span class="number">1000</span>);</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="6-2-逐段解析"><a href="#6-2-逐段解析" class="headerlink" title="6.2 逐段解析"></a>6.2 逐段解析</h3><ol>
+<li><strong>目标时间</strong>用 <code>ZonedDateTime</code> 创建，明确指定了 <code>Asia/Shanghai</code> 时区，不会因为用户系统时区不同而出错。</li>
+<li><strong>当前时间</strong>通过 <code>Temporal.Now.zonedDateTimeISO(&#39;Asia/Shanghai&#39;)</code> 获取，保证和目标在同一时区下比较。</li>
+<li><strong>时间差</strong>用 <code>now.until(target, &#123; largestUnit: &#39;day&#39; &#125;)</code> 计算，直接得到天、时、分、秒各字段，不需要手动除以 86400000 再取余。</li>
+<li><strong>比较</strong>用 <code>ZonedDateTime.compare()</code>，语义清晰：<code>&gt;= 0</code> 代表当前时间已到达或超过目标。</li>
+<li><strong>不可变性</strong>的好处：每次 <code>tick()</code> 都重新获取 <code>now</code>，不存在累计误差或意外修改。</li>
+</ol>
+<h3 id="6-3-对比-Date-写法"><a href="#6-3-对比-Date-写法" class="headerlink" title="6.3 对比 Date 写法"></a>6.3 对比 Date 写法</h3><p>如果用传统 <code>Date</code> 实现同样功能：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Date 版本（对比参考）</span></span><br><span class="line"><span class="keyword">const</span> target = <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="string">&#x27;2027-01-01T00:00:00+08:00&#x27;</span>).<span class="title function_">getTime</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">tick</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> diff = target - <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br><span class="line">    <span class="keyword">if</span> (diff &lt;= <span class="number">0</span>) &#123; <span class="comment">/* ... */</span> <span class="keyword">return</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> days  = <span class="title class_">Math</span>.<span class="title function_">floor</span>(diff / <span class="number">86400000</span>);</span><br><span class="line">    <span class="keyword">const</span> hours = <span class="title class_">Math</span>.<span class="title function_">floor</span>((diff % <span class="number">86400000</span>) / <span class="number">3600000</span>);</span><br><span class="line">    <span class="keyword">const</span> mins  = <span class="title class_">Math</span>.<span class="title function_">floor</span>((diff % <span class="number">3600000</span>) / <span class="number">60000</span>);</span><br><span class="line">    <span class="keyword">const</span> secs  = <span class="title class_">Math</span>.<span class="title function_">floor</span>((diff % <span class="number">60000</span>) / <span class="number">1000</span>);</span><br><span class="line">    <span class="comment">// ...手动计算每一级单位</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>对比之下，Temporal 版本的优势很明显：</p>
+<ul>
+<li>不需要手动做毫秒除法</li>
+<li><code>until()</code> 直接返回结构化的时间差</li>
+<li>时区处理显式且可靠</li>
+</ul>
+<hr>
+<h2 id="七、真实实例：管理系统中时间模块"><a href="#七、真实实例：管理系统中时间模块" class="headerlink" title="七、真实实例：管理系统中时间模块"></a>七、真实实例：管理系统中时间模块</h2><blockquote>
+<p>前面的倒计时是一个独立小页面，下面来看我的<strong>真实 React 项目</strong>中 Temporal 的用法——后台管理系统的布局组件。<br>虽然是用的 React 技术栈，但 Temporal 的核心用法和原理在任何框架中都是一样的。<br>如果你对我的后台管理系统感兴趣，欢迎前往体验(<em>^▽^</em>)</p>
+</blockquote>
+<a class="button not-markdown small center" target="_blank" rel="noopener" href="https://admin.wled.top" title="后台管理系统"><i class="fa-solid" aria-hidden="true"></i> 后台管理系统</a>
+
+<p>这个管理系统的顶栏需要实时显示当前时间，同时根据时间自动切换暗黑模式。来看它是怎么用 Temporal 实现的。</p>
+<h3 id="7-1-自动暗黑模式：PlainDateTime-判断时段"><a href="#7-1-自动暗黑模式：PlainDateTime-判断时段" class="headerlink" title="7.1 自动暗黑模式：PlainDateTime 判断时段"></a>7.1 自动暗黑模式：PlainDateTime 判断时段</h3><div class="code-container" data-rel="Jsx"><figure class="iseeu highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [darkMode, setDarkMode] = <span class="title function_">useState</span>(</span><br><span class="line">    <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainDateTimeISO</span>().<span class="property">hour</span> &gt;= <span class="number">18</span> ||</span><br><span class="line">    <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">plainDateTimeISO</span>().<span class="property">hour</span> &lt; <span class="number">6</span></span><br><span class="line">);</span><br><span class="line"><span class="comment">// 晚上 6 点到早上 6 点默认开启暗黑模式</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>逐行解析</strong></p>
+<ul>
+<li><code>Temporal.Now.plainDateTimeISO()</code> 获取当前本地日期时间（<code>PlainDateTime</code> 类型）。</li>
+<li><code>.hour</code> 直接取小时数（0–23），命名直观，不需要像 <code>Date</code> 那样调 <code>getHours()</code>。</li>
+<li>这里用 <code>PlainDateTime</code> 而非 <code>ZonedDateTime</code>，因为”当前用户看到的时间”就是本地时间，不需要跨时区。</li>
+</ul>
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>这是一种典型的<strong>用对类型</strong>场景：<br>判断当前是白天还是夜晚，只关心本地时间，所以用 <code>PlainDateTime</code> 就够了，不需要引入时区复杂度。</p></div></div>
+
+<h3 id="7-2-实时时钟：ZonedDateTime-精准定时器"><a href="#7-2-实时时钟：ZonedDateTime-精准定时器" class="headerlink" title="7.2 实时时钟：ZonedDateTime + 精准定时器"></a>7.2 实时时钟：ZonedDateTime + 精准定时器</h3><p>管理系统的顶栏和锁屏界面都需要一个<strong>秒级实时时钟</strong>：</p>
+<div class="code-container" data-rel="Jsx"><figure class="iseeu highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [time, setTime] = <span class="title function_">useState</span>(<span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">zonedDateTimeISO</span>());</span><br><span class="line"><span class="keyword">const</span> timerRef = <span class="title function_">useRef</span>(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">nextTick</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">        <span class="comment">// ① 每次获取最新的带时区时间</span></span><br><span class="line">        <span class="keyword">const</span> now = <span class="title class_">Temporal</span>.<span class="property">Now</span>.<span class="title function_">zonedDateTimeISO</span>();</span><br><span class="line">        <span class="title function_">setTime</span>(now);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ② 计算&quot;下一整秒&quot;的时间点</span></span><br><span class="line">        <span class="keyword">const</span> nextSecond = now.<span class="title function_">add</span>(&#123; <span class="attr">seconds</span>: <span class="number">1</span> &#125;)</span><br><span class="line">            .<span class="title function_">round</span>(&#123;</span><br><span class="line">                <span class="attr">smallestUnit</span>: <span class="string">&#x27;second&#x27;</span>,</span><br><span class="line">                <span class="attr">roundingMode</span>: <span class="string">&#x27;floor&#x27;</span></span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ③ 用 until + total 精确算出到下一秒还剩多少毫秒</span></span><br><span class="line">        <span class="keyword">const</span> msUntilNextSecond = now.<span class="title function_">until</span>(nextSecond)</span><br><span class="line">            .<span class="title function_">total</span>(&#123; <span class="attr">unit</span>: <span class="string">&#x27;millisecond&#x27;</span> &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ④ setTimeout 递归，动态计算下次执行时间</span></span><br><span class="line">        timerRef.<span class="property">current</span> = <span class="built_in">setTimeout</span>(nextTick, msUntilNextSecond);</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">nextTick</span>(); <span class="comment">// 立即执行第一次</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (timerRef.<span class="property">current</span>) &#123;</span><br><span class="line">            <span class="built_in">clearTimeout</span>(timerRef.<span class="property">current</span>);</span><br><span class="line">            timerRef.<span class="property">current</span> = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;, []);</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>逐行解析</strong></p>
+<p>这段代码的核心思路是：<strong>不用 <code>setInterval(fn, 1000)</code>，而是每次动态计算到下一整秒的精确延迟。</strong></p>
+<ul>
+<li><strong>① 获取当前时间</strong>：<code>Temporal.Now.zonedDateTimeISO()</code> 返回带时区的完整时间，精度到纳秒。</li>
+<li><strong>② 计算下一整秒</strong>：先 <code>add(&#123; seconds: 1 &#125;)</code> 加一秒，再 <code>round(&#123; smallestUnit: &#39;second&#39;, roundingMode: &#39;floor&#39; &#125;)</code> 向下取整到整秒——比如当前时间是 <code>14:30:01.347</code>，加 1 秒得到 <code>14:30:02.347</code>，向下取整得到 <code>14:30:02.000</code>。</li>
+<li><strong>③ 计算剩余毫秒数</strong>：<code>now.until(nextSecond)</code> 得到一个 <code>Duration</code> 对象，<code>.total(&#123; unit: &#39;millisecond&#39; &#125;)</code> 将它换算成毫秒总数。</li>
+<li><strong>④ 递归 setTimeout</strong>：用精确的毫秒数设定下一次触发，避免 <code>setInterval</code> 的累积漂移问题。</li>
+</ul>
+<div class="callout callout--simple info mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p><strong>为什么不用 <code>setInterval(fn, 1000)</code>？</strong></p>
+<p><code>setInterval</code> 每次固定延迟 1000ms，但实际执行可能因主线程繁忙而延迟。时间一长，显示时间会和真实时间越差越远。</p>
+<p>上面的方案每次都重新获取真实时间 + 精确计算剩余毫秒，所以：</p>
+<ul>
+<li><strong>秒跳变对齐整秒</strong>：用户看到的秒数切换不会有大幅的偏移</li>
+<li><strong>无累积误差</strong>：即使某一次延迟了，下一次会自动修正，计算误差不超过毫秒级，保证时钟长期运行也能保持准确。</li>
+<li><strong>不可变性保障</strong>：每次循环都是全新的 <code>now</code> 对象，不存在引用共享问题</li>
+</ul></div></div>
+
+<h3 id="7-3-时间格式化显示"><a href="#7-3-时间格式化显示" class="headerlink" title="7.3 时间格式化显示"></a>7.3 时间格式化显示</h3><p>锁屏界面显示的大号时钟，直接用 <code>toLocaleString</code> 格式化：</p>
+<div class="code-container" data-rel="Jsx"><figure class="iseeu highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;p style=&#123;&#123; <span class="attr">fontSize</span>: <span class="string">&#x27;10vh&#x27;</span>, <span class="attr">fontWeight</span>: <span class="string">&#x27;bold&#x27;</span> &#125;&#125;&gt;</span><br><span class="line">    &#123;time.<span class="title function_">toLocaleString</span>(<span class="string">&#x27;zh-CN&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">hour</span>: <span class="string">&#x27;2-digit&#x27;</span>,</span><br><span class="line">        <span class="attr">minute</span>: <span class="string">&#x27;2-digit&#x27;</span>,</span><br><span class="line">        <span class="attr">second</span>: <span class="string">&#x27;2-digit&#x27;</span></span><br><span class="line">    &#125;)&#125;</span><br><span class="line">&lt;/p&gt;</span><br><span class="line"><span class="comment">// 显示效果：&quot;20:15:30&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>这里 <code>time</code> 就是前面 <code>useState</code> 中存的 <code>ZonedDateTime</code> 对象，因为它自带时区信息，<code>toLocaleString</code> 能正确地按时区渲染时间。</p>
+<h3 id="7-4-这个实例用到了哪些-Temporal-知识？"><a href="#7-4-这个实例用到了哪些-Temporal-知识？" class="headerlink" title="7.4 这个实例用到了哪些 Temporal 知识？"></a>7.4 这个实例用到了哪些 Temporal 知识？</h3><table>
+<thead>
+<tr>
+<th>知识点</th>
+<th>对应章节</th>
+<th>实际用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Temporal.Now.plainDateTimeISO()</code></td>
+<td><a href="#3-3-Temporal-PlainDateTime-%E2%80%94-%E6%97%A5%E6%9C%9F-%E6%97%B6%E9%97%B4">章节 3.3</a></td>
+<td>判断当前小时，切换暗黑模式</td>
+</tr>
+<tr>
+<td><code>Temporal.Now.zonedDateTimeISO()</code></td>
+<td><a href="#3-4-Temporal-ZonedDateTime-%E2%80%94-%E5%AE%8C%E6%95%B4%E6%97%B6%E9%97%B4%EF%BC%88%E5%B8%A6%E6%97%B6%E5%8C%BA%EF%BC%89">章节 3.4</a></td>
+<td>获取带时区的实时时间</td>
+</tr>
+<tr>
+<td><code>.add()</code> + <code>.round()</code></td>
+<td><a href="#%E6%97%A5%E6%9C%9F%E8%BF%90%E7%AE%97">章节 3.1</a></td>
+<td>计算下一个整秒时间点</td>
+</tr>
+<tr>
+<td><code>.until().total()</code></td>
+<td><a href="#4-4-until-%E4%B8%8E-since-%E2%80%94-%E8%AE%A1%E7%AE%97%E6%97%B6%E9%97%B4%E5%B7%AE">章节 4.4</a></td>
+<td>精确计算到下一秒的毫秒数</td>
+</tr>
+<tr>
+<td><code>.toLocaleString()</code></td>
+<td><a href="#8-5-%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%98%BE%E7%A4%BA">章节 8.5</a></td>
+<td>把时间格式化为 <code>HH:mm:ss</code> 显示</td>
+</tr>
+<tr>
+<td>不可变性</td>
+<td><a href="#4-2-%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7">章节 4.2</a></td>
+<td>每次循环创建新对象，无引用共享风险</td>
+</tr>
+</tbody></table>
+<div class="callout callout--simple success mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>从这个实例可以看出，Temporal 在真实项目中并不需要”全部都用”。<br>只需要根据场景选对类型（<code>PlainDateTime</code> 或 <code>ZonedDateTime</code>），配合 <code>add()</code>、<code>round()</code>、<code>until()</code> 等少量方法，就能优雅地解决实际问题。</p></div></div>
+
+<hr>
+<h2 id="八、常见场景速查"><a href="#八、常见场景速查" class="headerlink" title="八、常见场景速查"></a>八、常见场景速查</h2><h3 id="8-1-获取某月有多少天"><a href="#8-1-获取某月有多少天" class="headerlink" title="8.1 获取某月有多少天"></a>8.1 获取某月有多少天</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ym = <span class="title class_">Temporal</span>.<span class="property">PlainYearMonth</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-02&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ym.<span class="property">daysInMonth</span>); <span class="comment">// 28</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ym2 = <span class="title class_">Temporal</span>.<span class="property">PlainYearMonth</span>.<span class="title function_">from</span>(<span class="string">&#x27;2024-02&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ym2.<span class="property">daysInMonth</span>); <span class="comment">// 29（闰年）</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="8-2-判断闰年"><a href="#8-2-判断闰年" class="headerlink" title="8.2 判断闰年"></a>8.2 判断闰年</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2024-06-15&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="property">inLeapYear</span>); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> date2 = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-06-15&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date2.<span class="property">inLeapYear</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="8-3-获取星期几"><a href="#8-3-获取星期几" class="headerlink" title="8.3 获取星期几"></a>8.3 获取星期几</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="property">dayOfWeek</span>); <span class="comment">// 5（周五，ISO 8601：周一=1，周日=7）</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="8-4-获取一年中的第几天"><a href="#8-4-获取一年中的第几天" class="headerlink" title="8.4 获取一年中的第几天"></a>8.4 获取一年中的第几天</h3><div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="property">dayOfYear</span>); <span class="comment">// 65</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="8-5-格式化显示"><a href="#8-5-格式化显示" class="headerlink" title="8.5 格式化显示"></a>8.5 格式化显示</h3><p>Temporal 本身不内置复杂的格式化方法，推荐配合 <code>Intl.DateTimeFormat</code> 使用：</p>
+<div class="code-container" data-rel="Js"><figure class="iseeu highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> date = <span class="title class_">Temporal</span>.<span class="property">PlainDate</span>.<span class="title function_">from</span>(<span class="string">&#x27;2026-03-06&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 toLocaleString</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="title function_">toLocaleString</span>(<span class="string">&#x27;zh-CN&#x27;</span>));</span><br><span class="line"><span class="comment">// &quot;2026/3/6&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(date.<span class="title function_">toLocaleString</span>(<span class="string">&#x27;zh-CN&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">year</span>: <span class="string">&#x27;numeric&#x27;</span>,</span><br><span class="line">    <span class="attr">month</span>: <span class="string">&#x27;long&#x27;</span>,</span><br><span class="line">    <span class="attr">day</span>: <span class="string">&#x27;numeric&#x27;</span>,</span><br><span class="line">    <span class="attr">weekday</span>: <span class="string">&#x27;long&#x27;</span></span><br><span class="line">&#125;));</span><br><span class="line"><span class="comment">// &quot;2026年3月6日星期五&quot;</span></span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<h2 id="九、排错清单"><a href="#九、排错清单" class="headerlink" title="九、排错清单"></a>九、排错清单</h2><p>当 Temporal 代码”不对劲”时，按这个顺序排查：</p>
+<ol>
+<li><strong>类型选对了吗？</strong> 需要时区就用 <code>ZonedDateTime</code>，不要用 <code>PlainDateTime</code>“凑合”</li>
+<li><strong>时区写对了吗？</strong> 必须用 IANA 格式（如 <code>Asia/Shanghai</code>），不能写 <code>+08:00</code>（部分方法不支持）</li>
+<li><strong>溢出策略确认了吗？</strong> 默认是 <code>constrain</code> 静默修正，业务校验场景记得用 <code>reject</code></li>
+<li><strong>单位指定了吗？</strong> <code>until()</code> &#x2F; <code>since()</code> 默认最大单位可能不是你想要的，显式传 <code>largestUnit</code></li>
+<li><strong>浏览器支持确认了吗？</strong> 不支持时需要 <code>@js-temporal/polyfill</code></li>
+</ol>
+<div class="callout callout--simple tip mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>调试时善用 <code>.toString()</code> 打印完整字符串，Temporal 的字符串格式自带类型信息，一眼就能看出问题。</p></div></div>
+
+<hr>
+<h2 id="下一步…"><a href="#下一步…" class="headerlink" title="下一步…"></a>下一步…</h2><p>如果你已经读到这里，建议按照这个节奏继续：</p>
+<ol>
+<li>把倒计时示例手写一遍（不要复制）</li>
+<li>改造成”距离某个自定义事件”的倒计时</li>
+<li>试试 <code>PlainDate</code> 写一个简单的日历网格</li>
+<li>用 <code>ZonedDateTime</code> 做一个”世界时钟”（同时显示北京、东京、纽约时间）</li>
+<li>参考管理系统实例，在自己的项目中实现一个<strong>精准实时时钟</strong></li>
+</ol>
+<p>当你能”选对类型、算对时间、讲清原理”，Temporal 就算入门了。</p>
+<div class="callout callout--simple success mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>Temporal 不是 Date 的补丁，而是一套全新的时间处理思维。<br>先替换最痛的场景，再逐步扩展到整个项目。</p></div></div>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 告别 Date | JavaScript Temporal API 使用教程</li>
+        <li><strong>作者:</strong> BY·Wled</li>
+        <li><strong>创建于
+                :</strong> 2026-03-01 20:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2026-03-06 19:24:32
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.wled.top/2026/03/01/HelloTemporal/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/02/03/HTML/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">前端入门开发 | 从能写到懂原理</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        (function() {
+            const containerId = "giscus-container";
+            const mapping = "pathname";
+            const lang = "zh-CN";
+            const inputPosition = "bottom";
+            const reactionsEnabled = "1" === "1";
+            const emitMetadata = "1" === "1";
+            const strict = "0" === "1";
+            const loading = "lazy";
+
+            const getTerm = () => {
+                if (mapping === "pathname") return location.pathname;
+                if (mapping === "url") return location.href;
+                if (mapping === "title") return document.title;
+                if (mapping === "og:title") {
+                    const ogTitle = document.querySelector("meta[property='og:title']");
+                    return ogTitle?.content || document.title;
+                }
+                return "";
+            };
+
+            const sendUpdate = () => {
+                const iframe = document.querySelector("iframe.giscus-frame");
+                if (!iframe) {
+                    return;
+                }
+
+                const setConfig = {
+                    theme: "preferred_color_scheme",
+                    lang,
+                    inputPosition,
+                    reactionsEnabled,
+                    emitMetadata,
+                    strict,
+                };
+
+                if (mapping !== "number") {
+                    const term = getTerm();
+                    if (term) {
+                        setConfig.term = term;
+                    }
+                }
+
+                iframe.contentWindow.postMessage(
+                    { giscus: { setConfig } },
+                    "https://giscus.app",
+                );
+            };
+
+            const loadGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                const iframe = container.querySelector("iframe.giscus-frame");
+                if (iframe) {
+                    sendUpdate();
+                    return;
+                }
+
+                if (container.dataset.giscusInit === "true") {
+                    return;
+                }
+
+                const giscusConfig = {
+                    src: "https://giscus.app/client.js",
+                    "data-repo": "BYWled/Takling",
+                    "data-repo-id": "R_kgDOM2X6Kg",
+                    "data-category": "Announcements",
+                    "data-category-id": "DIC_kwDOM2X6Ks4Civf9",
+                    "data-mapping": mapping,
+                    "data-strict": "0",
+                    "data-reactions-enabled": "1",
+                    "data-emit-metadata": "1",
+                    "data-theme": "preferred_color_scheme",
+                    "data-lang": lang,
+                    "data-input-position": inputPosition,
+                    "data-loading": loading,
+                    crossorigin: "anonymous",
+                    async: true,
+                };
+
+                const giscusScript = document.createElement("script");
+                for (const key in giscusConfig) {
+                    giscusScript.setAttribute(key, giscusConfig[key]);
+                }
+                container.appendChild(giscusScript);
+                container.dataset.giscusInit = "true";
+            };
+
+            const runGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                if (container.querySelector("iframe.giscus-frame")) {
+                    sendUpdate();
+                    return;
+                }
+
+                loadGiscus();
+            };
+
+            runGiscus();
+        })();
+    </script>
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">告别 Date | JavaScript Temporal API 使用教程</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Date-%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-text">一、Date 到底有什么问题？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%9C%88%E4%BB%BD%E4%BB%8E-0-%E5%BC%80%E5%A7%8B"><span class="nav-text">1.1 月份从 0 开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%AF%B9%E8%B1%A1%E5%8F%AF%E5%8F%98%EF%BC%88Mutable%EF%BC%89"><span class="nav-text">1.2 对象可变（Mutable）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%B2%A1%E6%9C%89%E5%8E%9F%E7%94%9F%E6%97%B6%E5%8C%BA%E6%94%AF%E6%8C%81"><span class="nav-text">1.3 没有原生时区支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%97%A5%E6%9C%9F%E8%BF%90%E7%AE%97%E9%9D%A0%E6%89%8B%E6%90%93"><span class="nav-text">1.4 日期运算靠手搓</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Temporal-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-text">二、Temporal 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Temporal-%E7%B1%BB%E5%9E%8B%E4%B8%80%E8%A7%88"><span class="nav-text">Temporal 类型一览</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%9A%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9E%8B%E9%80%90%E4%B8%AA%E5%86%99"><span class="nav-text">三、快速上手：核心类型逐个写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Temporal-PlainDate-%E2%80%94-%E7%BA%AF%E6%97%A5%E6%9C%9F"><span class="nav-text">3.1 Temporal.PlainDate — 纯日期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E8%BF%90%E7%AE%97"><span class="nav-text">日期运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E6%AF%94%E8%BE%83"><span class="nav-text">日期比较</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Temporal-PlainTime-%E2%80%94-%E7%BA%AF%E6%97%B6%E9%97%B4"><span class="nav-text">3.2 Temporal.PlainTime — 纯时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Temporal-PlainDateTime-%E2%80%94-%E6%97%A5%E6%9C%9F-%E6%97%B6%E9%97%B4"><span class="nav-text">3.3 Temporal.PlainDateTime — 日期 + 时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-Temporal-ZonedDateTime-%E2%80%94-%E5%AE%8C%E6%95%B4%E6%97%B6%E9%97%B4%EF%BC%88%E5%B8%A6%E6%97%B6%E5%8C%BA%EF%BC%89"><span class="nav-text">3.4 Temporal.ZonedDateTime — 完整时间（带时区）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E5%8C%BA%E8%BD%AC%E6%8D%A2%E5%AE%9E%E6%88%98"><span class="nav-text">时区转换实战</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-Temporal-Instant-%E2%80%94-%E6%97%B6%E9%97%B4%E8%BD%B4%E4%B8%8A%E7%9A%84%E4%B8%80%E5%88%BB"><span class="nav-text">3.5 Temporal.Instant — 时间轴上的一刻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-Temporal-Duration-%E2%80%94-%E6%8C%81%E7%BB%AD%E6%97%B6%E9%97%B4"><span class="nav-text">3.6 Temporal.Duration — 持续时间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Duration-%E8%BF%90%E7%AE%97"><span class="nav-text">Duration 运算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-Temporal-PlainYearMonth-%E4%B8%8E-PlainMonthDay"><span class="nav-text">3.7 Temporal.PlainYearMonth 与 PlainMonthDay</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BB%8E%E2%80%9D%E4%BC%9A%E7%94%A8%E2%80%9D%E5%88%B0%E2%80%9D%E7%94%A8%E5%AF%B9%E2%80%9D"><span class="nav-text">四、从”会用”到”用对”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">4.1 类型选择指南</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="nav-text">4.2 不可变性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-with-%E2%80%94-%E4%BF%AE%E6%94%B9%E9%83%A8%E5%88%86%E5%AD%97%E6%AE%B5"><span class="nav-text">4.3 with() — 修改部分字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-until-%E4%B8%8E-since-%E2%80%94-%E8%AE%A1%E7%AE%97%E6%97%B6%E9%97%B4%E5%B7%AE"><span class="nav-text">4.4 until() 与 since() — 计算时间差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E6%AF%94%E8%BE%83%E4%B8%8E%E6%8E%92%E5%BA%8F"><span class="nav-text">4.5 比较与排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="nav-text">五、核心原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%99%E4%B9%88%E5%A4%9A%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="nav-text">5.1 为什么需要这么多类型？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-ISO-8601-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F"><span class="nav-text">5.2 ISO 8601 字符串格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Temporal-Now-%E2%80%94-%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4%E7%9A%84%E7%BB%9F%E4%B8%80%E5%85%A5%E5%8F%A3"><span class="nav-text">5.3 Temporal.Now — 获取当前时间的统一入口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E6%BA%A2%E5%87%BA%E5%A4%84%E7%90%86%EF%BC%88overflow%EF%BC%89"><span class="nav-text">5.4 溢出处理（overflow）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-%E5%92%8C-Date-%E7%9A%84%E4%BA%92%E6%93%8D%E4%BD%9C"><span class="nav-text">5.5 和 Date 的互操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%A8%A1%E6%8B%9F%E5%AE%9E%E6%88%98%EF%BC%9A%E5%80%92%E8%AE%A1%E6%97%B6%E7%BB%84%E4%BB%B6"><span class="nav-text">六、模拟实战：倒计时组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-text">6.1 完整代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E9%80%90%E6%AE%B5%E8%A7%A3%E6%9E%90"><span class="nav-text">6.2 逐段解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%AF%B9%E6%AF%94-Date-%E5%86%99%E6%B3%95"><span class="nav-text">6.3 对比 Date 写法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%9C%9F%E5%AE%9E%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%97%B6%E9%97%B4%E6%A8%A1%E5%9D%97"><span class="nav-text">七、真实实例：管理系统中时间模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E8%87%AA%E5%8A%A8%E6%9A%97%E9%BB%91%E6%A8%A1%E5%BC%8F%EF%BC%9APlainDateTime-%E5%88%A4%E6%96%AD%E6%97%B6%E6%AE%B5"><span class="nav-text">7.1 自动暗黑模式：PlainDateTime 判断时段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E5%AE%9E%E6%97%B6%E6%97%B6%E9%92%9F%EF%BC%9AZonedDateTime-%E7%B2%BE%E5%87%86%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">7.2 实时时钟：ZonedDateTime + 精准定时器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%98%BE%E7%A4%BA"><span class="nav-text">7.3 时间格式化显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-%E8%BF%99%E4%B8%AA%E5%AE%9E%E4%BE%8B%E7%94%A8%E5%88%B0%E4%BA%86%E5%93%AA%E4%BA%9B-Temporal-%E7%9F%A5%E8%AF%86%EF%BC%9F"><span class="nav-text">7.4 这个实例用到了哪些 Temporal 知识？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5"><span class="nav-text">八、常见场景速查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E8%8E%B7%E5%8F%96%E6%9F%90%E6%9C%88%E6%9C%89%E5%A4%9A%E5%B0%91%E5%A4%A9"><span class="nav-text">8.1 获取某月有多少天</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E5%88%A4%E6%96%AD%E9%97%B0%E5%B9%B4"><span class="nav-text">8.2 判断闰年</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-3-%E8%8E%B7%E5%8F%96%E6%98%9F%E6%9C%9F%E5%87%A0"><span class="nav-text">8.3 获取星期几</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-4-%E8%8E%B7%E5%8F%96%E4%B8%80%E5%B9%B4%E4%B8%AD%E7%9A%84%E7%AC%AC%E5%87%A0%E5%A4%A9"><span class="nav-text">8.4 获取一年中的第几天</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-5-%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%98%BE%E7%A4%BA"><span class="nav-text">8.5 格式化显示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%8E%92%E9%94%99%E6%B8%85%E5%8D%95"><span class="nav-text">九、排错清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E2%80%A6"><span class="nav-text">下一步…</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">BY·Wled</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 10 篇文章
+                    </span>
+                    
+                        <span>
+                            共 36.2k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="图片查看器">
+	<button class="image-viewer-close" type="button" aria-label="关闭">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="上一页">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="关闭">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="下一页">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/main.js" ></script>
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Typed.min.js" ></script>
+
+
+
+
+
+
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+
+
+	
+	<div id="aplayer"></div>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>
