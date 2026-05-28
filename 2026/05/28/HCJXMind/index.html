@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Wled">
+    
+    
+    <meta name="author" content="BY·Wled">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://www.wled.top/2026/05/28/hcjxmind/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端三件套面试题总结">
+<meta property="og:url" content="https://www.wled.top/2026/05/28/HCJXMind/index.html">
+<meta property="og:site_name" content="莺之驿站">
+<meta property="og:description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-05-28T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-28T09:57:45.218Z">
+<meta property="article:author" content="BYWled">
+<meta property="article:tag" content="XMind">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.wled.top/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/Oz-Vessalius-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/Oz-Vessalius-favicon.svg">
+    <meta name="theme-color" content="#21DEDB">
+    <link rel="shortcut icon" href="/images/Oz-Vessalius-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            前端三件套面试题总结 | 伴莺の小窝
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.wled.top","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","delete_mask":true,"headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#21DEDB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"欢迎访问伴莺の小窝 | Welcome ~"},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"伴莺の小窝","subtitle":{"text":["Wled's Relay Station"],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":[{"icon":"fa-brands fa-github","url":"https://github.com/BYWled"},{"icon":"fa-brands fa-bilibili","url":"https://space.bilibili.com/128746094"},{"icon":"fa-solid fa-people-group","url":"./Dozer-Esports/index.html"},{"icon":"fa-solid fa-basket-shopping","url":"https://store.wled.top/"},{"icon":"fa-solid fa-gear","url":"https://admin.wled.top/"}],"qrs":null}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"サイエンス (feat. 重音テト)","artist":"MIMI/重音テト","url":"/songs/MIMI.mp3","cover":"/songs/MIMI.jpg","lrc":"/songs/MIMI.lrc"},{"name":"痛いの痛いの飛んでいけっ (feat. saewool)","artist":"MIMI/saewool","url":"/songs/MIMI2.flac","cover":"/songs/MIMI2.jpg","lrc":"/songs/MIMI2.lrc"},{"name":"星降る海 (Starry Sea)","artist":"Aqu3ra/早見沙織","url":"/songs/Starry Sea.flac","cover":"/songs/Starry Sea.jpg","lrc":"/songs/Starry Sea.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"path":"/","icon":"fa-solid fa-home"},"前端":{"path":"/categories/计算机从入门到入土/前端如此简单","icon":"fa-solid fa-code"},"Demos":{"icon":"fa-solid fa-diagram-project","submenus":{"镜像站":"https://mirror.wled.top/","乐购商城":"https://store.wled.top/","管理系统":"https://admin.wled.top/","状态监控":"https://status.wled.top/status"}},"娱乐":{"icon":"fa-solid fa-face-grin-beam","submenus":{"MC":"/Ying","小说":"/novel"}},"关于":{"icon":"fa-regular fa-user","submenus":{"我":"/about","源代码":"https://github.com/BYWled/Ying-of-Me"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"流年间，途游光景伴莺随","show_on_mobile":false,"links":{"动态":{"path":"/archives","icon":"fa-regular fa-archive"},"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"类别":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2024/9/13 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2024/9/13 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.i18n = {"search":"站内搜索您需要的内容...","toc":"目录","prev":"上一页","next":"下一页","prev_posts":"上一篇","next_posts":"下一篇","page":"第 %d 页","recent_posts":"最新文章","share":"分享","powered_by":"由 %s 驱动","theme":"主题","rss_feed":"RSS Feed","category":"分类","categories":"分类","tag":"标签","tags":"标签","post":"文章","posts":"文章","tagcloud":"标签云","comment":"评论","comments":"评论","top":"置顶","sticky":"置顶","go-back-home":"回到首页","masonry_loading":"照片加载中...","image_viewer":"图片查看器","close":"关闭","exif":{"title":"EXIF","cards":{"camera":"相机","lens":"镜头","exposure":"曝光","other":"其他"},"fields":{"make":"品牌","model":"机型","date_taken":"拍摄时间","lens_model":"镜头","focal_length":"焦距","focus_mode":"对焦模式","shutter":"快门","aperture":"光圈","iso":"感光度","exposure_program":"曝光程序","exposure_compensation":"曝光补偿","metering_mode":"测光模式","flash":"闪光灯","white_balance":"白平衡","latitude":"纬度","longitude":"经度","altitude":"海拔"},"status":{"loading":"加载中...","no_exif":"无 EXIF 信息","library_missing":"EXIF 库未加载","image_source_missing":"图片地址不可用","unavailable":"EXIF 不可用（可能被 CORS 阻止或缺少元数据）","flag_unavailable":"EXIF 不可用"}},"home":"首页","archive":"归档","archives":"归档","about":"关于","links":"链接","link":"链接","friends":"友情链接","friend":"友情链接","timeline":"时间轴","shuoshuo":"说说","bookmarks":"书签","site_uv":"访问人数","site_pv":"总访问量","read_more":"阅读全文","wordcount":"字","min2read":"分钟","changelog":"更新日志","status":"状态","runtime":"博客已运行","days":"天","hours":"小时","minutes":"分钟","seconds":"秒","optimized_by":"并由 Evan 进行优化","rights":"版权所有","site_posts":"共撰写了 %s 篇文章","site_wordcount":"共 %s 字","copyright":{"title":"标题","author":"作者","link":"链接","create_time":"创建于","update_time":"更新于","license_title":"版权声明","license_content":"本文章采用 %s 进行许可。","all_rights_reserved":"版权所有 &#169 %s，禁止转载。","public_domain":"本文为公有领域作品，可自由转载、引用。"},"ago":{"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"},"create_time":"创建","update_time":"更新","expired":"这篇文章最后更新于 %s 天前，内容可能已经过时。"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                伴莺の小窝
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-home fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                                        >
+                                    <i class="fa-solid fa-code fa-fw"></i>
+                                    前端
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-diagram-project fa-fw"></i>
+                                    DEMOS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://mirror.wled.top/">
+                                                    镜像站
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://store.wled.top/">
+                                                    乐购商城
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://admin.wled.top/">
+                                                    管理系统
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://status.wled.top/status">
+                                                    状态监控
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-face-grin-beam fa-fw"></i>
+                                    娱乐
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/Ying">
+                                                    MC
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/novel">
+                                                    小说
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    我
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">
+                                                    源代码
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-solid fa-home fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                        >
+                            <span>
+                                前端
+                            </span>
+                            
+                                <i class="fa-solid fa-code fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Demos"
+                        >
+                            <span>
+                                DEMOS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Demos">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://mirror.wled.top/">镜像站</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://store.wled.top/">乐购商城</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://admin.wled.top/">管理系统</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://status.wled.top/status">状态监控</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-娱乐"
+                        >
+                            <span>
+                                娱乐
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-娱乐">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/Ying">MC</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/novel">小说</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-关于"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">我</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">源代码</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">13</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">前端三件套面试题总结</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/Oz-Vessalius-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">BYWled</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-05-28 17:00</span>
+        <span class="mobile">2026-05-28 17:00</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-05-28 17:57:45</span>
+            <span class="mobile">2026-05-28 17:57:45</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">计算机从入门到入土</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/XMind/">XMind</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.9k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>27 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  blue" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>写在之前</summary><div class="content p-4 "><p><strong>前端八股文，背完就入 <del class="mask">土</del> 职！</strong></p>
+<div class="callout callout--simple danger mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>本内容提炼自前端核心基础课程笔记，首发<text color="green">伴莺の小窝</text>，未经授权禁止搬运！</p></div></div>
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>内容涵盖HTML、CSS、JS三大基础的高频面试题，采用“理解性记忆”法梳理。如有错漏，请向管理员反馈。</p></div></div></div></details>
+
+<h1 id="知识图谱"><a href="#知识图谱" class="headerlink" title="知识图谱"></a>知识图谱</h1><div class="markmap-wrap" 
+      
+      style="height: 900px"
+    >
+      <script type="application/json">{"content":"&#x524d;&#x7aef;&#x4e09;&#x4ef6;&#x5957;&#x9762;&#x8bd5;&#x6838;&#x5fc3;","children":[{"content":"HTML &#x57fa;&#x7840;","children":[{"content":"\n<p data-lines=\"5,6\">&#x8282;&#x70b9;&#x4e0e;&#x9875;&#x9762;&#x52a0;&#x8f7d;</p>","children":[{"content":"&#x5757;&#x7ea7;&#x5143;&#x7d20;&#xff1a;&#x72ec;&#x5360;&#x4e00;&#x884c;&#xff08;&#x5982; <code>div</code>, <code>p</code>, <code>h1-h6</code>, <code>ul</code> &#x7b49;&#xff09;","children":[],"payload":{"tag":"li","lines":"6,7"}},{"content":"&#x884c;&#x5185;&#x5143;&#x7d20;&#xff1a;&#x591a;&#x4e2a;&#x53ef;&#x5728;&#x540c;&#x4e00;&#x884c;&#xff08;&#x5982; <code>span</code>, <code>a</code>, <code>img</code>, <code>input</code> &#x7b49;&#xff09;","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"<strong><code>script</code> &#x6807;&#x7b7e;&#x7684;&#x52a0;&#x8f7d;&#x673a;&#x5236;</strong>","children":[{"content":"<code>async</code>&#xff1a;&#x5f02;&#x6b65;&#x4e0b;&#x8f7d;&#xff0c;&#x4e0b;&#x8f7d;&#x5b8c;&#x7acb;&#x5373;&#x6267;&#x884c;&#xff08;&#x6253;&#x65ad;HTML&#x89e3;&#x6790;&#xff09;&#xff0c;&#x6267;&#x884c;&#x987a;&#x5e8f;&#x4e0d;&#x786e;&#x5b9a;","children":[],"payload":{"tag":"li","lines":"9,10"}},{"content":"<code>defer</code>&#xff1a;&#x5f02;&#x6b65;&#x4e0b;&#x8f7d;&#xff0c;HTML&#x89e3;&#x6790;&#x5b8c;&#x6210;&#x540e;&#x624d;&#x6267;&#x884c;&#xff0c;&#x6309;&#x987a;&#x6b21;&#x6267;&#x884c;&#xff0c;<strong>&#x63a8;&#x8350;&#x4f7f;&#x7528;</strong>","children":[],"payload":{"tag":"li","lines":"10,12"}}],"payload":{"tag":"li","lines":"8,12"}}],"payload":{"tag":"li","lines":"5,12"}},{"content":"\n<p data-lines=\"12,13\"><strong>H5 &#x65b0;&#x589e;&#x7279;&#x6027;&#x4e0e;&#x8bed;&#x4e49;&#x5316;</strong></p>","children":[{"content":"\n<p data-lines=\"13,14\"><strong>&#x8bed;&#x4e49;&#x5316;&#x6807;&#x7b7e;</strong>&#xff1a;&#x5982; <code>header</code>, <code>nav</code>, <code>footer</code></p>","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"\n<p data-lines=\"14,15\"><strong>&#x8bed;&#x4e49;&#x5316;&#x4f5c;&#x7528;</strong>&#xff1a;&#x4ee3;&#x7801;&#x7ed3;&#x6784;&#x6e05;&#x6670;&#xff0c;&#x5229;&#x4e8e;&#x65e0;&#x969c;&#x788d;&#x9605;&#x8bfb;&#xff08;&#x76f2;&#x4eba;&#x9605;&#x8bfb;&#x5668;&#xff09;&#xff0c;&#x6781;&#x5927;&#x5730;<strong>&#x5229;&#x4e8e;SEO&#xff08;&#x641c;&#x7d22;&#x5f15;&#x64ce;&#x722c;&#x866b;&#x89e3;&#x6790;&#xff09;</strong></p>","children":[],"payload":{"tag":"li","lines":"14,15"}},{"content":"\n<p data-lines=\"15,16\"><strong>&#x672c;&#x5730;&#x5b58;&#x50a8; (Web Storage)</strong></p>","children":[{"content":"<code>Cookie</code>&#xff1a;&#x5bb9;&#x91cf;&#x6781;&#x5c0f;&#xff08;&#x7ea6;4KB&#xff09;&#xff0c;<strong>&#x968f;&#x7f51;&#x7edc;&#x8bf7;&#x6c42;&#x81ea;&#x52a8;&#x53d1;&#x9001;&#x5230;&#x670d;&#x52a1;&#x7aef;</strong>&#xff08;&#x589e;&#x52a0;&#x6d41;&#x91cf;&#x6d88;&#x8017;&#xff09;&#xff0c;&#x53ef;&#x8bbe;&#x7f6e;&#x8fc7;&#x671f;&#x65f6;&#x95f4;","children":[],"payload":{"tag":"li","lines":"16,17"}},{"content":"<code>localStorage</code>&#xff1a;&#x5bb9;&#x91cf;&#x5927;&#xff08;&#x7ea6;5MB&#xff09;&#xff0c;<strong>&#x6301;&#x4e45;&#x5316;&#x672c;&#x5730;&#x5b58;&#x50a8;</strong>&#xff0c;&#x9664;&#x975e;&#x624b;&#x52a8;&#x6e05;&#x9664;&#xff0c;&#x5426;&#x5219;&#x6c38;&#x4e45;&#x4fdd;&#x5b58;&#xff0c;&#x4e0d;&#x53c2;&#x4e0e;&#x670d;&#x52a1;&#x5668;&#x901a;&#x4fe1;","children":[],"payload":{"tag":"li","lines":"17,18"}},{"content":"<code>sessionStorage</code>&#xff1a;&#x5bb9;&#x91cf;&#x5927;&#xff08;&#x7ea6;5MB&#xff09;&#xff0c;<strong>&#x4f1a;&#x8bdd;&#x7ea7;&#x5b58;&#x50a8;</strong>&#xff0c;&#x5173;&#x95ed;&#x5f53;&#x524d;&#x6d4f;&#x89c8;&#x5668;&#x6807;&#x7b7e;&#x9875;&#x6216;&#x7a97;&#x53e3;&#x5373;&#x9500;&#x6bc1;&#xff0c;&#x4e0d;&#x53c2;&#x4e0e;&#x670d;&#x52a1;&#x5668;&#x901a;&#x4fe1;","children":[],"payload":{"tag":"li","lines":"18,20"}}],"payload":{"tag":"li","lines":"15,20"}},{"content":"\n<p data-lines=\"20,21\"><strong>&#x591a;&#x5a92;&#x4f53;&#x97f3;&#x89c6;&#x9891;&#x6807;&#x7b7e;</strong></p>","children":[{"content":"<code>audio</code> / <code>video</code>&#xff1a;&#x5185;&#x7f6e;&#x591a;&#x5a92;&#x4f53;&#x64ad;&#x653e;&#x652f;&#x6301;&#xff0c;&#x652f;&#x6301; <code>play()</code>, <code>pause()</code> &#x7b49; JS &#x65b9;&#x6cd5;","children":[],"payload":{"tag":"li","lines":"21,22"}},{"content":"&#x63a7;&#x5236;&#x6761;&#x5c5e;&#x6027;&#xff1a;<code>controls</code> &#x5c5e;&#x6027;&#x7528;&#x4e8e;&#x663e;&#x793a;&#x6d4f;&#x89c8;&#x5668;&#x81ea;&#x5e26;&#x7684;&#x5a92;&#x4f53;&#x63a7;&#x5236;&#x6761;","children":[],"payload":{"tag":"li","lines":"22,23"}},{"content":"&#x5faa;&#x73af;&#x5c5e;&#x6027;&#xff1a;<code>loop</code> &#x5c5e;&#x6027;&#x7528;&#x4e8e;&#x8bbe;&#x7f6e;&#x97f3;&#x89c6;&#x9891;&#x5faa;&#x73af;&#x64ad;&#x653e;","children":[],"payload":{"tag":"li","lines":"23,24"}},{"content":"<strong>&#x81ea;&#x52a8;&#x64ad;&#x653e;&#x9650;&#x5236;</strong>&#xff1a;<code>autoplay</code> &#x5c5e;&#x6027;<strong>&#x901a;&#x5e38;&#x5fc5;&#x987b;&#x914d;&#x5408; <code>muted</code> &#x9759;&#x97f3;</strong>&#x624d;&#x80fd;&#x5728;&#x73b0;&#x4ee3;&#x6d4f;&#x89c8;&#x5668;&#x4e2d;&#x81ea;&#x52a8;&#x64ad;&#x653e;&#x751f;&#x6548;","children":[],"payload":{"tag":"li","lines":"24,26"}}],"payload":{"tag":"li","lines":"20,26"}},{"content":"\n<p data-lines=\"26,27\"><strong>&#x5176;&#x4ed6;&#x6838;&#x5fc3;&#x65b0;&#x589e; API</strong></p>","children":[{"content":"<code>canvas</code>&#xff1a;&#x63d0;&#x4f9b; JS &#x7ed8;&#x56fe; API&#xff0c;&#x7528;&#x4e8e;&#x7ed8;&#x5236; 2D/3D &#x56fe;&#x5f62;&#x3001;&#x6e38;&#x620f;&#x52a8;&#x753b;&#x6216;&#x6570;&#x636e;&#x53ef;&#x89c6;&#x5316;&#xff08;&#x5982; Echarts&#xff09;","children":[],"payload":{"tag":"li","lines":"27,28"}},{"content":"<code>WebSocket</code>&#xff1a;&#x5b9e;&#x73b0;&#x6d4f;&#x89c8;&#x5668;&#x4e0e;&#x670d;&#x52a1;&#x5668;&#x7684;<strong>&#x5168;&#x53cc;&#x5de5;&#x5b9e;&#x65f6;&#x901a;&#x4fe1;</strong>","children":[],"payload":{"tag":"li","lines":"28,29"}},{"content":"<code>Geolocation</code>&#xff1a;&#x7528;&#x4e8e;&#x83b7;&#x53d6;&#x7528;&#x6237;&#x7684;&#x5730;&#x7406;&#x5b9a;&#x4f4d;&#x4fe1;&#x606f;","children":[],"payload":{"tag":"li","lines":"29,31"}}],"payload":{"tag":"li","lines":"26,31"}}],"payload":{"tag":"li","lines":"12,31"}},{"content":"\n<p data-lines=\"31,32\">&#x6d4f;&#x89c8;&#x5668;&#x5e38;&#x8bc6;</p>","children":[{"content":"&#x7f51;&#x9875;&#x9ed8;&#x8ba4;&#x5b57;&#x4f53;&#x5927;&#x5c0f;&#xff1a;<code>16px</code> (&#x8c37;&#x6b4c;&#x6700;&#x5c0f;&#x5b57;&#x4f53; <code>12px</code>&#xff0c;&#x53ef;&#x7528; <code>transform: scale()</code> &#x89e3;&#x51b3;)","children":[],"payload":{"tag":"li","lines":"32,33"}},{"content":"<strong>DOCTYPE &#x7684;&#x4f5c;&#x7528;</strong>&#xff1a;&#x544a;&#x77e5;&#x6d4f;&#x89c8;&#x5668;&#x4f7f;&#x7528;&#x4f55;&#x79cd;HTML/XHTML&#x89c4;&#x8303;&#x89e3;&#x6790;&#x6587;&#x6863;&#xff08;&#x89e6;&#x53d1;&#x4e25;&#x683c;&#x6a21;&#x5f0f;&#xff0c;&#x907f;&#x514d;&#x6df7;&#x6742;/&#x602a;&#x5f02;&#x6a21;&#x5f0f;&#xff09;","children":[],"payload":{"tag":"li","lines":"33,35"}}],"payload":{"tag":"li","lines":"31,35"}}],"payload":{"tag":"h2","lines":"3,4"}},{"content":"CSS &#x57fa;&#x7840;","children":[{"content":"\n<p data-lines=\"37,38\"><strong>&#x76d2;&#x6a21;&#x578b; (Box Model)</strong></p>","children":[{"content":"<strong>&#x6807;&#x51c6;&#x76d2;&#x6a21;&#x578b;</strong>&#xff08;&#x9ed8;&#x8ba4;&#xff09;&#xff1a;<code>width</code> &#x4ec5;&#x4ee3;&#x8868; <code>content</code> &#x5185;&#x5bb9;&#x533a;&#x5bbd;&#x5ea6;","children":[],"payload":{"tag":"li","lines":"38,39"}},{"content":"<strong>&#x602a;&#x5f02;/IE&#x76d2;&#x6a21;&#x578b;</strong>&#xff08;<code>box-sizing: border-box</code>&#xff09;&#xff1a;<code>width</code> = <code>content</code> + <code>padding</code> + <code>border</code>&#xff08;<strong>&#x5927;&#x5382;&#x5fc5;&#x95ee;&#xff0c;&#x79fb;&#x52a8;&#x7aef;&#x6781;&#x5176;&#x5e38;&#x7528;&#xff0c;&#x5f7b;&#x5e95;&#x89e3;&#x51b3;&#x8fb9;&#x6846;&#x6491;&#x7834;&#x5e03;&#x5c40;&#x95ee;&#x9898;</strong>&#xff09;","children":[],"payload":{"tag":"li","lines":"39,41"}}],"payload":{"tag":"li","lines":"37,41"}},{"content":"\n<p data-lines=\"41,42\">&#x9009;&#x62e9;&#x5668;&#x4e0e;&#x6743;&#x91cd;</p>","children":[{"content":"<strong>&#x6743;&#x91cd;&#x8ba1;&#x7b97;&#x4f18;&#x5148;&#x7ea7;</strong>&#xff1a;<code>!important</code> &gt; &#x884c;&#x5185;&#x6837;&#x5f0f; &gt; ID&#x9009;&#x62e9;&#x5668; &gt; &#x7c7b;/&#x4f2a;&#x7c7b;/&#x5c5e;&#x6027; &gt; &#x6807;&#x7b7e;/&#x4f2a;&#x5143;&#x7d20; &gt; &#x901a;&#x914d;&#x7b26;","children":[],"payload":{"tag":"li","lines":"42,43"}},{"content":"<strong>&#x6027;&#x80fd;&#x5dee;&#x5f02;</strong>&#xff1a;&#x7236;&#x5b50;&#x9009;&#x62e9;&#x5668;&#x627e;&#x8282;&#x70b9;&#x66f4;&#x5feb;&#xff0c;&#x6027;&#x80fd;&#x4f18;&#x4e8e;&#x540e;&#x4ee3;&#x9009;&#x62e9;&#x5668;&#xff08;&#x540e;&#x4ee3;&#x9009;&#x62e9;&#x5668;&#x9012;&#x5f52;&#x5c42;&#x7ea7;&#x6df1;&#xff0c;&#x6e32;&#x67d3;&#x5f15;&#x64ce;&#x6d88;&#x8017;&#x5927;&#xff09;","children":[],"payload":{"tag":"li","lines":"43,45"}}],"payload":{"tag":"li","lines":"41,45"}},{"content":"\n<p data-lines=\"45,46\"><strong>&#x7ecf;&#x5178;&#x5e03;&#x5c40;&#x4e0e;&#x5c45;&#x4e2d;&#x65b9;&#x6848;</strong></p>","children":[{"content":"<strong>&#x6c34;&#x5e73;&#x5782;&#x76f4;&#x5c45;&#x4e2d;&#x6838;&#x5fc3;&#x65b9;&#x6848;</strong>","children":[{"content":"Flex &#x65b9;&#x6848;&#xff1a;&#x7236;&#x5bb9;&#x5668; <code>display: flex; justify-content: center; align-items: center;</code>","children":[],"payload":{"tag":"li","lines":"47,48"}},{"content":"&#x5b9a;&#x4f4d;&#x65b9;&#x6848;&#xff1a;&#x5b50;&#x7edd;&#x7236;&#x76f8;&#xff0c;&#x5b50;&#x5143;&#x7d20; <code>absolute</code> + <code>transform: translate(-50%, -50%)</code>","children":[],"payload":{"tag":"li","lines":"48,49"}},{"content":"Grid &#x65b9;&#x6848;&#xff1a;&#x7236;&#x5bb9;&#x5668; <code>display: grid; place-items: center;</code>","children":[],"payload":{"tag":"li","lines":"49,51"}}],"payload":{"tag":"li","lines":"46,51"}}],"payload":{"tag":"li","lines":"45,51"}},{"content":"\n<p data-lines=\"51,52\"><strong>BFC (&#x5757;&#x7ea7;&#x683c;&#x5f0f;&#x5316;&#x4e0a;&#x4e0b;&#x6587;)</strong></p>","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;&#x72ec;&#x7acb;&#x7684;&#x6e32;&#x67d3;&#x533a;&#x57df;&#xff0c;&#x5185;&#x90e8;&#x5143;&#x7d20;&#x7684;&#x5e03;&#x5c40;&#x5b8c;&#x5168;&#x4e0d;&#x53d7;&#x5916;&#x90e8;&#x73af;&#x5883;&#x5f71;&#x54cd;","children":[],"payload":{"tag":"li","lines":"52,53"}},{"content":"<strong>&#x89e6;&#x53d1;&#x6761;&#x4ef6;</strong>&#xff1a;<code>overflow</code> &#x4e0d;&#x4e3a; <code>visible</code>&#x3001;&#x6d6e;&#x52a8;&#x3001;&#x7edd;&#x5bf9;/&#x56fa;&#x5b9a;&#x5b9a;&#x4f4d;&#x3001;<code>display: inline-block/flex</code>","children":[],"payload":{"tag":"li","lines":"53,54"}},{"content":"<strong>&#x5e94;&#x7528;&#x573a;&#x666f;</strong>&#xff1a;&#x89e3;&#x51b3; <code>margin</code> &#x584c;&#x9677;/&#x91cd;&#x53e0;&#x95ee;&#x9898;&#x3001;&#x6e05;&#x9664;&#x6d6e;&#x52a8;&#xff08;&#x89e3;&#x51b3;&#x7236;&#x5143;&#x7d20;&#x9ad8;&#x5ea6;&#x584c;&#x9677;&#xff09;&#x3001;&#x5b9e;&#x73b0;&#x81ea;&#x9002;&#x5e94;&#x4e24;&#x680f;&#x5e03;&#x5c40;","children":[],"payload":{"tag":"li","lines":"54,56"}}],"payload":{"tag":"li","lines":"51,56"}},{"content":"\n<p data-lines=\"56,57\">&#x9690;&#x85cf;&#x4e0e;&#x663e;&#x793a;</p>","children":[{"content":"<code>display: none</code>&#xff1a;&#x5143;&#x7d20;&#x8131;&#x79bb;&#x6587;&#x6863;&#x6d41;&#xff0c;&#x4e0d;&#x5728;&#x9875;&#x9762;&#x751f;&#x6210;&#xff0c;<strong>&#x4e0d;&#x5360;&#x4f4d;</strong>&#xff0c;&#x5fc5;&#x5b9a;&#x5f15;&#x53d1;<strong>&#x91cd;&#x6392;</strong>","children":[],"payload":{"tag":"li","lines":"57,58"}},{"content":"<code>visibility: hidden</code>&#xff1a;&#x5143;&#x7d20;&#x4e0d;&#x53ef;&#x89c1;&#xff0c;&#x4f46;<strong>&#x4f9d;&#x7136;&#x5360;&#x4f4d;</strong>&#xff0c;&#x5f15;&#x53d1;&#x91cd;&#x7ed8;&#x4e0d;&#x91cd;&#x6392;&#xff0c;&#x4e8b;&#x4ef6;&#x65e0;&#x6cd5;&#x70b9;&#x51fb;&#x89e6;&#x53d1;","children":[],"payload":{"tag":"li","lines":"58,59"}},{"content":"<code>opacity: 0</code>&#xff1a;&#x900f;&#x660e;&#x5ea6;&#x53d8;&#x4e3a;0&#xff0c;<strong>&#x4f9d;&#x7136;&#x5360;&#x4f4d;</strong>&#xff0c;&#x4e0d;&#x5f15;&#x53d1;&#x91cd;&#x6392;&#xff0c;&#x4e8b;&#x4ef6;<strong>&#x53ef;&#x4ee5;&#x6b63;&#x5e38;&#x70b9;&#x51fb;&#x89e6;&#x53d1;</strong>","children":[],"payload":{"tag":"li","lines":"59,61"}}],"payload":{"tag":"li","lines":"56,61"}},{"content":"\n<p data-lines=\"61,62\"><strong>&#x91cd;&#x7ed8;&#x4e0e;&#x91cd;&#x6392; (&#x56de;&#x6d41;)</strong></p>","children":[{"content":"<strong>&#x91cd;&#x6392; (Reflow)</strong>&#xff1a;&#x64cd;&#x4f5c;DOM&#x589e;&#x5220;&#x6539;&#x3001;&#x6539;&#x53d8;&#x4f4d;&#x7f6e;&#x6216;&#x5c3a;&#x5bf8;&#x5927;&#x5c0f;&#xff0c;<strong>&#x5fc5;&#x5b9a;&#x5bfc;&#x81f4;&#x91cd;&#x7ed8;</strong>&#xff0c;&#x6027;&#x80fd;&#x6d88;&#x8017;&#x5de8;&#x5927;","children":[],"payload":{"tag":"li","lines":"62,63"}},{"content":"&#x91cd;&#x7ed8; (Repaint)&#xff1a;&#x4ec5;&#x6539;&#x53d8;&#x57fa;&#x7840;&#x89c6;&#x89c9;&#x6837;&#x5f0f;&#xff08;&#x5982;&#x5b57;&#x4f53;&#x989c;&#x8272;&#x3001;&#x80cc;&#x666f;&#x8272;&#xff09;&#xff0c;&#x4e0d;&#x4e00;&#x5b9a;&#x5bfc;&#x81f4;&#x91cd;&#x6392;","children":[],"payload":{"tag":"li","lines":"63,64"}},{"content":"<strong>&#x4f18;&#x5316;&#x65b9;&#x6848;</strong>&#xff1a;&#x5408;&#x5e76;DOM&#x64cd;&#x4f5c;&#xff08;&#x5982;&#x4f7f;&#x7528; <code>DocumentFragment</code>&#xff09;&#x3001;&#x907f;&#x514d;&#x4f7f;&#x7528; <code>table</code> &#x5e03;&#x5c40;&#x3001;&#x5229;&#x7528; CSS3 &#x786c;&#x4ef6;&#x52a0;&#x901f; (<code>transform</code>/<code>opacity</code> &#x4e0d;&#x5f15;&#x53d1;&#x91cd;&#x6392;)","children":[],"payload":{"tag":"li","lines":"64,66"}}],"payload":{"tag":"li","lines":"61,66"}}],"payload":{"tag":"h2","lines":"35,36"}},{"content":"JavaScript &#x57fa;&#x7840;","children":[{"content":"\n<p data-lines=\"68,69\">&#x6570;&#x636e;&#x7c7b;&#x578b;&#x4e0e;&#x5185;&#x5b58;</p>","children":[{"content":"\n<p data-lines=\"69,70\"><strong>&#x57fa;&#x672c;&#x6570;&#x636e;&#x7c7b;&#x578b;</strong>&#xff1a;<code>Number</code>, <code>String</code>, <code>Boolean</code>, <code>Undefined</code>, <code>Null</code>, <code>Symbol</code>, <code>BigInt</code>&#xff08;&#x5b58;&#x50a8;&#x5728;&#x6808;&#x5185;&#x5b58;&#x4e2d;&#xff09;</p>","children":[],"payload":{"tag":"li","lines":"69,70"}},{"content":"\n<p data-lines=\"70,71\"><strong>&#x5f15;&#x7528;&#x6570;&#x636e;&#x7c7b;&#x578b;</strong>&#xff1a;<code>Object</code>, <code>Array</code>, <code>Function</code>&#xff08;&#x5b58;&#x50a8;&#x5728;&#x5806;&#x5185;&#x5b58;&#x4e2d;&#xff0c;&#x53d8;&#x91cf;&#x5b58;&#x653e;&#x7684;&#x662f;&#x5185;&#x5b58;&#x5730;&#x5740;&#xff09;</p>","children":[],"payload":{"tag":"li","lines":"70,71"}},{"content":"\n<p data-lines=\"71,72\"><strong>&#x7c7b;&#x578b;&#x68c0;&#x6d4b;&#x673a;&#x5236;</strong></p>","children":[{"content":"<code>typeof</code> &#x7f3a;&#x9677;&#xff1a;&#x68c0;&#x6d4b; <code>null</code>&#x3001;&#x5bf9;&#x8c61;&#x3001;&#x6570;&#x7ec4;&#x65f6;&#xff0c;&#x7ed3;&#x679c;&#x5168;&#x4e3a; <code>&quot;object&quot;</code>&#xff0c;&#x65e0;&#x6cd5;&#x505a;&#x7cbe;&#x7ec6;&#x5316;&#x533a;&#x5206;","children":[],"payload":{"tag":"li","lines":"72,73"}},{"content":"<strong>&#x7ec8;&#x6781;&#x68c0;&#x6d4b;&#x65b9;&#x6848;</strong>&#xff1a;&#x4f7f;&#x7528; <code>Object.prototype.toString.call(xxx)</code> &#x53ef;&#x4ee5;&#x7cbe;&#x51c6;&#x68c0;&#x6d4b;&#x6240;&#x6709;&#x57fa;&#x672c;&#x53ca;&#x590d;&#x6742;&#x7c7b;&#x578b;","children":[],"payload":{"tag":"li","lines":"73,75"}}],"payload":{"tag":"li","lines":"71,75"}},{"content":"\n<p data-lines=\"75,76\"><strong>&#x7b49;&#x53f7;&#x7684;&#x533a;&#x522b;</strong></p>","children":[{"content":"<code>==</code>&#xff1a;&#x6d89;&#x53ca;&#x9690;&#x5f0f;&#x7c7b;&#x578b;&#x8f6c;&#x6362;&#xff0c;&#x4ec5;&#x6bd4;&#x8f83;&#x503c;&#x662f;&#x5426;&#x76f8;&#x7b49;&#xff08;&#x5927;&#x5382;&#x5e38;&#x8003; <code>[] == ![]</code> &#x7ed3;&#x679c;&#x4e3a; true &#x7684;&#x5947;&#x8469;&#x8f6c;&#x6362;&#xff09;","children":[],"payload":{"tag":"li","lines":"76,77"}},{"content":"<code>===</code>&#xff1a;&#x4e25;&#x683c;&#x76f8;&#x7b49;&#xff0c;&#x7c7b;&#x578b;&#x4e0e;&#x503c;&#x90fd;&#x5fc5;&#x987b;&#x5b8c;&#x5168;&#x4e00;&#x81f4;&#x624d;&#x8fd4;&#x56de; true","children":[],"payload":{"tag":"li","lines":"77,79"}}],"payload":{"tag":"li","lines":"75,79"}}],"payload":{"tag":"li","lines":"68,79"}},{"content":"\n<p data-lines=\"79,80\"><strong>&#x539f;&#x578b;&#x4e0e;&#x539f;&#x578b;&#x94fe; (Prototype Chain)</strong></p>","children":[{"content":"&#x539f;&#x578b;&#x6982;&#x5ff5;&#xff1a;&#x6bcf;&#x4e2a;&#x5bf9;&#x8c61;&#x90fd;&#x6709; <code>__proto__</code> &#x9690;&#x5f0f;&#x539f;&#x578b;&#xff0c;&#x5b83;&#x6307;&#x5411;&#x5176;&#x6784;&#x9020;&#x51fd;&#x6570;&#x7684; <code>prototype</code> &#x663e;&#x5f0f;&#x539f;&#x578b;&#x5bf9;&#x8c61;","children":[],"payload":{"tag":"li","lines":"80,81"}},{"content":"<strong>&#x539f;&#x578b;&#x94fe;&#x67e5;&#x627e;&#x673a;&#x5236;</strong>&#xff1a;&#x8bbf;&#x95ee;&#x5bf9;&#x8c61;&#x5c5e;&#x6027;&#x65f6;&#xff0c;&#x81ea;&#x8eab;&#x6ca1;&#x6709;&#x5c31;&#x4f1a;&#x987a;&#x7740; <code>__proto__</code> &#x5411;&#x4e0a;&#x7ea7;&#x67e5;&#x627e;&#xff0c;&#x76f4;&#x5230; <code>Object.prototype.__proto__ === null</code> &#x7ed3;&#x675f;","children":[],"payload":{"tag":"li","lines":"81,83"}}],"payload":{"tag":"li","lines":"79,83"}},{"content":"\n<p data-lines=\"83,84\"><strong>&#x95ed;&#x5305; (Closure)</strong></p>","children":[{"content":"&#x5b9a;&#x4e49;&#xff1a;&#x51fd;&#x6570;&#x5185;&#x90e8;&#x53ef;&#x4ee5;&#x8bbf;&#x95ee;&#x5916;&#x90e8;&#x51fd;&#x6570;&#x4f5c;&#x7528;&#x57df;&#x4e2d;&#x53d8;&#x91cf;&#x7684;&#x7ec4;&#x5408;&#xff08;&#x51fd;&#x6570;&#x5d4c;&#x5957;&#x51fd;&#x6570;&#xff0c;&#x5185;&#x5c42;&#x5f15;&#x7528;&#x5916;&#x5c42;&#x53d8;&#x91cf;&#xff09;","children":[],"payload":{"tag":"li","lines":"84,85"}},{"content":"<strong>&#x6838;&#x5fc3;&#x5e94;&#x7528;</strong>&#xff1a;&#x5b9e;&#x73b0;&#x6570;&#x636e;&#x7684;&#x79c1;&#x6709;&#x5316;&#x5c01;&#x88c5;&#x3001;&#x51fd;&#x6570;&#x67ef;&#x91cc;&#x5316;&#x3001;&#x9632;&#x6296;&#x8282;&#x6d41;&#x5e95;&#x5c42;&#x5b9e;&#x73b0;","children":[],"payload":{"tag":"li","lines":"85,86"}},{"content":"<strong>&#x81f4;&#x547d;&#x7f3a;&#x70b9;</strong>&#xff1a;&#x88ab;&#x5f15;&#x7528;&#x7684;&#x53d8;&#x91cf;&#x65e0;&#x6cd5;&#x88ab;&#x5783;&#x573e;&#x56de;&#x6536;&#x673a;&#x5236;&#x9500;&#x6bc1;&#xff0c;&#x6ee5;&#x7528;&#x5bb9;&#x6613;&#x5bfc;&#x81f4;<strong>&#x5185;&#x5b58;&#x6cc4;&#x6f0f;</strong>","children":[],"payload":{"tag":"li","lines":"86,88"}}],"payload":{"tag":"li","lines":"83,88"}},{"content":"\n<p data-lines=\"88,89\"><strong>&#x4e8b;&#x4ef6;&#x5faa;&#x73af; (Event Loop) &#x5b8f;&#x4efb;&#x52a1;/&#x5fae;&#x4efb;&#x52a1;</strong></p>","children":[{"content":"&#x6838;&#x5fc3;&#x6982;&#x5ff5;&#xff1a;JS &#x662f;&#x5355;&#x7ebf;&#x7a0b;&#x975e;&#x963b;&#x585e;&#x7684;&#xff0c;&#x5fc5;&#x987b;&#x901a;&#x8fc7;&#x4efb;&#x52a1;&#x961f;&#x5217;&#xff08;Task Queue&#xff09;&#x5b9e;&#x73b0;&#x5f02;&#x6b65;&#x8c03;&#x5ea6;","children":[],"payload":{"tag":"li","lines":"89,90"}},{"content":"<strong>&#x5b8f;&#x4efb;&#x52a1; (Macrotask)</strong>&#xff1a;&#x5305;&#x62ec; <code>setTimeout</code>, <code>setInterval</code>, DOM&#x4e8b;&#x4ef6;&#x7ed1;&#x5b9a;, Ajax &#x8bf7;&#x6c42;","children":[],"payload":{"tag":"li","lines":"90,91"}},{"content":"<strong>&#x5fae;&#x4efb;&#x52a1; (Microtask)</strong>&#xff1a;&#x5305;&#x62ec; <code>Promise.then/catch</code>, <code>process.nextTick</code>, <code>MutationObserver</code>","children":[],"payload":{"tag":"li","lines":"91,92"}},{"content":"<strong>&#x6267;&#x884c;&#x987a;&#x5e8f;</strong>&#xff1a;&#x6267;&#x884c;&#x4e00;&#x6574;&#x5757;&#x540c;&#x6b65;&#x4ee3;&#x7801; -&gt; &#x5f7b;&#x5e95;&#x6e05;&#x7a7a;&#x6240;&#x6709;&#x5fae;&#x4efb;&#x52a1; -&gt; &#x53d6;&#x51fa;&#x4e00;&#x4e2a;&#x5b8f;&#x4efb;&#x52a1;&#x6267;&#x884c; -&gt; &#x518d;&#x6b21;&#x6e05;&#x7a7a;&#x6240;&#x6709;&#x5fae;&#x4efb;&#x52a1; -&gt; &#x4e0d;&#x65ad;&#x5faa;&#x73af;","children":[],"payload":{"tag":"li","lines":"92,94"}}],"payload":{"tag":"li","lines":"88,94"}},{"content":"\n<p data-lines=\"94,95\"><strong><code>this</code> &#x6307;&#x5411;&#x4e0e;&#x5f3a;&#x5236;&#x7ed1;&#x5b9a;</strong></p>","children":[{"content":"&#x6307;&#x5411;&#x89c4;&#x5219;&#xff1a;&#x8c01;&#x8c03;&#x7528;&#x5c31;&#x6307;&#x5411;&#x8c01;&#xff08;&#x5168;&#x5c40;&#x73af;&#x5883;&#x6307;&#x5411; <code>window</code>&#xff09;","children":[],"payload":{"tag":"li","lines":"95,96"}},{"content":"&#x7bad;&#x5934;&#x51fd;&#x6570;&#x7279;&#x6027;&#xff1a;<strong>&#x7bad;&#x5934;&#x51fd;&#x6570;&#x6ca1;&#x6709;&#x81ea;&#x5df1;&#x7684; <code>this</code></strong>&#xff0c;&#x5b83;&#x7684; <code>this</code> &#x6c38;&#x8fdc;&#x6307;&#x5411;&#x5176;&#x5b9a;&#x4e49;&#x65f6;&#x6240;&#x5904;&#x7684;&#x5916;&#x5c42;&#x4f5c;&#x7528;&#x57df;","children":[],"payload":{"tag":"li","lines":"96,97"}},{"content":"<strong>&#x5f3a;&#x5236;&#x6539;&#x53d8; <code>this</code> &#x7684;&#x4e09;&#x4e2a;&#x65b9;&#x6cd5;</strong>","children":[{"content":"<code>call</code>&#xff1a;&#x63a5;&#x6536;<strong>&#x53c2;&#x6570;&#x5217;&#x8868;</strong>&#xff08;&#x9017;&#x53f7;&#x5206;&#x9694;&#xff09;&#xff0c;&#x7acb;&#x5373;&#x6267;&#x884c;&#x8be5;&#x51fd;&#x6570;","children":[],"payload":{"tag":"li","lines":"98,99"}},{"content":"<code>apply</code>&#xff1a;&#x63a5;&#x6536;<strong>&#x53c2;&#x6570;&#x6570;&#x7ec4;</strong>&#xff08;Array&#xff09;&#xff0c;&#x7acb;&#x5373;&#x6267;&#x884c;&#x8be5;&#x51fd;&#x6570;","children":[],"payload":{"tag":"li","lines":"99,100"}},{"content":"<code>bind</code>&#xff1a;&#x63a5;&#x6536;&#x53c2;&#x6570;&#x5217;&#x8868;&#xff0c;<strong>&#x8fd4;&#x56de;&#x4e00;&#x4e2a;&#x6539;&#x53d8;&#x4e86; <code>this</code> &#x6307;&#x5411;&#x7684;&#x65b0;&#x51fd;&#x6570;&#xff0c;&#x9700;&#x8981;&#x624b;&#x52a8;&#x8c03;&#x7528;&#x624d;&#x6267;&#x884c;</strong>","children":[],"payload":{"tag":"li","lines":"100,102"}}],"payload":{"tag":"li","lines":"97,102"}}],"payload":{"tag":"li","lines":"94,102"}},{"content":"\n<p data-lines=\"102,103\"><strong>DOM &#x64cd;&#x4f5c;&#x4e0e;&#x4e8b;&#x4ef6;&#x6d41;&#x673a;&#x5236; (&#x91cd;&#x70b9;)</strong></p>","children":[{"content":"\n<p data-lines=\"103,104\">DOM &#x8282;&#x70b9;&#x5185;&#x5bb9;&#x64cd;&#x4f5c;&#x7ec6;&#x5206;</p>","children":[{"content":"<code>innerHTML</code>&#xff1a;&#x4e0d;&#x4ec5;&#x83b7;&#x53d6;&#x6587;&#x672c;&#xff0c;&#x8fd8;&#x80fd;&#x89e3;&#x6790;&#x5e76;&#x6e32;&#x67d3;&#x5b57;&#x7b26;&#x4e32;&#x4e2d;&#x7684; HTML &#x6807;&#x7b7e;&#xff08;&#x6709; XSS &#x6ce8;&#x5165;&#x98ce;&#x9669;&#xff09;","children":[],"payload":{"tag":"li","lines":"104,105"}},{"content":"<code>innerText</code>&#xff1a;&#x53ea;&#x83b7;&#x53d6;&#x7eaf;&#x6587;&#x672c;&#xff0c;&#x81ea;&#x52a8;&#x5ffd;&#x7565; HTML &#x6807;&#x7b7e;&#xff0c;&#x4e14;<strong>&#x4e0d;&#x4fdd;&#x7559;</strong>&#x4ee3;&#x7801;&#x4e2d;&#x7684;&#x7a7a;&#x767d;&#x4e0e;&#x6362;&#x884c;&#x683c;&#x5f0f;","children":[],"payload":{"tag":"li","lines":"105,106"}},{"content":"<code>textContent</code>&#xff1a;&#x53ea;&#x83b7;&#x53d6;&#x7eaf;&#x6587;&#x672c;&#xff0c;&#x5ffd;&#x7565; HTML &#x6807;&#x7b7e;&#xff0c;&#x4f46;<strong>&#x4e25;&#x683c;&#x4fdd;&#x7559;</strong>&#x539f;&#x6709;&#x7684;&#x6587;&#x672c;&#x7f29;&#x8fdb;&#x4e0e;&#x6362;&#x884c;&#x7b26;","children":[],"payload":{"tag":"li","lines":"106,108"}}],"payload":{"tag":"li","lines":"103,108"}},{"content":"\n<p data-lines=\"108,109\"><strong>&#x4e8b;&#x4ef6;&#x6d41;&#x4e0e;&#x5192;&#x6ce1;&#x673a;&#x5236; (Event Bubbling)</strong></p>","children":[{"content":"<strong>&#x4e8b;&#x4ef6;&#x6d41;&#x4e09;&#x4e2a;&#x9636;&#x6bb5;</strong>&#xff1a;&#x6355;&#x83b7;&#x9636;&#x6bb5; (&#x4ece;&#x5916;&#x5411;&#x5185;) -&gt; &#x76ee;&#x6807;&#x9636;&#x6bb5; -&gt; <strong>&#x5192;&#x6ce1;&#x9636;&#x6bb5; (&#x4ece;&#x5185;&#x5411;&#x5916;)</strong>","children":[],"payload":{"tag":"li","lines":"109,110"}},{"content":"<strong>&#x4e8b;&#x4ef6;&#x5192;&#x6ce1;&#x6982;&#x5ff5;</strong>&#xff1a;&#x4e8b;&#x4ef6;&#x4ece;&#x89e6;&#x53d1;&#x7684;&#x6700;&#x6df1;&#x5c42; DOM &#x8282;&#x70b9;&#x5f00;&#x59cb;&#xff0c;&#x9010;&#x7ea7;&#x5411;&#x7236;&#x7ea7;&#x8282;&#x70b9;&#x4f20;&#x64ad;&#x63a5;&#x6536;&#x7684;&#x8fc7;&#x7a0b;","children":[],"payload":{"tag":"li","lines":"110,111"}},{"content":"<strong>&#x963b;&#x6b62;&#x4e8b;&#x4ef6;&#x5192;&#x6ce1;</strong>&#xff1a;&#x8c03;&#x7528; <strong><code>e.stopPropagation()</code></strong> &#xff08;&#x963b;&#x6b62;&#x4e8b;&#x4ef6;&#x7ee7;&#x7eed;&#x5411;&#x4e0a;&#x4f20;&#x9012;&#xff0c;IE &#x65e7;&#x7248;&#x7528; <code>e.cancelBubble = true</code>&#xff09;","children":[],"payload":{"tag":"li","lines":"111,112"}},{"content":"<strong>&#x963b;&#x6b62;&#x9ed8;&#x8ba4;&#x884c;&#x4e3a;</strong>&#xff1a;&#x8c03;&#x7528; <strong><code>e.preventDefault()</code></strong>&#xff08;&#x7528;&#x4e8e;&#x963b;&#x6b62; <code>a</code> &#x6807;&#x7b7e;&#x9ed8;&#x8ba4;&#x8df3;&#x8f6c;&#x3001;&#x963b;&#x6b62;&#x8868;&#x5355;&#x9ed8;&#x8ba4;&#x63d0;&#x4ea4;&#x5237;&#x65b0;&#x7b49;&#xff09;","children":[],"payload":{"tag":"li","lines":"112,114"}}],"payload":{"tag":"li","lines":"108,114"}},{"content":"\n<p data-lines=\"114,115\"><strong>&#x4e8b;&#x4ef6;&#x59d4;&#x6258; (Event Delegation)</strong></p>","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;&#x5229;&#x7528;<strong>&#x4e8b;&#x4ef6;&#x5192;&#x6ce1;&#x673a;&#x5236;</strong>&#xff0c;&#x5c06;&#x539f;&#x672c;&#x9700;&#x8981;&#x7ed1;&#x5b9a;&#x5728;&#x591a;&#x4e2a;&#x5b50;&#x5143;&#x7d20;&#x4e0a;&#x7684;&#x4e8b;&#x4ef6;&#xff0c;&#x7edf;&#x4e00;&#x7ed1;&#x5b9a;&#x5728;&#x5b83;&#x4eec;&#x5171;&#x540c;&#x7684;<strong>&#x7236;&#x5143;&#x7d20;</strong>&#x4e0a;","children":[],"payload":{"tag":"li","lines":"115,116"}},{"content":"&#x5224;&#x65ad;&#x4e8b;&#x4ef6;&#x6e90;&#xff1a;&#x5728;&#x7236;&#x5143;&#x7d20;&#x7684;&#x4e8b;&#x4ef6;&#x51fd;&#x6570;&#x4e2d;&#xff0c;&#x901a;&#x8fc7;&#x4e8b;&#x4ef6;&#x5bf9;&#x8c61; <strong><code>e.target</code></strong> &#x83b7;&#x53d6;&#x771f;&#x6b63;&#x88ab;&#x70b9;&#x51fb;&#x89e6;&#x53d1;&#x7684;&#x5b50;&#x8282;&#x70b9;&#x8fdb;&#x884c;&#x903b;&#x8f91;&#x5224;&#x65ad;","children":[],"payload":{"tag":"li","lines":"116,117"}},{"content":"&#x4f18;&#x52bf;&#xff1a;&#x6781;&#x5927;&#x5730;<strong>&#x51cf;&#x5c11;&#x4e86;&#x5185;&#x5b58;&#x6d88;&#x8017;</strong>&#xff08;&#x53ea;&#x9700;&#x6ce8;&#x518c;&#x4e00;&#x4e2a;&#x76d1;&#x542c;&#x5668;&#xff09;&#xff0c;&#x4e14;&#x80fd;&#x591f;&#x5929;&#x7136;&#x76d1;&#x542c;<strong>&#x672a;&#x6765;&#x52a8;&#x6001;&#x65b0;&#x589e;</strong>&#x7684;&#x5b50;&#x5143;&#x7d20;&#x8282;&#x70b9;","children":[],"payload":{"tag":"li","lines":"117,119"}}],"payload":{"tag":"li","lines":"114,119"}}],"payload":{"tag":"li","lines":"102,119"}},{"content":"\n<p data-lines=\"119,120\">&#x6570;&#x7ec4;&#x9ad8;&#x9636;&#x64cd;&#x4f5c; (&#x5355;&#x9879;&#x7ec6;&#x5206;)</p>","children":[{"content":"<code>forEach</code>&#xff1a;&#x7eaf;&#x5faa;&#x73af;&#x904d;&#x5386;&#xff0c;&#x65e0;&#x8fd4;&#x56de;&#x503c;&#xff0c;<strong>&#x7f3a;&#x9677;&#x662f;&#x65e0;&#x6cd5;&#x7528; <code>break/return</code> &#x7ec8;&#x6b62;&#x5faa;&#x73af;</strong>","children":[],"payload":{"tag":"li","lines":"120,121"}},{"content":"<code>map</code>&#xff1a;&#x5faa;&#x73af;&#x6570;&#x7ec4;&#x5e76;<strong>&#x8fd4;&#x56de;&#x4fee;&#x6539;&#x540e;&#x7684;&#x65b0;&#x6570;&#x7ec4;</strong>&#xff0c;&#x7edd;&#x5bf9;&#x4e0d;&#x4fee;&#x6539;&#x539f;&#x57fa;&#x7840;&#x6570;&#x636e;&#x6570;&#x7ec4;","children":[],"payload":{"tag":"li","lines":"121,122"}},{"content":"<code>filter</code>&#xff1a;&#x6839;&#x636e;&#x6761;&#x4ef6;&#x8fc7;&#x6ee4;&#xff0c;&#x8fd4;&#x56de;&#x6240;&#x6709;&#x6ee1;&#x8db3;&#x6761;&#x4ef6;&#x7684;&#x5143;&#x7d20;&#x7ec4;&#x6210;&#x7684;<strong>&#x65b0;&#x6570;&#x7ec4;</strong>","children":[],"payload":{"tag":"li","lines":"122,123"}},{"content":"<code>find</code>&#xff1a;&#x67e5;&#x627e;&#x5e76;&#x8fd4;&#x56de;&#x6ee1;&#x8db3;&#x6761;&#x4ef6;&#x7684;<strong>&#x7b2c;&#x4e00;&#x4e2a;&#x5143;&#x7d20;&#x672c;&#x8eab;</strong>","children":[],"payload":{"tag":"li","lines":"123,124"}},{"content":"<code>findIndex</code>&#xff1a;&#x67e5;&#x627e;&#x5e76;&#x8fd4;&#x56de;&#x6ee1;&#x8db3;&#x6761;&#x4ef6;&#x7684;<strong>&#x7b2c;&#x4e00;&#x4e2a;&#x5143;&#x7d20;&#x7684;&#x7d22;&#x5f15;&#x503c;</strong>","children":[],"payload":{"tag":"li","lines":"124,125"}},{"content":"<code>splice</code>&#xff1a;&#x4efb;&#x610f;&#x4f4d;&#x7f6e;&#x589e;&#x5220;&#x6539;&#xff0c;<strong>&#x662f;&#x53d8;&#x5f02;&#x65b9;&#x6cd5;&#xff0c;&#x4f1a;&#x76f4;&#x63a5;&#x4fee;&#x6539;&#x539f;&#x6570;&#x7ec4;</strong>","children":[],"payload":{"tag":"li","lines":"125,126"}},{"content":"<code>slice</code>&#xff1a;&#x6839;&#x636e;&#x8d77;&#x59cb;&#x548c;&#x7ed3;&#x675f;&#x4f4d;&#x7f6e;&#x622a;&#x53d6;&#x6570;&#x7ec4;&#xff0c;<strong>&#x4e0d;&#x4fee;&#x6539;&#x539f;&#x6570;&#x7ec4;</strong>&#xff0c;&#x5e38;&#x7528;&#x4e8e;&#x6570;&#x7ec4;&#x6d45;&#x62f7;&#x8d1d;","children":[],"payload":{"tag":"li","lines":"126,127"}},{"content":"<code>reduce</code>&#xff1a;&#x7d2f;&#x52a0;&#x5668;&#x51fd;&#x6570;&#xff0c;&#x5e38;&#x7528;&#x4e8e;&#x6570;&#x7ec4;&#x6c42;&#x548c;&#x6c47;&#x603b;&#x6216;&#x590d;&#x6742;&#x7684;&#x6570;&#x636e;&#x683c;&#x5f0f;&#x8f6c;&#x6362;","children":[],"payload":{"tag":"li","lines":"127,129"}}],"payload":{"tag":"li","lines":"119,129"}},{"content":"\n<p data-lines=\"129,130\">&#x5bf9;&#x8c61;&#x64cd;&#x4f5c;&#x4e0e;&#x6df1;&#x6d45;&#x62f7;&#x8d1d;</p>","children":[{"content":"&#x6d45;&#x62f7;&#x8d1d;&#xff1a;&#x4ec5;&#x62f7;&#x8d1d;&#x7b2c;&#x4e00;&#x5c42;&#x5c5e;&#x6027;&#x7684;&#x503c;&#xff0c;&#x6df1;&#x5c42;&#x5f15;&#x7528;&#x7c7b;&#x578b;&#x4f9d;&#x65e7;&#x5171;&#x4eab;&#x540c;&#x4e00;&#x5757;&#x5806;&#x5185;&#x5b58;&#x5730;&#x5740;&#xff08;&#x5982;&#x6269;&#x5c55;&#x8fd0;&#x7b97;&#x7b26; <code>...</code>&#x3001;<code>Object.assign</code>&#xff09;","children":[],"payload":{"tag":"li","lines":"130,131"}},{"content":"&#x6df1;&#x62f7;&#x8d1d;&#xff1a;&#x5f00;&#x8f9f;&#x5168;&#x65b0;&#x5185;&#x5b58;&#x7a7a;&#x95f4;&#x62f7;&#x8d1d;&#x6240;&#x6709;&#x5c42;&#x7ea7;&#x7ed3;&#x6784;&#xff0c;&#x4fee;&#x6539;&#x4e92;&#x4e0d;&#x5f71;&#x54cd;","children":[],"payload":{"tag":"li","lines":"131,132"}},{"content":"<strong>&#x5927;&#x5382;&#x624b;&#x5199;&#x6df1;&#x62f7;&#x8d1d;</strong>&#xff1a;&#x4f7f;&#x7528; <code>JSON.parse(JSON.stringify(obj))</code> &#x4f1a;&#x5bfc;&#x81f4; <code>function</code>&#x3001;<code>undefined</code> &#x548c;&#x6b63;&#x5219;&#x4e22;&#x5931;&#xff0c;&#x4e14;&#x62a5;&#x9519;<strong>&#x5faa;&#x73af;&#x5f15;&#x7528;</strong>&#xff0c;&#x5927;&#x5382;&#x9762;&#x8bd5;&#x5fc5;&#x5b9a;&#x8981;&#x6c42;<strong>&#x624b;&#x5199;&#x9012;&#x5f52;&#x6df1;&#x62f7;&#x8d1d;&#x51fd;&#x6570;</strong>&#x89e3;&#x51b3;","children":[],"payload":{"tag":"li","lines":"132,134"}}],"payload":{"tag":"li","lines":"129,134"}},{"content":"\n<p data-lines=\"134,135\">ES6+ &#x8fdb;&#x9636;&#x4e0e;&#x5f02;&#x6b65;&#x7f16;&#x7a0b;</p>","children":[{"content":"\n<p data-lines=\"135,136\"><strong>&#x9632;&#x6296; (Debounce) &#x4e0e;&#x8282;&#x6d41; (Throttle)</strong></p>","children":[{"content":"&#x9632;&#x6296;&#xff1a;&#x9891;&#x7e41;&#x89e6;&#x53d1;&#x7684;&#x4e8b;&#x4ef6;&#x53ea;&#x5728;<strong>&#x6700;&#x540e;&#x4e00;&#x6b21;&#x64cd;&#x4f5c;&#x7ed3;&#x675f;&#x540e;</strong>&#x624d;&#x6267;&#x884c;&#xff08;&#x7ecf;&#x5178;&#x573a;&#x666f;&#xff1a;&#x641c;&#x7d22;&#x6846;&#x9632;&#x6296;&#x8bf7;&#x6c42;&#x3001;&#x7a97;&#x53e3; <code>resize</code> &#x76d1;&#x542c;&#xff09;","children":[],"payload":{"tag":"li","lines":"136,137"}},{"content":"&#x8282;&#x6d41;&#xff1a;&#x63a7;&#x5236;&#x6267;&#x884c;&#x9891;&#x7387;&#xff0c;&#x56fa;&#x5b9a;&#x65f6;&#x95f4;&#x6bb5;&#x5185;<strong>&#x65e0;&#x8bba;&#x89e6;&#x53d1;&#x591a;&#x5c11;&#x6b21;&#x53ea;&#x6267;&#x884c;&#x4e00;&#x6b21;</strong>&#xff08;&#x7ecf;&#x5178;&#x573a;&#x666f;&#xff1a;&#x6eda;&#x52a8;&#x6761;&#x89e6;&#x5e95;&#x52a0;&#x8f7d;&#x3001;&#x75af;&#x72c2;&#x70b9;&#x51fb;&#x63d0;&#x4ea4;&#x6309;&#x94ae;&#xff09;","children":[],"payload":{"tag":"li","lines":"137,139"}}],"payload":{"tag":"li","lines":"135,139"}},{"content":"\n<p data-lines=\"139,140\"><strong>Promise &#x6838;&#x5fc3;&#x673a;&#x5236;</strong></p>","children":[{"content":"&#x89e3;&#x51b3;&#x75db;&#x70b9;&#xff1a;&#x5b8c;&#x7f8e;&#x89e3;&#x51b3;&#x4f20;&#x7edf; Ajax &#x5d4c;&#x5957;&#x4ea7;&#x751f;&#x7684;&#x201c;&#x56de;&#x8c03;&#x5730;&#x72f1;&#xff08;Callback Hell&#xff09;&#x201d;","children":[],"payload":{"tag":"li","lines":"140,141"}},{"content":"&#x72b6;&#x6001;&#x673a;&#x673a;&#x5236;&#xff1a;&#x5177;&#x6709; <code>pending</code>&#xff08;&#x8fdb;&#x884c;&#x4e2d;&#xff09;&#x3001;<code>fulfilled</code>&#xff08;&#x5df2;&#x6210;&#x529f;&#xff09;&#x3001;<code>rejected</code>&#xff08;&#x5df2;&#x5931;&#x8d25;&#xff09;&#x4e09;&#x79cd;&#x72b6;&#x6001;&#xff0c;<strong>&#x72b6;&#x6001;&#x4e00;&#x7ecf;&#x6539;&#x53d8;&#x4e0d;&#x53ef;&#x9006;&#x8f6c;</strong>","children":[],"payload":{"tag":"li","lines":"141,143"}}],"payload":{"tag":"li","lines":"139,143"}},{"content":"\n<p data-lines=\"143,144\"><strong>Promise &#x5e38;&#x7528;&#x9ad8;&#x9636; API</strong></p>","children":[{"content":"<code>Promise.all()</code>&#xff1a;&#x63a5;&#x6536; Promise &#x6570;&#x7ec4;&#xff0c;<strong>&#x7b49;&#x5f85;&#x6240;&#x6709;&#x6210;&#x529f;&#x624d;&#x8fd4;&#x56de;&#xff0c;&#x53ea;&#x8981;&#x6709;&#x4e00;&#x4e2a;&#x5931;&#x8d25;&#x5373;&#x6574;&#x4f53;&#x89e6;&#x53d1; catch</strong>","children":[],"payload":{"tag":"li","lines":"144,145"}},{"content":"<code>Promise.race()</code>&#xff1a;&#x8d5b;&#x8dd1;&#x673a;&#x5236;&#xff0c;<strong>&#x8c01;&#x6700;&#x5148;&#x6267;&#x884c;&#x5b8c;&#x6bd5;&#xff08;&#x65e0;&#x8bba;&#x6210;&#x529f;&#x8fd8;&#x662f;&#x5931;&#x8d25;&#xff09;&#x5c31;&#x7acb;&#x5373;&#x8fd4;&#x56de;&#x8c01;&#x7684;&#x7ed3;&#x679c;</strong>","children":[],"payload":{"tag":"li","lines":"145,147"}}],"payload":{"tag":"li","lines":"143,147"}},{"content":"\n<p data-lines=\"147,148\"><strong>Async / Await</strong></p>","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;&#x57fa;&#x4e8e; Promise &#x5c01;&#x88c5;&#x7684;&#x7ec8;&#x6781;&#x5f02;&#x6b65;&#x8bed;&#x6cd5;&#x7cd6;","children":[],"payload":{"tag":"li","lines":"148,149"}},{"content":"&#x4f18;&#x52bf;&#xff1a;&#x53ef;&#x4ee5;&#x7528;<strong>&#x540c;&#x6b65;&#x7684;&#x4ee3;&#x7801;&#x7f16;&#x5199;&#x65b9;&#x5f0f;</strong>&#x6765;&#x5904;&#x7406;&#x5f02;&#x6b65;&#x8bf7;&#x6c42;&#x94fe;&#x8def;&#xff0c;&#x5e76;&#x4e14;&#x80fd;&#x591f;&#x975e;&#x5e38;&#x65b9;&#x4fbf;&#x5730;&#x914d;&#x5408; <code>try...catch</code> &#x6355;&#x83b7;&#x5f02;&#x5e38;&#x9519;&#x8bef;","children":[],"payload":{"tag":"li","lines":"149,150"}}],"payload":{"tag":"li","lines":"147,150"}}],"payload":{"tag":"li","lines":"134,150"}}],"payload":{"tag":"h2","lines":"66,67"}}],"payload":{"tag":"h1","lines":"1,2"}}</script>
+      <script type="application/json">{}</script>
+    </div>
+
+<h1 id="面试题汇总"><a href="#面试题汇总" class="headerlink" title="面试题汇总"></a>面试题汇总</h1><h2 id="一、HTML-与-浏览器基础篇"><a href="#一、HTML-与-浏览器基础篇" class="headerlink" title="一、HTML 与 浏览器基础篇"></a>一、HTML 与 浏览器基础篇</h2><p>这部分主要考察你对页面骨架、HTML5 新特性以及浏览器存储、网络机制的理解。</p>
+<h3 id="H5-新特性与语义化"><a href="#H5-新特性与语义化" class="headerlink" title="H5 新特性与语义化"></a>H5 新特性与语义化</h3><ul>
+<li>HTML5 引入了哪些新特性？</li>
+<li>常见的行内元素和块级元素有哪些？</li>
+</ul>
+<h3 id="标签与资源引入"><a href="#标签与资源引入" class="headerlink" title="标签与资源引入"></a>标签与资源引入</h3><ul>
+<li><code>link</code> 和 <code>@import</code> 引入 CSS 的区别是什么？</li>
+</ul>
+<h3 id="本地存储（极高频）"><a href="#本地存储（极高频）" class="headerlink" title="本地存储（极高频）"></a>本地存储（极高频）</h3><ul>
+<li><code>localStorage</code>、<code>sessionStorage</code> 和 <code>cookie</code> 的区别及各自的适用场景是什么？</li>
+</ul>
+<h3 id="同源策略与跨域"><a href="#同源策略与跨域" class="headerlink" title="同源策略与跨域"></a>同源策略与跨域</h3><ul>
+<li>浏览器控制 <code>localStorage</code> 访问的同源策略条件是什么？</li>
+<li>解决跨域有哪几种常见方式（如 JSONP 的理解及其优缺点、CORS）？</li>
+</ul>
+<h3 id="网络请求流程（经典题）"><a href="#网络请求流程（经典题）" class="headerlink" title="网络请求流程（经典题）"></a>网络请求流程（经典题）</h3><ul>
+<li>从浏览器输入域名到服务端接收请求并渲染页面的中间完整流程是怎样的？（重点涉及 DNS 解析、TCP 握手、HTTP 请求等）。</li>
+</ul>
+<h3 id="HTTP-协议"><a href="#HTTP-协议" class="headerlink" title="HTTP 协议"></a>HTTP 协议</h3><ul>
+<li>HTTP 状态码中，服务端错误（5xx）和客户端错误（4xx）的典型值有哪些？</li>
+<li>HTTP 与 TCP 的关系是什么？TCP 属于 OSI 哪一层？</li>
+</ul>
+<h2 id="二、CSS-布局与样式篇"><a href="#二、CSS-布局与样式篇" class="headerlink" title="二、CSS 布局与样式篇"></a>二、CSS 布局与样式篇</h2><p>CSS 的核心在于“布局（盒模型&#x2F;Flex）”和“居中”。面试官通常会通过具体的场景来考察你的 CSS 功底。</p>
+<h3 id="盒模型（必考）"><a href="#盒模型（必考）" class="headerlink" title="盒模型（必考）"></a>盒模型（必考）</h3><ul>
+<li>说说你对 CSS 盒模型的理解？标准盒模型和怪异（IE）盒模型有什么区别？</li>
+<li>如何通过 <code>box-sizing</code> 更改盒模型？</li>
+</ul>
+<h3 id="元素居中（极高频）"><a href="#元素居中（极高频）" class="headerlink" title="元素居中（极高频）"></a>元素居中（极高频）</h3><ul>
+<li>实现元素水平垂直居中的方法有哪些？（要求至少说出 Flex、绝对定位+Transform、Grid 等 3 种以上方案）。</li>
+</ul>
+<h3 id="Flex-弹性布局"><a href="#Flex-弹性布局" class="headerlink" title="Flex 弹性布局"></a>Flex 弹性布局</h3><ul>
+<li>Flex 布局的常见使用场景有哪些？</li>
+<li>主轴方向如何定义（如 <code>flex-direction: row-reverse</code>）？</li>
+<li>如何使用 Flex 实现居中？</li>
+</ul>
+<h3 id="CSS-单位与响应式"><a href="#CSS-单位与响应式" class="headerlink" title="CSS 单位与响应式"></a>CSS 单位与响应式</h3><ul>
+<li><code>px</code>、<code>rem</code>、<code>em</code> 单位的区别是什么？</li>
+<li><code>rem</code> 的相对根节点是什么？</li>
+<li>了解自适应和响应式布局的区别吗？</li>
+</ul>
+<h3 id="属性细节与继承"><a href="#属性细节与继承" class="headerlink" title="属性细节与继承"></a>属性细节与继承</h3><ul>
+<li><code>display</code> 常用的值有哪些？</li>
+<li>CSS 中哪些属性可以继承，哪些属性不可以继承？</li>
+</ul>
+<h3 id="Transform-细节"><a href="#Transform-细节" class="headerlink" title="Transform 细节"></a>Transform 细节</h3><ul>
+<li><code>transform: translate(-50%, -50%)</code> 中的 <code>-50%</code> 是针对谁的大小进行计算的？（答：自身宽高）。</li>
+</ul>
+<h3 id="CSS3-样式特性"><a href="#CSS3-样式特性" class="headerlink" title="CSS3 样式特性"></a>CSS3 样式特性</h3><ul>
+<li>CSS3 的新特性有哪些？</li>
+<li>直角边变圆角怎么实现？</li>
+<li>阴影（<code>box-shadow</code>）怎么实现？</li>
+</ul>
+<h2 id="三、JavaScript-核心与进阶篇"><a href="#三、JavaScript-核心与进阶篇" class="headerlink" title="三、JavaScript 核心与进阶篇"></a>三、JavaScript 核心与进阶篇</h2><p>JS 是前端面试的重中之重，主要围绕数据类型、作用域&#x2F;闭包、<code>this</code> 指向、异步编程（Promise）以及事件循环展开。</p>
+<h3 id="变量与数据类型"><a href="#变量与数据类型" class="headerlink" title="变量与数据类型"></a>变量与数据类型</h3><ul>
+<li><code>var</code>、<code>let</code>、<code>const</code> 的区别是什么？</li>
+<li>什么情况下会出现 <code>undefined</code>？</li>
+<li>什么时候会出现 <code>null</code>？</li>
+<li><code>typeof(null)</code> 的输出结果是什么？（答：<code>&quot;object&quot;</code>）。</li>
+<li>JS 的数据类型有哪些？</li>
+<li>对 <code>Symbol</code> 和 <code>BigInt</code> 有什么了解？</li>
+<li>逻辑中断运算：当 <code>1 || 2</code> 执行时，左边为 <code>true</code>，右边还会执行吗？</li>
+</ul>
+<h3 id="作用域与闭包（高频痛点）"><a href="#作用域与闭包（高频痛点）" class="headerlink" title="作用域与闭包（高频痛点）"></a>作用域与闭包（高频痛点）</h3><ul>
+<li>什么是作用域链？</li>
+<li>谈谈你对闭包的理解？</li>
+<li>闭包的常见使用场景有哪些？（如在 React <code>useState</code> 或递归中的闭包）。</li>
+</ul>
+<h3 id="函数与-this-指向"><a href="#函数与-this-指向" class="headerlink" title="函数与 this 指向"></a>函数与 this 指向</h3><ul>
+<li>普通函数中 <code>this</code> 的指向规则是什么？</li>
+<li>如何改变普通函数 <code>this</code> 的指向？（掌握 <code>call</code>、<code>apply</code>、<code>bind</code> 的区别）。</li>
+<li>箭头函数的 <code>this</code> 指向规则是什么？</li>
+<li>能否通过 <code>bind</code>&#x2F;<code>call</code>&#x2F;<code>apply</code> 改变箭头函数的 <code>this</code>？</li>
+</ul>
+<h3 id="数组、对象操作与原生-JS"><a href="#数组、对象操作与原生-JS" class="headerlink" title="数组、对象操作与原生 JS"></a>数组、对象操作与原生 JS</h3><ul>
+<li>常用数组遍历方式有哪些？（如 <code>map</code>、<code>forEach</code>、<code>reduce</code> 等）。</li>
+<li>实现数组浅拷贝和深拷贝的方法有哪些？（如扩展运算符 <code>...</code>、<code>concat</code>、<code>JSON.parse(JSON.stringify())</code>、<code>lodash.cloneDeep</code> 等）。</li>
+<li>如何通过数组方法反转字符串？</li>
+<li>原生 JS 事件对象与 React 事件对象（合成事件）有何区别？</li>
+</ul>
+<h3 id="异步编程与事件循环（绝对核心）"><a href="#异步编程与事件循环（绝对核心）" class="headerlink" title="异步编程与事件循环（绝对核心）"></a>异步编程与事件循环（绝对核心）</h3><ul>
+<li>说说你对 JavaScript 事件循环（Event Loop）的理解？</li>
+<li>Promise 异步的理解及常用方法？</li>
+<li><code>new Promise</code> 的参数结构是怎样的？</li>
+<li>Promise 属于微任务还是宏任务？</li>
+<li>结合请求超时场景，如何手写 Promise 逻辑？</li>
+<li>使用 <code>await</code> 需要什么条件？（如必须在 <code>async</code> 函数内等）。</li>
+</ul>
+<h3 id="模块化与其他"><a href="#模块化与其他" class="headerlink" title="模块化与其他"></a>模块化与其他</h3><ul>
+<li><code>CommonJS</code> 和 <code>AMD</code> &#x2F; <code>ESModule</code> 的区别是什么？</li>
+<li>如何处理后端返回的二进制文件（如 PDF、Blob 格式）？</li>
+</ul>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 前端三件套面试题总结</li>
+        <li><strong>作者:</strong> BYWled</li>
+        <li><strong>创建于
+                :</strong> 2026-05-28 17:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2026-05-28 17:57:45
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.wled.top/2026/05/28/HCJXMind/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/XMind/">#XMind</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E9%9D%A2%E8%AF%95/">#面试</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/28/DSandCC/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">DeepSeek + Claude Code 极简上手指南</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        (function() {
+            const containerId = "giscus-container";
+            const mapping = "pathname";
+            const lang = "zh-CN";
+            const inputPosition = "bottom";
+            const reactionsEnabled = "1" === "1";
+            const emitMetadata = "1" === "1";
+            const strict = "0" === "1";
+            const loading = "lazy";
+
+            const getTerm = () => {
+                if (mapping === "pathname") return location.pathname;
+                if (mapping === "url") return location.href;
+                if (mapping === "title") return document.title;
+                if (mapping === "og:title") {
+                    const ogTitle = document.querySelector("meta[property='og:title']");
+                    return ogTitle?.content || document.title;
+                }
+                return "";
+            };
+
+            const sendUpdate = () => {
+                const iframe = document.querySelector("iframe.giscus-frame");
+                if (!iframe) {
+                    return;
+                }
+
+                const setConfig = {
+                    theme: "preferred_color_scheme",
+                    lang,
+                    inputPosition,
+                    reactionsEnabled,
+                    emitMetadata,
+                    strict,
+                };
+
+                if (mapping !== "number") {
+                    const term = getTerm();
+                    if (term) {
+                        setConfig.term = term;
+                    }
+                }
+
+                iframe.contentWindow.postMessage(
+                    { giscus: { setConfig } },
+                    "https://giscus.app",
+                );
+            };
+
+            const loadGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                const iframe = container.querySelector("iframe.giscus-frame");
+                if (iframe) {
+                    sendUpdate();
+                    return;
+                }
+
+                if (container.dataset.giscusInit === "true") {
+                    return;
+                }
+
+                const giscusConfig = {
+                    src: "https://giscus.app/client.js",
+                    "data-repo": "BYWled/Takling",
+                    "data-repo-id": "R_kgDOM2X6Kg",
+                    "data-category": "Announcements",
+                    "data-category-id": "DIC_kwDOM2X6Ks4Civf9",
+                    "data-mapping": mapping,
+                    "data-strict": "0",
+                    "data-reactions-enabled": "1",
+                    "data-emit-metadata": "1",
+                    "data-theme": "preferred_color_scheme",
+                    "data-lang": lang,
+                    "data-input-position": inputPosition,
+                    "data-loading": loading,
+                    crossorigin: "anonymous",
+                    async: true,
+                };
+
+                const giscusScript = document.createElement("script");
+                for (const key in giscusConfig) {
+                    giscusScript.setAttribute(key, giscusConfig[key]);
+                }
+                container.appendChild(giscusScript);
+                container.dataset.giscusInit = "true";
+            };
+
+            const runGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                if (container.querySelector("iframe.giscus-frame")) {
+                    sendUpdate();
+                    return;
+                }
+
+                loadGiscus();
+            };
+
+            runGiscus();
+        })();
+    </script>
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">前端三件套面试题总结</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1"><span class="nav-text">知识图谱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB"><span class="nav-text">面试题汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81HTML-%E4%B8%8E-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="nav-text">一、HTML 与 浏览器基础篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#H5-%E6%96%B0%E7%89%B9%E6%80%A7%E4%B8%8E%E8%AF%AD%E4%B9%89%E5%8C%96"><span class="nav-text">H5 新特性与语义化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E4%B8%8E%E8%B5%84%E6%BA%90%E5%BC%95%E5%85%A5"><span class="nav-text">标签与资源引入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8%EF%BC%88%E6%9E%81%E9%AB%98%E9%A2%91%EF%BC%89"><span class="nav-text">本地存储（极高频）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E4%B8%8E%E8%B7%A8%E5%9F%9F"><span class="nav-text">同源策略与跨域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B%EF%BC%88%E7%BB%8F%E5%85%B8%E9%A2%98%EF%BC%89"><span class="nav-text">网络请求流程（经典题）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E5%8D%8F%E8%AE%AE"><span class="nav-text">HTTP 协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81CSS-%E5%B8%83%E5%B1%80%E4%B8%8E%E6%A0%B7%E5%BC%8F%E7%AF%87"><span class="nav-text">二、CSS 布局与样式篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%92%E6%A8%A1%E5%9E%8B%EF%BC%88%E5%BF%85%E8%80%83%EF%BC%89"><span class="nav-text">盒模型（必考）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E5%B1%85%E4%B8%AD%EF%BC%88%E6%9E%81%E9%AB%98%E9%A2%91%EF%BC%89"><span class="nav-text">元素居中（极高频）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flex-%E5%BC%B9%E6%80%A7%E5%B8%83%E5%B1%80"><span class="nav-text">Flex 弹性布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-%E5%8D%95%E4%BD%8D%E4%B8%8E%E5%93%8D%E5%BA%94%E5%BC%8F"><span class="nav-text">CSS 单位与响应式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E7%BB%86%E8%8A%82%E4%B8%8E%E7%BB%A7%E6%89%BF"><span class="nav-text">属性细节与继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transform-%E7%BB%86%E8%8A%82"><span class="nav-text">Transform 细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS3-%E6%A0%B7%E5%BC%8F%E7%89%B9%E6%80%A7"><span class="nav-text">CSS3 样式特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81JavaScript-%E6%A0%B8%E5%BF%83%E4%B8%8E%E8%BF%9B%E9%98%B6%E7%AF%87"><span class="nav-text">三、JavaScript 核心与进阶篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-text">变量与数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E9%97%AD%E5%8C%85%EF%BC%88%E9%AB%98%E9%A2%91%E7%97%9B%E7%82%B9%EF%BC%89"><span class="nav-text">作用域与闭包（高频痛点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E4%B8%8E-this-%E6%8C%87%E5%90%91"><span class="nav-text">函数与 this 指向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E3%80%81%E5%AF%B9%E8%B1%A1%E6%93%8D%E4%BD%9C%E4%B8%8E%E5%8E%9F%E7%94%9F-JS"><span class="nav-text">数组、对象操作与原生 JS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%EF%BC%88%E7%BB%9D%E5%AF%B9%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="nav-text">异步编程与事件循环（绝对核心）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8E%E5%85%B6%E4%BB%96"><span class="nav-text">模块化与其他</span></a></li></ol></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">BY·Wled</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 13 篇文章
+                    </span>
+                    
+                        <span>
+                            共 49.4k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="图片查看器">
+	<button class="image-viewer-close" type="button" aria-label="关闭">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="上一页">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="关闭">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="下一页">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/main.js" ></script>
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Typed.min.js" ></script>
+
+
+
+
+
+
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+
+
+	
+	<div id="aplayer"></div>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>
