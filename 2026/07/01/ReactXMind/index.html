@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Wled">
+    
+    
+    <meta name="author" content="BY·Wled">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://www.wled.top/2026/07/01/reactxmind/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React 知识点总结">
+<meta property="og:url" content="https://www.wled.top/2026/07/01/ReactXMind/index.html">
+<meta property="og:site_name" content="莺之驿站">
+<meta property="og:description" content="欢迎访问伴莺の小窝 | Welcome ~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.wled.top/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-07-01T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-01T02:02:19.291Z">
+<meta property="article:author" content="BYWled">
+<meta property="article:tag" content="XMind">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.wled.top/images/redefine-og.webp">
+    
+    
+        <!-- Google tag (gtag.js) -->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-KV4G04HDC6"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-KV4G04HDC6');
+        </script>
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/Oz-Vessalius-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/Oz-Vessalius-favicon.svg">
+    <meta name="theme-color" content="#21DEDB">
+    <link rel="shortcut icon" href="/images/Oz-Vessalius-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            React 知识点总结 | 伴莺の小窝
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"www.wled.top","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","delete_mask":true,"headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#21DEDB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"欢迎访问伴莺の小窝 | Welcome ~"},"google_analytics":{"enable":true,"id":"G-KV4G04HDC6"}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"伴莺の小窝","subtitle":{"text":["Wled's Relay Station"],"hitokoto":{"enable":true,"show_author":true,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":[{"icon":"fa-brands fa-github","url":"https://github.com/BYWled"},{"icon":"fa-brands fa-bilibili","url":"https://space.bilibili.com/128746094"},{"icon":"fa-solid fa-people-group","url":"./Dozer-Esports/index.html"},{"icon":"fa-solid fa-basket-shopping","url":"https://store.wled.top/"},{"icon":"fa-solid fa-gear","url":"https://admin.wled.top/"},{"icon":"fa-solid fa-star-half-stroke","url":"https://score.wled.top/"}],"qrs":null}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"Still Shining (feat. 重音テト)","artist":"Mayonazy/重音テト","url":"/songs/Still Shining.mp3","cover":"/songs/Still Shining.jpg","lrc":"/songs/Still Shining.lrc"},{"name":"歌姫失格 (feat. 初音ミク)","artist":"ピノキオピー/初音未来","url":"/songs/歌姫失格.mp3","cover":"/songs/歌姫失格.jpg","lrc":"/songs/歌姫失格.lrc"},{"name":"サイエンス (feat. 重音テト)","artist":"MIMI/重音テト","url":"/songs/MIMI.mp3","cover":"/songs/MIMI.jpg","lrc":"/songs/MIMI.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"path":"/","icon":"fa-solid fa-home"},"前端":{"path":"/categories/计算机从入门到入土/前端如此简单","icon":"fa-solid fa-code"},"Demos":{"icon":"fa-solid fa-diagram-project","submenus":{"镜像站":"https://mirror.wled.top/","乐购商城":"https://store.wled.top/","管理系统":"https://admin.wled.top/","状态监控":"https://status.wled.top/status","测评社区":"https://score.wled.top/"}},"娱乐":{"icon":"fa-solid fa-face-grin-beam","submenus":{"MC":"/Ying","小说":"/novel"}},"关于":{"icon":"fa-regular fa-user","submenus":{"我":"/about","源代码":"https://github.com/BYWled/Ying-of-Me"}}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"流年间，途游光景伴莺随","show_on_mobile":false,"links":{"动态":{"path":"/archives","icon":"fa-regular fa-archive"},"标签":{"path":"/tags","icon":"fa-regular fa-tags"},"类别":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2024/9/13 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2024/9/13 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.i18n = {"search":"站内搜索您需要的内容...","toc":"目录","prev":"上一页","next":"下一页","prev_posts":"上一篇","next_posts":"下一篇","page":"第 %d 页","recent_posts":"最新文章","share":"分享","powered_by":"由 %s 驱动","theme":"主题","rss_feed":"RSS Feed","category":"分类","categories":"分类","tag":"标签","tags":"标签","post":"文章","posts":"文章","tagcloud":"标签云","comment":"评论","comments":"评论","top":"置顶","sticky":"置顶","go-back-home":"回到首页","masonry_loading":"照片加载中...","image_viewer":"图片查看器","close":"关闭","exif":{"title":"EXIF","cards":{"camera":"相机","lens":"镜头","exposure":"曝光","other":"其他"},"fields":{"make":"品牌","model":"机型","date_taken":"拍摄时间","lens_model":"镜头","focal_length":"焦距","focus_mode":"对焦模式","shutter":"快门","aperture":"光圈","iso":"感光度","exposure_program":"曝光程序","exposure_compensation":"曝光补偿","metering_mode":"测光模式","flash":"闪光灯","white_balance":"白平衡","latitude":"纬度","longitude":"经度","altitude":"海拔"},"status":{"loading":"加载中...","no_exif":"无 EXIF 信息","library_missing":"EXIF 库未加载","image_source_missing":"图片地址不可用","unavailable":"EXIF 不可用（可能被 CORS 阻止或缺少元数据）","flag_unavailable":"EXIF 不可用"}},"home":"首页","archive":"归档","archives":"归档","about":"关于","links":"链接","link":"链接","friends":"友情链接","friend":"友情链接","timeline":"时间轴","shuoshuo":"说说","bookmarks":"书签","site_uv":"访问人数","site_pv":"总访问量","read_more":"阅读全文","wordcount":"字","min2read":"分钟","changelog":"更新日志","status":"状态","runtime":"博客已运行","days":"天","hours":"小时","minutes":"分钟","seconds":"秒","optimized_by":"并由 Evan 进行优化","rights":"版权所有","site_posts":"共撰写了 %s 篇文章","site_wordcount":"共 %s 字","copyright":{"title":"标题","author":"作者","link":"链接","create_time":"创建于","update_time":"更新于","license_title":"版权声明","license_content":"本文章采用 %s 进行许可。","all_rights_reserved":"版权所有 &#169 %s，禁止转载。","public_domain":"本文为公有领域作品，可自由转载、引用。"},"ago":{"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"},"create_time":"创建","update_time":"更新","expired":"这篇文章最后更新于 %s 天前，内容可能已经过时。"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                伴莺の小窝
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-home fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                                        >
+                                    <i class="fa-solid fa-code fa-fw"></i>
+                                    前端
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-diagram-project fa-fw"></i>
+                                    DEMOS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://mirror.wled.top/">
+                                                    镜像站
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://store.wled.top/">
+                                                    乐购商城
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://admin.wled.top/">
+                                                    管理系统
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://status.wled.top/status">
+                                                    状态监控
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://score.wled.top/">
+                                                    测评社区
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-solid fa-face-grin-beam fa-fw"></i>
+                                    娱乐
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/Ying">
+                                                    MC
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="/novel">
+                                                    小说
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="/about">
+                                                    我
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">
+                                                    源代码
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-solid fa-home fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95"
+                        >
+                            <span>
+                                前端
+                            </span>
+                            
+                                <i class="fa-solid fa-code fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Demos"
+                        >
+                            <span>
+                                DEMOS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Demos">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://mirror.wled.top/">镜像站</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://store.wled.top/">乐购商城</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://admin.wled.top/">管理系统</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://status.wled.top/status">状态监控</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://score.wled.top/">测评社区</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-娱乐"
+                        >
+                            <span>
+                                娱乐
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-娱乐">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/Ying">MC</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/novel">小说</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-关于"
+                        >
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="/about">我</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/BYWled/Ying-of-Me">源代码</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">React 知识点总结</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/Oz-Vessalius-avatar.svg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">BYWled</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-07-01 17:00</span>
+        <span class="mobile">2026-07-01 17:00</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-07-01 10:02:19</span>
+            <span class="mobile">2026-07-01 10:02:19</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/">计算机从入门到入土</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F/%E5%89%8D%E7%AB%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95/">前端如此简单</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/XMind/">XMind</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.3k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>56 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  blue" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>写在之前</summary><div class="content p-4 "><p><strong>React 八股文，背完就入 <del class="mask">土</del> 职！</strong></p>
+<div class="callout callout--simple danger mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>本内容提炼自 React 核心基础课程笔记，首发<text color="green">伴莺の小窝</text>，未经授权禁止搬运！</p></div></div>
+<div class="callout callout--simple warning mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>内容涵盖 React 的核心知识点与高频问题，采用“理解性记忆”法梳理。如有错漏，请向管理员反馈。</p></div></div></div></details>
+
+<h1 id="知识图谱"><a href="#知识图谱" class="headerlink" title="知识图谱"></a>知识图谱</h1><div class="callout callout--simple danger mb-4 rounded-small shadow-redefine-flat bg-(--callout-bg-color) p-3 pl-1 relative flex flex-row gap-2 items-center"><div role="none" class="rounded-full self-stretch w-0.5 bg-(--callout-primary-color) shrink-0 opacity-60"></div><div class="callout__content markdown-body flex-1 min-w-0"><p>由于框架限制，请<strong>刷新页面</strong>后查看完整的思维导图。<br>小程序暂时无法展示 Markmap 思维导图，建议在 PC 端或手机浏览器查看以获得最佳体验。</p></div></div>
+
+<div class="markmap-wrap" 
+      
+      style="height: 900px"
+    >
+      <script type="application/json">{"content":"React &#x9762;&#x8bd5;&#x6838;&#x5fc3;","children":[{"content":"&#x57fa;&#x7840;&#x4e0e; JSX","children":[{"content":"JSX &#x8bed;&#x6cd5;","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;JavaScript XML&#xff0c;&#x5141;&#x8bb8;&#x5728; JS &#x4e2d;&#x7f16;&#x5199;&#x7c7b; HTML &#x7ed3;&#x6784;&#x7684;&#x8bed;&#x6cd5;&#x7cd6;","children":[],"payload":{"tag":"li","lines":"6,7"}},{"content":"&#x7f16;&#x8bd1;&#x5e95;&#x5c42;&#xff1a;&#x901a;&#x8fc7; Babel &#x7f16;&#x8bd1;&#x4e3a; <strong><code>React.createElement</code></strong> &#x7684;&#x51fd;&#x6570;&#x8c03;&#x7528;","children":[],"payload":{"tag":"li","lines":"7,8"}},{"content":"&#x8fd0;&#x884c;&#x7ed3;&#x679c;&#xff1a;&#x6700;&#x7ec8;&#x751f;&#x6210;&#x63cf;&#x8ff0; UI &#x7684; <strong>Virtual DOM (JS &#x5bf9;&#x8c61;)</strong>","children":[],"payload":{"tag":"li","lines":"8,9"}}],"payload":{"tag":"li","lines":"5,9"}},{"content":"&#x6e32;&#x67d3;&#x63a7;&#x5236;","children":[{"content":"<strong>&#x5355;&#x6839;&#x8282;&#x70b9;&#x539f;&#x5219;</strong>&#xff1a;&#x7ec4;&#x4ef6;&#x5fc5;&#x987b;&#x53ea;&#x6709;&#x4e00;&#x4e2a;&#x6839;&#x8282;&#x70b9;","children":[],"payload":{"tag":"li","lines":"10,11"}},{"content":"&#x89e3;&#x51b3;&#x65b9;&#x6848;&#xff1a;&#x63a8;&#x8350;&#x4f7f;&#x7528;&#x7a7a;&#x8282;&#x70b9; <strong><code>Fragment</code></strong> &#x6216; <code>&lt;&gt;&lt;/&gt;</code>&#xff0c;&#x907f;&#x514d;&#x5f15;&#x5165;&#x5197;&#x4f59;&#x7684; HTML DOM &#x5d4c;&#x5957;","children":[],"payload":{"tag":"li","lines":"11,12"}},{"content":"&#x63d2;&#x503c;&#x8868;&#x8fbe;&#x5f0f;&#xff1a;Mustache &#x8bed;&#x6cd5; <code>{}</code> &#x4e2d;&#x53ef;&#x6267;&#x884c;&#x5e76;&#x6e32;&#x67d3;&#x4efb;&#x610f; JS &#x8868;&#x8fbe;&#x5f0f;","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"<strong>&#x6761;&#x4ef6;&#x6e32;&#x67d3;</strong>&#xff1a;React &#x65e0;&#x6cd5;&#x4f7f;&#x7528;&#x6307;&#x4ee4;&#xff0c;&#x5fc5;&#x987b;&#x4f7f;&#x7528;&#x903b;&#x8f91;&#x4e0e; <code>&amp;&amp;</code> &#x6216; <strong>&#x4e09;&#x76ee;&#x8fd0;&#x7b97;&#x7b26; <code>? :</code></strong> &#x5b9e;&#x73b0;","children":[],"payload":{"tag":"li","lines":"13,14"}},{"content":"<strong>&#x5217;&#x8868;&#x6e32;&#x67d3;</strong>&#xff1a;&#x901a;&#x8fc7;&#x6570;&#x7ec4;&#x9ad8;&#x9636;&#x65b9;&#x6cd5; <strong><code>map()</code></strong> &#x5faa;&#x73af;&#x8fd4;&#x56de; JSX &#x8282;&#x70b9;","children":[],"payload":{"tag":"li","lines":"14,15"}}],"payload":{"tag":"li","lines":"9,15"}},{"content":"Key &#x952e;&#x503c;&#x8bbe;&#x8ba1;","children":[{"content":"&#x6838;&#x5fc3;&#x4f5c;&#x7528;&#xff1a;&#x5728; Diff &#x9636;&#x6bb5;&#x8bc6;&#x522b;&#x8282;&#x70b9;&#xff0c;&#x590d;&#x7528;&#x672a;&#x4fee;&#x6539;&#x7684; DOM&#xff0c;&#x63d0;&#x5347;&#x6e32;&#x67d3;&#x6027;&#x80fd;","children":[],"payload":{"tag":"li","lines":"16,17"}},{"content":"<strong>&#x4e3a;&#x4ec0;&#x4e48;&#x5fcc;&#x7528; index &#x4f5c;&#x4e3a; key</strong>&#xff1a;&#x5f53;&#x5217;&#x8868;&#x53d1;&#x751f;&#x5f80;&#x5934;&#x90e8;&#x63d2;&#x5165;&#x3001;&#x5220;&#x9664;&#x3001;&#x91cd;&#x6392;&#x7b49;&#x64cd;&#x4f5c;&#x65f6;<br>\n&#x6240;&#x6709;&#x8282;&#x70b9;&#x7684; index &#x4f1a;&#x5f3a;&#x5236;&#x53d1;&#x751f;&#x504f;&#x79fb;&#xff0c;&#x5bfc;&#x81f4; React &#x8bef;&#x5224;&#x8282;&#x70b9;&#x5df2;&#x6539;&#x53d8;&#xff0c;&#x5f3a;&#x5236;&#x9500;&#x6bc1;&#x5e76;&#x91cd;&#x65b0;&#x521b;&#x5efa; DOM<br>\n&#x5bb9;&#x6613;&#x5f15;&#x53d1;&#x8f93;&#x5165;&#x6846;&#x72b6;&#x6001;&#x9519;&#x4f4d;&#x3001;&#x4e34;&#x65f6;&#x72b6;&#x6001;&#x4e22;&#x5931;&#x4ee5;&#x53ca;&#x4e25;&#x91cd;&#x7684;&#x6e32;&#x67d3;&#x6027;&#x80fd;&#x95ee;&#x9898;","children":[],"payload":{"tag":"li","lines":"17,21"}}],"payload":{"tag":"li","lines":"15,21"}}],"payload":{"tag":"h2","lines":"3,4"}},{"content":"&#x6837;&#x5f0f;&#x9694;&#x79bb;&#x4e0e;&#x914d;&#x7f6e;","children":[{"content":"&#x5168;&#x5c40;&#x6c61;&#x67d3;","children":[{"content":"&#x6982;&#x5ff5;&#x7f3a;&#x9677;&#xff1a;React &#x9ed8;&#x8ba4;&#x4e0d;&#x652f;&#x6301;&#x6837;&#x5f0f;&#x4f5c;&#x7528;&#x57df; (Scoped)","children":[],"payload":{"tag":"li","lines":"24,25"}},{"content":"&#x5f15;&#x5165;&#x98ce;&#x9669;&#xff1a;&#x666e;&#x901a;&#x65b9;&#x5f0f;&#x5f15;&#x5165;&#x7684; CSS &#x6837;&#x5f0f;&#x4f1a;&#x5168;&#x5c40;&#x751f;&#x6548;&#xff0c;&#x6781;&#x6613;&#x5bfc;&#x81f4;&#x7c7b;&#x540d;&#x6c61;&#x67d3;&#x548c;&#x76f8;&#x4e92;&#x8986;&#x76d6;","children":[],"payload":{"tag":"li","lines":"25,26"}}],"payload":{"tag":"li","lines":"23,26"}},{"content":"&#x5c40;&#x90e8;&#x5316;&#x65b9;&#x6848;","children":[{"content":"<strong>CSS Modules (&#x6a21;&#x5757;&#x5316;)</strong>","children":[{"content":"&#x547d;&#x540d;&#x683c;&#x5f0f;&#xff1a;&#x5fc5;&#x987b;&#x547d;&#x540d;&#x4e3a; <code>*.module.css</code> &#x6216; <code>*.module.scss</code>","children":[],"payload":{"tag":"li","lines":"28,29"}},{"content":"&#x5b9e;&#x73b0;&#x673a;&#x5236;&#xff1a;&#x6784;&#x5efa;&#x5de5;&#x5177;&#x5728;&#x6253;&#x5305;&#x65f6;&#x4e3a;&#x6bcf;&#x4e2a;&#x7c7b;&#x540d;&#x81ea;&#x52a8;&#x751f;&#x6210; <strong>&#x54c8;&#x5e0c;&#x7c7b;&#x540d;&#x540e;&#x7f00;</strong>","children":[],"payload":{"tag":"li","lines":"29,30"}},{"content":"&#x8bed;&#x6cd5;&#x652f;&#x6301;&#xff1a;&#x901a;&#x8fc7; <code>:global</code> &#x58f0;&#x660e;&#x5168;&#x5c40;&#x6837;&#x5f0f;&#xff0c;&#x901a;&#x8fc7; <code>:local</code> &#x58f0;&#x660e;&#x5c40;&#x90e8;&#x6837;&#x5f0f;","children":[],"payload":{"tag":"li","lines":"30,31"}}],"payload":{"tag":"li","lines":"27,31"}},{"content":"CSS-in-JS","children":[{"content":"&#x539f;&#x7406;&#xff1a;&#x5728; JS &#x6587;&#x4ef6;&#x4e2d;&#x7f16;&#x5199;&#x771f;&#x6b63;&#x7684; CSS&#xff0c;&#x652f;&#x6301;&#x57fa;&#x4e8e; props &#x7684;&#x52a8;&#x6001;&#x6837;&#x5f0f;&#x7ed1;&#x5b9a;","children":[],"payload":{"tag":"li","lines":"32,33"}},{"content":"&#x7f3a;&#x70b9;&#xff1a;&#x589e;&#x52a0;&#x8fd0;&#x884c;&#x65f6;&#x7684; JS &#x8fd0;&#x7b97;&#x5f00;&#x9500;&#xff0c;&#x4f53;&#x79ef;&#x7565;&#x5927;","children":[],"payload":{"tag":"li","lines":"33,34"}}],"payload":{"tag":"li","lines":"31,34"}}],"payload":{"tag":"li","lines":"26,34"}},{"content":"&#x9884;&#x5904;&#x7406;&#x5668;&#x4e0e;&#x5de5;&#x5177;&#x5e93;","children":[{"content":"&#x65b9;&#x6848;&#xff1a;Sass / Less &#x914d;&#x5408;&#x6253;&#x5305;&#x5de5;&#x5177;&#x522b;&#x540d;&#x914d;&#x7f6e;&#x8fdb;&#x884c;&#x6a21;&#x5757;&#x5316;&#x5bfc;&#x5165;","children":[],"payload":{"tag":"li","lines":"35,36"}},{"content":"&#x8d8b;&#x52bf;&#xff1a;&#x4f7f;&#x7528; Tailwind CSS &#x5b9e;&#x7528;&#x7c7b;&#xff0c;&#x89c4;&#x907f;&#x4f20;&#x7edf;&#x7c7b;&#x540d;&#x5b9a;&#x4e49;&#xff0c;&#x5929;&#x7136;&#x89c4;&#x907f;&#x5168;&#x5c40;&#x6837;&#x5f0f;&#x51b2;&#x7a81;","children":[],"payload":{"tag":"li","lines":"36,38"}}],"payload":{"tag":"li","lines":"34,38"}}],"payload":{"tag":"h2","lines":"21,22"}},{"content":"&#x72b6;&#x6001;&#x7ba1;&#x7406;&#x4e0e;&#x6570;&#x636e;&#x6d41;","children":[{"content":"&#x6570;&#x636e;&#x6d41;&#x52a8;","children":[{"content":"<strong>&#x5355;&#x5411;&#x6570;&#x636e;&#x6d41;</strong>&#xff1a;&#x6570;&#x636e;&#x53ea;&#x80fd;&#x81ea;&#x9876;&#x5411;&#x4e0b;&#x5355;&#x5411;&#x6d41;&#x52a8; (&#x7236;&#x7ec4;&#x4ef6; -&gt; &#x5b50;&#x7ec4;&#x4ef6;)","children":[],"payload":{"tag":"li","lines":"41,42"}},{"content":"&#x53ea;&#x8bfb;&#x9650;&#x5236;&#xff1a;&#x5b50;&#x7ec4;&#x4ef6;&#x901a;&#x8fc7;&#x5f62;&#x53c2;&#x63a5;&#x6536;&#x7684; <strong><code>props</code> &#x662f;&#x53ea;&#x8bfb;&#x7684;</strong>&#xff0c;&#x7edd;&#x5bf9;&#x4e0d;&#x53ef;&#x5728;&#x5b50;&#x7ec4;&#x4ef6;&#x76f4;&#x63a5;&#x8fdb;&#x884c;&#x4fee;&#x6539;","children":[],"payload":{"tag":"li","lines":"42,43"}}],"payload":{"tag":"li","lines":"40,43"}},{"content":"useState &#x72b6;&#x6001;","children":[{"content":"&#x58f0;&#x660e;&#xff1a;&#x8fd4;&#x56de;&#x4e00;&#x4e2a;&#x5305;&#x542b;&#x4e24;&#x4e2a;&#x5143;&#x7d20;&#x7684;&#x6570;&#x7ec4; <code>[&#x5f53;&#x524d;&#x72b6;&#x6001;&#x503c;, &#x4fee;&#x6539;&#x72b6;&#x6001;&#x7684; set &#x65b9;&#x6cd5;]</code>","children":[],"payload":{"tag":"li","lines":"44,45"}},{"content":"<strong>&#x5f02;&#x6b65;&#x4e0e;&#x6279;&#x5904;&#x7406;&#x673a;&#x5236;</strong>","children":[{"content":"<code>set</code> &#x65b9;&#x6cd5;&#x4fee;&#x6539;&#x72b6;&#x6001;&#x662f; <strong>&#x5f02;&#x6b65;&#x7684;/&#x6279;&#x5904;&#x7406;&#x7684;</strong>&#xff0c;&#x65e0;&#x6cd5;&#x5728;&#x8c03;&#x7528;&#x540e;&#x7acb;&#x5373;&#x62ff;&#x5230;&#x6700;&#x65b0;&#x503c;","children":[],"payload":{"tag":"li","lines":"46,47"}},{"content":"&#x89e3;&#x51b3;&#x65b9;&#x6cd5;&#xff1a;&#x4f7f;&#x7528; <strong><code>setState(prev =&gt; prev + 1)</code></strong> &#x51fd;&#x6570;&#x5f0f;&#x53c2;&#x6570;&#x83b7;&#x53d6;&#x6700;&#x65b0;&#x7684;&#x524d;&#x7f6e;&#x72b6;&#x6001;","children":[],"payload":{"tag":"li","lines":"47,48"}},{"content":"&#x7edf;&#x4e00;&#x76d1;&#x542c;&#xff1a;&#x6216;&#x4f7f;&#x7528; <code>useEffect</code> &#x76d1;&#x542c;&#x8be5;&#x53d8;&#x91cf;&#xff0c;&#x5728;&#x66f4;&#x65b0;&#x540e;&#x83b7;&#x53d6;&#x6700;&#x65b0;&#x503c;","children":[],"payload":{"tag":"li","lines":"48,49"}}],"payload":{"tag":"li","lines":"45,49"}},{"content":"&#x91cd;&#x65b0;&#x6e32;&#x67d3;&#x673a;&#x5236;&#xff1a;&#x6bcf;&#x6b21;&#x6267;&#x884c; <code>set</code> &#x66f4;&#x65b0;&#x6570;&#x636e;&#xff0c;&#x90fd;&#x4f1a; <strong>&#x5bfc;&#x81f4;&#x6574;&#x4e2a;&#x7ec4;&#x4ef6;&#x51fd;&#x6570;&#x88ab;&#x91cd;&#x65b0;&#x6267;&#x884c;&#x4e00;&#x904d;</strong>","children":[],"payload":{"tag":"li","lines":"49,50"}}],"payload":{"tag":"li","lines":"43,50"}},{"content":"&#x7ec4;&#x4ef6;&#x901a;&#x4fe1;","children":[{"content":"&#x57fa;&#x7840;&#x901a;&#x4fe1;","children":[{"content":"<strong>&#x7236;&#x4f20;&#x5b50;</strong>&#xff1a;&#x7236;&#x7ec4;&#x4ef6;&#x901a;&#x8fc7;&#x52a8;&#x6001;&#x6216;&#x9759;&#x6001;&#x5c5e;&#x6027;&#x4f20;&#x503c;&#xff0c;&#x5b50;&#x7ec4;&#x4ef6;&#x901a;&#x8fc7;&#x63a5;&#x6536; <code>props</code> &#x5e76;&#x89e3;&#x6784;&#x4f7f;&#x7528;","children":[],"payload":{"tag":"li","lines":"52,53"}},{"content":"<strong>&#x5b50;&#x4f20;&#x7236;</strong>&#xff1a;&#x7236;&#x7ec4;&#x4ef6;&#x4f20;&#x9012;&#x4e00;&#x4e2a; <strong>&#x56de;&#x8c03;&#x51fd;&#x6570;</strong> &#x7ed9;&#x5b50;&#x7ec4;&#x4ef6;&#xff0c;&#x5b50;&#x7ec4;&#x4ef6;&#x901a;&#x8fc7;&#x8c03;&#x7528;&#x5e76;&#x4f20;&#x5165;&#x5b9e;&#x53c2;&#x56de;&#x4f20;&#x6570;&#x636e;","children":[],"payload":{"tag":"li","lines":"53,54"}}],"payload":{"tag":"li","lines":"51,54"}},{"content":"<strong>Context &#x4e0a;&#x4e0b;&#x6587;</strong>","children":[{"content":"&#x89e3;&#x51b3;&#x75db;&#x70b9;&#xff1a;&#x907f;&#x514d; Props &#x9010;&#x5c42;&#x6df1;&#x5c42;&#x900f;&#x4f20; (Props Drilling)","children":[],"payload":{"tag":"li","lines":"55,56"}},{"content":"<strong>&#x6027;&#x80fd;&#x6296;&#x52a8;&#x9677;&#x9631;</strong>&#xff1a;&#x4e00;&#x65e6; Context &#x7684; value &#x53d1;&#x751f;&#x53d8;&#x5316;<br>\n&#x8ba2;&#x9605;&#x4e86;&#x8be5; Context &#x7684;&#x6240;&#x6709;&#x5b50;&#x7ec4;&#x4ef6;&#xff0c;&#x4e0d;&#x8bba;&#x662f;&#x5426;&#x4f7f;&#x7528;&#x53d8;&#x5316;&#x5b57;&#x6bb5;&#x90fd;&#x4f1a;&#x88ab;<strong>&#x5f3a;&#x5236;&#x89e6;&#x53d1;&#x91cd;&#x65b0;&#x6e32;&#x67d3;</strong>","children":[],"payload":{"tag":"li","lines":"56,58"}},{"content":"&#x4f18;&#x5316;&#x65b9;&#x6848;&#xff1a;&#x62c6;&#x5206;&#x591a;&#x4e2a;&#x5355;&#x4e00;&#x804c;&#x8d23;&#x7684; Context&#xff0c;&#x6216;&#x7ed3;&#x5408; <code>useMemo</code> &#x5bf9;&#x6d88;&#x8d39;&#x7ec4;&#x4ef6;&#x8fdb;&#x884c;&#x62e6;&#x622a;","children":[],"payload":{"tag":"li","lines":"58,59"}}],"payload":{"tag":"li","lines":"54,59"}}],"payload":{"tag":"li","lines":"50,59"}},{"content":"&#x72b6;&#x6001;&#x7ba1;&#x7406;&#x5e93;","children":[{"content":"<strong>Redux Toolkit</strong>","children":[{"content":"&#x6838;&#x5fc3;&#x67b6;&#x6784;&#xff1a;&#x7edf;&#x4e00;&#x7684;&#x5168;&#x5c40; Store &#x5b58;&#x50a8;&#x72b6;&#x6001;&#xff0c;&#x901a;&#x8fc7; Action &#x89e6;&#x53d1;&#x53d8;&#x66f4;&#xff0c;&#x7528; Reducer &#x8ba1;&#x7b97;&#x65b0;&#x72b6;&#x6001;","children":[],"payload":{"tag":"li","lines":"61,62"}},{"content":"&#x6539;&#x8fdb;&#xff1a;&#x5927;&#x5e45;&#x51cf;&#x5c11;&#x4f20;&#x7edf; Redux &#x5197;&#x957f;&#x7684;&#x6837;&#x677f;&#x4ee3;&#x7801;&#xff0c;&#x5e76;&#x5185;&#x7f6e; Immer &#x652f;&#x6301;&#x76f4;&#x63a5;&#x4fee;&#x6539;&#x72b6;&#x6001;","children":[],"payload":{"tag":"li","lines":"62,63"}}],"payload":{"tag":"li","lines":"60,63"}},{"content":"Zustand","children":[{"content":"&#x7279;&#x6027;&#xff1a;&#x8f7b;&#x91cf;&#x3001;&#x65e0; Provider &#x5305;&#x88f9;&#xff0c;&#x57fa;&#x4e8e; Hooks &#x7684;&#x8ba2;&#x9605;&#x5f0f;&#x72b6;&#x6001;&#x7ba1;&#x7406;&#x5e93;&#xff0c;&#x4e2d;&#x5c0f;&#x578b;&#x9879;&#x76ee;&#x9996;&#x9009;","children":[],"payload":{"tag":"li","lines":"64,66"}}],"payload":{"tag":"li","lines":"63,66"}}],"payload":{"tag":"li","lines":"59,66"}}],"payload":{"tag":"h2","lines":"38,39"}},{"content":"&#x751f;&#x547d;&#x5468;&#x671f;&#x4e0e;&#x526f;&#x4f5c;&#x7528;","children":[{"content":"&#x751f;&#x547d;&#x5468;&#x671f;&#x6f14;&#x8fdb;","children":[{"content":"Class &#x7ec4;&#x4ef6;&#xff1a;&#x4f7f;&#x7528; <code>componentDidMount</code>&#x3001;<code>componentDidUpdate</code>&#x3001;<code>componentWillUnmount</code>","children":[],"payload":{"tag":"li","lines":"69,70"}},{"content":"Function &#x7ec4;&#x4ef6;&#xff1a;&#x5b8c;&#x5168;&#x4f7f;&#x7528; <strong><code>useEffect</code></strong> &#x7edf;&#x4e00;&#x6620;&#x5c04;&#x548c;&#x7ba1;&#x7406;&#x751f;&#x547d;&#x5468;&#x671f;&#x4e0e;&#x526f;&#x4f5c;&#x7528;","children":[],"payload":{"tag":"li","lines":"70,71"}}],"payload":{"tag":"li","lines":"68,71"}},{"content":"<strong>useEffect &#x6267;&#x884c;&#x673a;&#x5236;</strong>","children":[{"content":"<strong>&#x6302;&#x8f7d;&#x9636;&#x6bb5; (Mount)</strong>","children":[{"content":"&#x4f9d;&#x8d56;&#x9879;&#xff1a;&#x8bbe;&#x7f6e;&#x4e3a; <strong>&#x7a7a;&#x6570;&#x7ec4; <code>[]</code></strong>","children":[],"payload":{"tag":"li","lines":"73,74"}},{"content":"&#x65f6;&#x673a;&#xff1a;&#x4ec5;&#x5728;&#x7ec4;&#x4ef6;&#x9996;&#x6b21;&#x6e32;&#x67d3;&#x5b8c;&#x6210;&#x540e;&#x6267;&#x884c;&#x4e00;&#x6b21;&#xff08;&#x5e38;&#x7528;&#x4e8e;&#x521d;&#x59cb;&#x5316; Ajax &#x8bf7;&#x6c42;&#x3001;&#x4e8b;&#x4ef6;&#x8ba2;&#x9605;&#xff09;","children":[],"payload":{"tag":"li","lines":"74,75"}}],"payload":{"tag":"li","lines":"72,75"}},{"content":"<strong>&#x66f4;&#x65b0;&#x9636;&#x6bb5; (Update)</strong>","children":[{"content":"&#x4f9d;&#x8d56;&#x9879;&#xff1a;&#x6570;&#x7ec4;&#x4e2d;&#x5199;&#x5165;&#x8981;&#x76d1;&#x542c;&#x7684;&#x76ee;&#x6807;&#x53d8;&#x91cf;","children":[],"payload":{"tag":"li","lines":"76,77"}},{"content":"&#x65f6;&#x673a;&#xff1a;&#x5f53;&#x76d1;&#x542c;&#x7684;&#x53d8;&#x91cf;&#x53d1;&#x751f;&#x6539;&#x53d8;&#x540e;&#x6267;&#x884c;","children":[],"payload":{"tag":"li","lines":"77,78"}}],"payload":{"tag":"li","lines":"75,78"}},{"content":"<strong>&#x5378;&#x8f7d;&#x9636;&#x6bb5; (Unmount)</strong>","children":[{"content":"&#x56de;&#x6536;&#x673a;&#x5236;&#xff1a;&#x5728; <code>useEffect</code> &#x6267;&#x884c;&#x51fd;&#x6570;&#x4e2d; <strong><code>return () =&gt; {}</code> &#x8fd4;&#x56de;&#x4e00;&#x4e2a;&#x6e05;&#x7406;&#x51fd;&#x6570;</strong>","children":[],"payload":{"tag":"li","lines":"79,80"}},{"content":"&#x65f6;&#x673a;&#xff1a;&#x7ec4;&#x4ef6;&#x5373;&#x5c06;&#x88ab;&#x9500;&#x6bc1;&#x65f6;&#x3001;&#x6216;&#x4e0b;&#x4e00;&#x6b21; Effect &#x6267;&#x884c;&#x4e4b;&#x524d;&#x89e6;&#x53d1;","children":[],"payload":{"tag":"li","lines":"80,81"}},{"content":"&#x6838;&#x5fc3;&#x5e94;&#x7528;&#xff1a;&#x5fc5;&#x987b;&#x5728;&#x6e05;&#x7406;&#x51fd;&#x6570;&#x4e2d; <strong>&#x6e05;&#x9664;&#x5b9a;&#x65f6;&#x5668; / &#x53d6;&#x6d88;&#x5168;&#x5c40;&#x4e8b;&#x4ef6;&#x76d1;&#x542c;</strong>&#xff0c;&#x9632;&#x8303;&#x5185;&#x5b58;&#x6cc4;&#x6f0f;","children":[],"payload":{"tag":"li","lines":"81,82"}}],"payload":{"tag":"li","lines":"78,82"}}],"payload":{"tag":"li","lines":"71,82"}},{"content":"&#x5e38;&#x89c1;&#x907f;&#x5751;&#x9677;&#x9631;","children":[{"content":"<strong>&#x6b7b;&#x5faa;&#x73af;&#x9677;&#x9631;</strong>","children":[{"content":"&#x9519;&#x8bef;&#x884c;&#x4e3a;&#xff1a;&#x7edd;&#x5bf9;&#x4e0d;&#x80fd;&#x5728; <code>useEffect</code> &#x4e2d;&#x76f4;&#x63a5;&#x4fee;&#x6539;&#x5176;&#x4f9d;&#x8d56;&#x9879;&#x6570;&#x7ec4;&#x91cc;&#x7684;&#x53d8;&#x91cf;","children":[],"payload":{"tag":"li","lines":"84,85"}},{"content":"&#x6076;&#x6027;&#x540e;&#x679c;&#xff1a;&#x4fee;&#x6539;&#x53d8;&#x91cf; -&gt; &#x89e6;&#x53d1;&#x6e32;&#x67d3; -&gt; &#x518d;&#x6b21;&#x6267;&#x884c; Effect -&gt; &#x65e0;&#x9650;&#x5faa;&#x73af;&#xff0c;&#x76f4;&#x81f3;&#x6808;&#x6ea2;&#x51fa;","children":[],"payload":{"tag":"li","lines":"85,86"}}],"payload":{"tag":"li","lines":"83,86"}},{"content":"<strong>&#x95ed;&#x5305;&#x65e7;&#x72b6;&#x6001;&#x9677;&#x9631;</strong>","children":[{"content":"&#x539f;&#x56e0;&#xff1a;Effect &#x5185;&#x90e8;&#x7684;&#x51fd;&#x6570;&#x5728;&#x58f0;&#x660e;&#x65f6;&#x6355;&#x83b7;&#x4e86;&#x5f53;&#x65f6;&#x6e32;&#x67d3;&#x5468;&#x671f;&#x4e0b;&#x7684;&#x72b6;&#x6001;&#x5feb;&#x7167;","children":[],"payload":{"tag":"li","lines":"87,88"}},{"content":"&#x8868;&#x73b0;&#xff1a;&#x5bfc;&#x81f4;&#x5b9a;&#x65f6;&#x5668;&#x6216;&#x56de;&#x8c03;&#x51fd;&#x6570;&#x4e2d;&#xff0c;&#x59cb;&#x7ec8;&#x8bfb;&#x53d6;&#x5230;&#x65e7;&#x7684;&#x503c;","children":[],"payload":{"tag":"li","lines":"88,89"}},{"content":"&#x89e3;&#x51b3;&#xff1a;&#x5c06;&#x53d8;&#x91cf;&#x52a0;&#x5165;&#x4f9d;&#x8d56;&#x9879;&#x6570;&#x7ec4;&#xff0c;&#x6216;&#x8005;&#x4f7f;&#x7528; <code>useRef</code> &#x4fdd;&#x6301;&#x5bf9;&#x6700;&#x65b0;&#x6570;&#x636e;&#x7684;&#x5f15;&#x7528;","children":[],"payload":{"tag":"li","lines":"89,90"}}],"payload":{"tag":"li","lines":"86,90"}}],"payload":{"tag":"li","lines":"82,90"}},{"content":"&#x6e32;&#x67d3;&#x65f6;&#x673a;&#x8fdb;&#x9636;","children":[{"content":"<strong>useEffect vs useLayoutEffect</strong>","children":[{"content":"<code>useEffect</code>&#xff1a;<strong>&#x5f02;&#x6b65;&#x6267;&#x884c;</strong>&#xff0c;&#x5728;&#x6d4f;&#x89c8;&#x5668;&#x5b8c;&#x6210; DOM &#x6e32;&#x67d3;&#x548c;&#x5c4f;&#x5e55;&#x7ed8;&#x5236; (Paint) &#x4e4b;&#x540e;&#x89e6;&#x53d1;&#xff0c;&#x4e0d;&#x963b;&#x585e;&#x9875;&#x9762;","children":[],"payload":{"tag":"li","lines":"92,93"}},{"content":"<code>useLayoutEffect</code>&#xff1a;<strong>&#x540c;&#x6b65;&#x6267;&#x884c;</strong>&#xff0c;&#x5728; DOM &#x66f4;&#x65b0;&#x4e4b;&#x540e;&#x3001;&#x5c4f;&#x5e55;&#x7ed8;&#x5236;&#x4e4b;&#x524d;&#x89e6;&#x53d1;&#xff0c;&#x4f1a;&#x963b;&#x585e;&#x9875;&#x9762;","children":[],"payload":{"tag":"li","lines":"93,94"}},{"content":"&#x5e94;&#x7528;&#x573a;&#x666f;&#xff1a;&#x5f53;&#x526f;&#x4f5c;&#x7528;&#x4ee3;&#x7801;&#x6d89;&#x53ca;&#x9ad8;&#x9891; DOM &#x8ba1;&#x7b97;&#x4e14;&#x9700;&#x8981;&#x907f;&#x514d;&#x9875;&#x9762;&#x95ea;&#x70c1;&#x65f6;&#x4f7f;&#x7528;","children":[],"payload":{"tag":"li","lines":"94,96"}}],"payload":{"tag":"li","lines":"91,96"}}],"payload":{"tag":"li","lines":"90,96"}}],"payload":{"tag":"h2","lines":"66,67"}},{"content":"&#x9ad8;&#x7ea7; Hooks &#x4e0e;&#x590d;&#x7528;","children":[{"content":"<strong>useRef &#x5f15;&#x7528;&#x4e0e;&#x5b58;&#x503c;</strong>","children":[{"content":"&#x573a;&#x666f;&#x4e00;&#xff1a;&#x7528;&#x4e8e;&#x83b7;&#x53d6;&#x771f;&#x5b9e;&#x7684; DOM &#x8282;&#x70b9;&#xff08;&#x7b49;&#x540c;&#x4e8e;&#x539f;&#x751f;&#x7684; <code>document.querySelector</code>&#xff09;","children":[],"payload":{"tag":"li","lines":"99,100"}},{"content":"&#x573a;&#x666f;&#x4e8c;&#xff1a;&#x5b58;&#x50a8;&#x4e00;&#x4e2a; <strong>&#x8de8;&#x8d8a;&#x7ec4;&#x4ef6;&#x6e32;&#x67d3;&#x5468;&#x671f;&#x3001;&#x4f46;&#x4fee;&#x6539;&#x65f6;&#x4e0d;&#x4f1a;&#x89e6;&#x53d1;&#x7ec4;&#x4ef6;&#x91cd;&#x65b0;&#x6e32;&#x67d3;</strong> &#x7684;&#x666e;&#x901a;&#x53d8;&#x91cf;","children":[],"payload":{"tag":"li","lines":"100,101"}}],"payload":{"tag":"li","lines":"98,101"}},{"content":"<strong>&#x9650;&#x5236;&#x6027;&#x5f15;&#x7528;&#x4f20;&#x9012;</strong>","children":[{"content":"forwardRef&#xff1a;&#x5141;&#x8bb8;&#x7236;&#x7ec4;&#x4ef6;&#x5c06; <code>ref</code> &#x5f80;&#x4e0b;&#x4f20;&#x9012;&#x7ed9;&#x5b50;&#x7ec4;&#x4ef6;&#x7684;&#x5185;&#x90e8; DOM","children":[],"payload":{"tag":"li","lines":"102,103"}},{"content":"useImperativeHandle&#xff1a;&#x63a7;&#x5236;&#x5b50;&#x7ec4;&#x4ef6;&#x66b4;&#x9732;&#x7ed9;&#x7236;&#x7ec4;&#x4ef6;&#x7684;&#x5b9e;&#x4f8b;&#x65b9;&#x6cd5;&#xff0c;<strong>&#x9632;&#x6b62;&#x7236;&#x7ec4;&#x4ef6;&#x76f4;&#x63a5;&#x4fee;&#x6539;&#x5b50;&#x7ec4;&#x4ef6; DOM</strong>","children":[],"payload":{"tag":"li","lines":"103,104"}}],"payload":{"tag":"li","lines":"101,104"}},{"content":"&#x81ea;&#x5b9a;&#x4e49; Hooks","children":[{"content":"&#x6838;&#x5fc3;&#x5b9a;&#x4f4d;&#xff1a;&#x5b9e;&#x73b0; React &#x7ec4;&#x4ef6;&#x95f4; <strong>&#x4e1a;&#x52a1;&#x903b;&#x8f91;&#x4e0e;&#x72b6;&#x6001;&#x903b;&#x8f91;</strong> &#x7684;&#x9ad8;&#x5185;&#x805a;&#x590d;&#x7528;","children":[],"payload":{"tag":"li","lines":"105,106"}},{"content":"&#x89c4;&#x8303;&#xff1a;&#x51fd;&#x6570;&#x540d;&#x5fc5;&#x987b;&#x4ee5; <strong><code>use</code></strong> &#x5f00;&#x5934;&#xff0c;&#x5185;&#x90e8;&#x53ef;&#x4ee5;&#x8c03;&#x7528;&#x5176;&#x4ed6;&#x5185;&#x7f6e; Hooks&#xff0c;&#x5404;&#x7ec4;&#x4ef6;&#x8c03;&#x7528;&#x7684;&#x72b6;&#x6001;&#x5b8c;&#x5168;&#x9694;&#x79bb;","children":[],"payload":{"tag":"li","lines":"106,107"}}],"payload":{"tag":"li","lines":"104,107"}},{"content":"<strong>Hooks &#x4f7f;&#x7528;&#x89c4;&#x5219;</strong>","children":[{"content":"&#x89c4;&#x5219;&#x4e00;&#xff1a;&#x53ea;&#x80fd;&#x5728; React &#x51fd;&#x6570;&#x7ec4;&#x4ef6;&#x7684; <strong>&#x6700;&#x5916;&#x5c42;/&#x9876;&#x90e8;</strong> &#x8c03;&#x7528; Hooks","children":[],"payload":{"tag":"li","lines":"108,109"}},{"content":"&#x9650;&#x5236;&#xff1a;<strong>&#x7edd;&#x5bf9;&#x4e0d;&#x80fd;</strong>&#x5728;&#x5faa;&#x73af;&#x3001;&#x6761;&#x4ef6;&#x5224;&#x65ad;&#x8bed;&#x53e5; (if/else) &#x6216;&#x5b50;&#x51fd;&#x6570;&#x4e2d;&#x8c03;&#x7528;&#xff0c;&#x786e;&#x4fdd;&#x94fe;&#x8868;&#x6e32;&#x67d3;&#x987a;&#x5e8f;&#x4e0d;&#x88ab;&#x7834;&#x574f;","children":[],"payload":{"tag":"li","lines":"109,111"}}],"payload":{"tag":"li","lines":"107,111"}}],"payload":{"tag":"h2","lines":"96,97"}},{"content":"&#x6027;&#x80fd;&#x4e0e;&#x6e32;&#x67d3;&#x4f18;&#x5316;","children":[{"content":"&#x51cf;&#x5c11;&#x975e;&#x5fc5;&#x8981;&#x66f4;&#x65b0;","children":[{"content":"<strong>React.memo</strong>","children":[{"content":"&#x539f;&#x7406;&#xff1a;&#x5bf9;&#x7ec4;&#x4ef6;&#x63a5;&#x6536;&#x7684; <code>props</code> &#x8fdb;&#x884c; <strong>&#x6d45;&#x5c42;&#x6bd4;&#x8f83; (Shallow Compare)</strong>","children":[],"payload":{"tag":"li","lines":"115,116"}},{"content":"&#x6548;&#x679c;&#xff1a;&#x82e5; <code>props</code> &#x672a;&#x53d8;&#xff0c;&#x76f4;&#x63a5;&#x8df3;&#x8fc7;&#x8be5;&#x5b50;&#x7ec4;&#x4ef6;&#x7684;&#x91cd;&#x65b0;&#x6e32;&#x67d3;&#xff0c;&#x590d;&#x7528;&#x4e0a;&#x4e00;&#x6b21;&#x7ed3;&#x679c;","children":[],"payload":{"tag":"li","lines":"116,117"}}],"payload":{"tag":"li","lines":"114,117"}},{"content":"<strong>useMemo</strong>","children":[{"content":"&#x4f5c;&#x7528;&#xff1a;&#x7528;&#x4e8e;&#x7f13;&#x5b58;&#x7ecf;&#x8fc7;&#x590d;&#x6742;&#x3001;&#x9ad8;&#x5f00;&#x9500;&#x8ba1;&#x7b97;&#x540e;&#x5f97;&#x51fa;&#x7684; <strong>&#x8ba1;&#x7b97;&#x7ed3;&#x679c;&#x503c;</strong>","children":[],"payload":{"tag":"li","lines":"118,119"}},{"content":"&#x6548;&#x679c;&#xff1a;&#x4ec5;&#x5f53;&#x4f9d;&#x8d56;&#x9879;&#x53d8;&#x5316;&#x65f6;&#x624d;&#x91cd;&#x65b0;&#x8ba1;&#x7b97;&#xff0c;&#x907f;&#x514d;&#x6bcf;&#x6b21;&#x7ec4;&#x4ef6;&#x6267;&#x884c;&#x65f6;&#x9ad8;&#x5f00;&#x9500;&#x91cd;&#x590d;&#x8ba1;&#x7b97;","children":[],"payload":{"tag":"li","lines":"119,120"}}],"payload":{"tag":"li","lines":"117,120"}},{"content":"<strong>useCallback</strong>","children":[{"content":"&#x4f5c;&#x7528;&#xff1a;&#x7528;&#x4e8e;&#x7f13;&#x5b58; <strong>&#x7ec4;&#x4ef6;&#x5185;&#x5b9a;&#x4e49;&#x7684;&#x51fd;&#x6570;&#x5b9e;&#x4f8b;&#x5f15;&#x7528;</strong>","children":[],"payload":{"tag":"li","lines":"121,122"}},{"content":"&#x5173;&#x8054;&#xff1a;&#x5e38;&#x4e0e; <code>React.memo</code> &#x8054;&#x5408;&#x4f7f;&#x7528;&#xff0c;&#x9632;&#x6b62;&#x4f20;&#x9012;&#x7ed9;&#x5b50;&#x7ec4;&#x4ef6;&#x7684;&#x51fd;&#x6570;&#x5f15;&#x7528;&#x5730;&#x5740;&#x6539;&#x53d8;&#x5bfc;&#x81f4; memo &#x5931;&#x6548;","children":[],"payload":{"tag":"li","lines":"122,123"}}],"payload":{"tag":"li","lines":"120,123"}},{"content":"&#x8fc7;&#x5ea6;&#x4f18;&#x5316;&#x8b66;&#x544a;&#xff1a;&#x76f2;&#x76ee;&#x5957;&#x7528;&#x7f13;&#x5b58; Hooks &#x4f1a;&#x589e;&#x52a0;&#x989d;&#x5916;&#x7684;&#x4f9d;&#x8d56;&#x6bd4;&#x5bf9;&#x4e0e;&#x95ed;&#x5305;&#x5185;&#x5b58;&#x5f00;&#x9500;","children":[],"payload":{"tag":"li","lines":"123,124"}}],"payload":{"tag":"li","lines":"113,124"}},{"content":"&#x6e32;&#x67d3;&#x5f00;&#x9500;&#x4f18;&#x5316;","children":[{"content":"<strong>&#x865a;&#x62df;&#x5217;&#x8868;</strong>","children":[{"content":"&#x539f;&#x7406;&#xff1a;&#x5bf9;&#x4e8e;&#x8d85;&#x957f;&#x6216;&#x65e0;&#x9650;&#x6eda;&#x52a8;&#x7684;&#x5217;&#x8868;&#xff0c;&#x4ec5;&#x6e32;&#x67d3;&#x5f53;&#x524d;&#x6d4f;&#x89c8;&#x5668; <strong>&#x53ef;&#x89c6;&#x7a97;&#x53e3;&#x5185;</strong> &#x7684; DOM &#x8282;&#x70b9;","children":[],"payload":{"tag":"li","lines":"126,127"}},{"content":"&#x673a;&#x5236;&#xff1a;&#x52a8;&#x6001;&#x8ba1;&#x7b97;&#x504f;&#x79fb;&#x5e76;&#x590d;&#x7528; DOM &#x5bb9;&#x5668;&#xff0c;&#x5927;&#x5e45;&#x524a;&#x51cf;&#x5e95;&#x5c42; DOM &#x4e2a;&#x6570;","children":[],"payload":{"tag":"li","lines":"127,128"}}],"payload":{"tag":"li","lines":"125,128"}},{"content":"&#x52a8;&#x6001;&#x52a0;&#x8f7d;","children":[{"content":"&#x5b9e;&#x8df5;&#xff1a;&#x4f7f;&#x7528; <code>React.lazy()</code> &#x914d;&#x5408; <code>Suspense</code> &#x52a8;&#x6001;&#x52a0;&#x8f7d;&#x672a;&#x8fdb;&#x5165;&#x89c6;&#x56fe;&#x7684;&#x7ec4;&#x4ef6;&#x6216;&#x8def;&#x7531;","children":[],"payload":{"tag":"li","lines":"129,131"}}],"payload":{"tag":"li","lines":"128,131"}}],"payload":{"tag":"li","lines":"124,131"}}],"payload":{"tag":"h2","lines":"111,112"}},{"content":"&#x8def;&#x7531;&#x7cfb;&#x7edf; (React-Router)","children":[{"content":"<strong>&#x5e95;&#x5c42;&#x8def;&#x7531;&#x6a21;&#x5f0f;</strong>","children":[{"content":"<strong>Hash &#x8def;&#x7531;</strong>","children":[{"content":"&#x8def;&#x5f84;&#x683c;&#x5f0f;&#xff1a;URL &#x4e2d;&#x5e26;&#x6709; <code>#</code> &#x7b26;&#x53f7;","children":[],"payload":{"tag":"li","lines":"135,136"}},{"content":"&#x539f;&#x7406;&#x673a;&#x5236;&#xff1a;&#x5229;&#x7528;&#x6d4f;&#x89c8;&#x5668;&#x539f;&#x751f;&#x7684;&#x76d1;&#x542c; <strong><code>hashchange</code></strong> &#x4e8b;&#x4ef6;&#x8fdb;&#x884c;&#x9875;&#x9762;&#x65e0;&#x5237;&#x65b0;&#x6e32;&#x67d3;","children":[],"payload":{"tag":"li","lines":"136,137"}},{"content":"&#x4f18;&#x52bf;&#xff1a;&#x672c;&#x5730;&#x5f00;&#x53d1;&#x65e0;&#x9700;&#x4efb;&#x4f55;&#x914d;&#x7f6e;&#xff0c;&#x652f;&#x6301;&#x76f8;&#x5bf9;&#x8def;&#x5f84;&#x8bbf;&#x95ee;","children":[],"payload":{"tag":"li","lines":"137,138"}}],"payload":{"tag":"li","lines":"134,138"}},{"content":"<strong>History &#x8def;&#x7531;</strong>","children":[{"content":"&#x8def;&#x5f84;&#x683c;&#x5f0f;&#xff1a;&#x6b63;&#x5e38;&#x7684;&#x6807;&#x51c6; URL &#x8def;&#x5f84;","children":[],"payload":{"tag":"li","lines":"139,140"}},{"content":"&#x539f;&#x7406;&#x673a;&#x5236;&#xff1a;&#x57fa;&#x4e8e; HTML5 History API &#x7684; <strong><code>pushState</code> / <code>replaceState</code></strong> &#x673a;&#x5236;","children":[],"payload":{"tag":"li","lines":"140,141"}},{"content":"<strong>&#x81f4;&#x547d;&#x767d;&#x5c4f;&#x7f3a;&#x9677;&#x4e0e; Nginx &#x89e3;&#x51b3;&#x65b9;&#x6848;</strong>","children":[{"content":"&#x7f3a;&#x9677;&#xff1a;&#x9875;&#x9762;&#x5237;&#x65b0;&#x65f6;&#x6d4f;&#x89c8;&#x5668;&#x4f1a;&#x5411;&#x670d;&#x52a1;&#x5668;&#x771f;&#x5b9e;&#x53d1;&#x9001;&#x8bf7;&#x6c42;&#xff0c;&#x5bfc;&#x81f4;&#x62a5;&#x51fa; 404 &#x767d;&#x5c4f;&#x9519;&#x8bef;","children":[],"payload":{"tag":"li","lines":"142,143"}},{"content":"&#x89e3;&#x51b3;&#x65b9;&#x6848;&#xff1a;&#x5fc5;&#x987b;&#x914d;&#x7f6e;&#x670d;&#x52a1;&#x5668; (&#x5982; Nginx) &#x5c06;&#x6240;&#x6709;&#x8bf7;&#x6c42;&#x91cd;&#x5b9a;&#x5411;&#x56de;&#x5165;&#x53e3;&#x6587;&#x4ef6; <code>index.html</code>","children":[],"payload":{"tag":"li","lines":"143,144"}}],"payload":{"tag":"li","lines":"141,144"}}],"payload":{"tag":"li","lines":"138,144"}}],"payload":{"tag":"li","lines":"133,144"}},{"content":"&#x6838;&#x5fc3;&#x673a;&#x5236;","children":[{"content":"<strong>&#x5d4c;&#x5957;&#x8def;&#x7531;&#x4e0e; Outlet</strong>","children":[{"content":"&#x4f5c;&#x7528;&#xff1a;&#x5728;&#x7236;&#x7ea7;&#x5e03;&#x5c40;&#x6a21;&#x677f; (Layout) &#x4e2d;&#x4e3a;&#x5b50;&#x8def;&#x7531;&#x6307;&#x5b9a;&#x663e;&#x793a;&#x51fa;&#x53e3; (&#x7c7b;&#x4f3c; <code>&lt;router-view&gt;</code>)","children":[],"payload":{"tag":"li","lines":"146,147"}}],"payload":{"tag":"li","lines":"145,147"}},{"content":"&#x8def;&#x7531;&#x6fc0;&#x6d3b;&#x4e0e;&#x8df3;&#x8f6c;","children":[{"content":"&#x58f0;&#x660e;&#x5f0f;&#xff1a;&#x4f7f;&#x7528; <code>&lt;Link&gt;</code> &#x6216;&#x81ea;&#x5e26;&#x6fc0;&#x6d3b;&#x9ad8;&#x4eae; class &#x7684; <code>&lt;NavLink&gt;</code>","children":[],"payload":{"tag":"li","lines":"148,149"}},{"content":"&#x7f16;&#x7a0b;&#x5f0f;&#xff1a;&#x4f7f;&#x7528; <code>useNavigate()</code> &#x5b9e;&#x73b0; JS &#x51fd;&#x6570;&#x4e2d;&#x7f16;&#x5199;&#x903b;&#x8f91;&#x8df3;&#x8f6c;","children":[],"payload":{"tag":"li","lines":"149,150"}}],"payload":{"tag":"li","lines":"147,150"}},{"content":"&#x8def;&#x7531;&#x62e6;&#x622a;&#x63a7;&#x5236;","children":[{"content":"&#x65b9;&#x6848;&#xff1a;React &#x65e0;&#x5185;&#x7f6e;&#x5168;&#x5c40;&#x524d;&#x7f6e;&#x5b88;&#x536b;&#xff0c;&#x9700;&#x5728;&#x9876;&#x5c42;&#x5305;&#x88f9;&#x81ea;&#x5b9a;&#x4e49; <code>&lt;RouteGuard&gt;</code> &#x7ec4;&#x4ef6;&#x6309;&#x9700;&#x6821;&#x9a8c;&#x9274;&#x6743;","children":[],"payload":{"tag":"li","lines":"151,153"}}],"payload":{"tag":"li","lines":"150,153"}}],"payload":{"tag":"li","lines":"144,153"}}],"payload":{"tag":"h2","lines":"131,132"}},{"content":"&#x6838;&#x5fc3;&#x5e95;&#x5c42;&#x673a;&#x5236;","children":[{"content":"<strong>Fiber &#x67b6;&#x6784;&#x539f;&#x7406;</strong>","children":[{"content":"&#x6838;&#x5fc3;&#x521d;&#x8877;&#xff1a;&#x6539;&#x53d8; React 15 &#x540c;&#x6b65;&#x9012;&#x5f52; Diff &#x6811;&#x65f6;&#x95f4;&#x8fc7;&#x957f;&#x5bfc;&#x81f4;&#x6d4f;&#x89c8;&#x5668;&#x4e3b;&#x7ebf;&#x7a0b;&#x5361;&#x6b7b;&#x7684;&#x5f0a;&#x7aef;","children":[],"payload":{"tag":"li","lines":"156,157"}},{"content":"&#x6570;&#x636e;&#x7ed3;&#x6784;&#xff1a;&#x91c7;&#x7528;&#x5e26;&#x6709;&#x7236;&#x3001;&#x5b50;&#x3001;&#x5144;&#x5f1f;&#x8282;&#x70b9;&#x6307;&#x9488;&#x7684; <strong>&#x5355;&#x5411;&#x94fe;&#x8868;&#x7ed3;&#x6784;</strong> &#x66ff;&#x6362;&#x539f;&#x751f;&#x6811;&#x7ed3;&#x6784;","children":[],"payload":{"tag":"li","lines":"157,158"}},{"content":"<strong>&#x65f6;&#x95f4;&#x5207;&#x7247;&#x4e0e;&#x53ef;&#x4e2d;&#x65ad;&#x6e32;&#x67d3;</strong>","children":[{"content":"&#x673a;&#x5236;&#xff1a;&#x5c06;&#x5927;&#x4efb;&#x52a1;&#x62c6;&#x5206;&#x4e3a;&#x4e00;&#x4e2a;&#x4e2a;&#x5fae;&#x5c0f;&#x7684; Fiber &#x5de5;&#x4f5c;&#x5355;&#x5143;","children":[],"payload":{"tag":"li","lines":"159,160"}},{"content":"&#x5206;&#x914d;&#xff1a;&#x5229;&#x7528;&#x6d4f;&#x89c8;&#x5668;&#x4e3b;&#x7ebf;&#x7a0b;&#x7684;&#x7a7a;&#x95f2;&#x65f6;&#x95f4; (RequestIdleCallback) &#x6e32;&#x67d3;","children":[],"payload":{"tag":"li","lines":"160,161"}},{"content":"&#x4e2d;&#x65ad;&#xff1a;&#x82e5;&#x6709;&#x7528;&#x6237;&#x9ad8;&#x4f18;&#x5148;&#x7ea7;&#x64cd;&#x4f5c;&#xff08;&#x5982;&#x70b9;&#x51fb;&#xff09;&#xff0c;React &#x4f1a; <strong>&#x7acb;&#x523b;&#x4e2d;&#x65ad;</strong> &#x6e32;&#x67d3;&#xff0c;&#x8ba9;&#x51fa;&#x4e3b;&#x7ebf;&#x7a0b;","children":[],"payload":{"tag":"li","lines":"161,162"}}],"payload":{"tag":"li","lines":"158,162"}}],"payload":{"tag":"li","lines":"155,162"}},{"content":"<strong>&#x53cc;&#x7f13;&#x5b58;&#x6811;&#x673a;&#x5236;</strong>","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;&#x5185;&#x5b58;&#x4e2d;&#x540c;&#x65f6;&#x5b58;&#x5728;&#x4e24;&#x68f5; Fiber &#x6811;","children":[],"payload":{"tag":"li","lines":"163,164"}},{"content":"&#x7ed3;&#x6784;&#xff1a;<strong>current &#x6811;</strong> (&#x5f53;&#x524d;&#x5c4f;&#x5e55;&#x5c55;&#x793a;) &#x4e0e; <strong>workInProgress &#x6811;</strong> (&#x5185;&#x5b58;&#x4e2d;&#x6b63;&#x5728;&#x5904;&#x7406;&#x66f4;&#x65b0;)","children":[],"payload":{"tag":"li","lines":"164,165"}},{"content":"&#x539f;&#x7406;&#xff1a;&#x6784;&#x5efa;&#x5b8c;&#x6bd5;&#x540e;&#xff0c;&#x6781;&#x901f;&#x5c06;&#x4e24;&#x68f5;&#x6811;&#x7684;&#x6839;&#x8282;&#x70b9;&#x6307;&#x9488;&#x8fdb;&#x884c;&#x539f;&#x5b50;&#x6027;&#x5bf9;&#x8c03;&#xff0c;&#x675c;&#x7edd;&#x534a;&#x6210;&#x54c1;&#x9875;&#x9762;&#x6e32;&#x67d3;","children":[],"payload":{"tag":"li","lines":"165,166"}}],"payload":{"tag":"li","lines":"162,166"}},{"content":"<strong>Diff &#x7b97;&#x6cd5;&#x7b56;&#x7565;</strong>","children":[{"content":"&#x540c;&#x5c42;&#x6bd4;&#x8f83; (Tree Diff)&#xff1a;&#x53ea;&#x5bf9;&#x540c;&#x5c42;&#x7ea7;&#x7684; DOM &#x8282;&#x70b9;&#x8fdb;&#x884c;&#x5bf9;&#x6bd4;&#xff0c;&#x8de8;&#x5c42;&#x7ea7;&#x79fb;&#x52a8;&#x76f4;&#x63a5;&#x9500;&#x6bc1;&#x91cd;&#x5efa;","children":[],"payload":{"tag":"li","lines":"167,168"}},{"content":"&#x7ec4;&#x4ef6;&#x5bf9;&#x6bd4; (Component Diff)&#xff1a;&#x76f8;&#x540c;&#x7c7b;&#x578b;&#x7ec4;&#x4ef6;&#x6309;&#x539f;&#x6837;&#x5bf9;&#x6bd4;&#xff1b;&#x4e0d;&#x540c;&#x7c7b;&#x578b;&#x7ec4;&#x4ef6;&#x76f4;&#x63a5;&#x9500;&#x6bc1;&#x91cd;&#x5efa;","children":[],"payload":{"tag":"li","lines":"168,169"}},{"content":"&#x5143;&#x7d20;&#x5bf9;&#x6bd4; (Element Diff)&#xff1a;&#x540c;&#x5c42;&#x5b50;&#x5143;&#x7d20;&#x5217;&#x8868;&#x4e2d;&#xff0c;&#x901a;&#x8fc7;&#x552f;&#x4e00;&#x7684; <code>key</code> &#x8fdb;&#x884c;&#x4f4d;&#x7f6e;&#x79fb;&#x52a8;&#x4e0e;&#x590d;&#x7528;","children":[],"payload":{"tag":"li","lines":"169,170"}}],"payload":{"tag":"li","lines":"166,170"}},{"content":"<strong>&#x5408;&#x6210;&#x4e8b;&#x4ef6;&#x7cfb;&#x7edf;</strong>","children":[{"content":"&#x521d;&#x8877;&#xff1a;&#x7edf;&#x4e00;&#x5404;&#x6d4f;&#x89c8;&#x5668;&#x4e8b;&#x4ef6;&#x5dee;&#x5f02;&#xff0c;&#x62b9;&#x5e73;&#x517c;&#x5bb9;&#x6027;&#x75db;&#x70b9;&#xff0c;&#x907f;&#x514d;&#x9891;&#x7e41;&#x89e3;&#x7ed1;&#x548c;&#x7ed1;&#x5b9a;&#x539f;&#x751f;&#x4e8b;&#x4ef6;","children":[],"payload":{"tag":"li","lines":"171,172"}},{"content":"<strong>&#x5347;&#x7ea7;&#x53d8;&#x66f4;</strong>","children":[{"content":"<strong>React 16</strong>&#xff1a;&#x4e8b;&#x4ef6;&#x59d4;&#x6258;&#x7ed1;&#x5b9a;&#x5728;&#x6d4f;&#x89c8;&#x5668;&#x7684; <strong><code>document</code></strong> &#x8282;&#x70b9;&#x4e0a;","children":[],"payload":{"tag":"li","lines":"173,174"}},{"content":"<strong>React 17+</strong>&#xff1a;&#x4e8b;&#x4ef6;&#x59d4;&#x6258;&#x6539;&#x7ed1;&#x5728; React &#x6e32;&#x67d3;&#x7684; <strong><code>root</code> &#x5bb9;&#x5668;&#x8282;&#x70b9;</strong> &#x4e0a;","children":[],"payload":{"tag":"li","lines":"174,175"}},{"content":"&#x4f18;&#x52bf;&#xff1a;&#x6709;&#x5229;&#x4e8e;&#x5fae;&#x524d;&#x7aef;&#x6846;&#x67b6;&#x6c99;&#x7bb1;&#x9694;&#x79bb;&#xff0c;&#x9632;&#x6b62;&#x591a; React &#x5b9e;&#x4f8b;&#x5e76;&#x5b58;&#x65f6;&#x5192;&#x6ce1;&#x62e6;&#x622a;&#x76f8;&#x4e92;&#x5e72;&#x6270;","children":[],"payload":{"tag":"li","lines":"175,177"}}],"payload":{"tag":"li","lines":"172,177"}}],"payload":{"tag":"li","lines":"170,177"}}],"payload":{"tag":"h2","lines":"153,154"}},{"content":"React 19 &#x65b0;&#x7279;&#x6027;","children":[{"content":"<strong>&#x5168;&#x65b0; <code>use</code> Hook</strong>","children":[{"content":"&#x4f5c;&#x7528;&#xff1a;&#x5728;&#x6e32;&#x67d3;&#x65f6;&#x76f4;&#x63a5;&#x8bfb;&#x53d6; Promise &#x6216; Context&#xff0c;&#x65e0;&#x9700;&#x518d;&#x4f9d;&#x8d56; <code>useEffect</code>","children":[],"payload":{"tag":"li","lines":"180,181"}},{"content":"&#x98a0;&#x8986;&#x6027;&#x7279;&#x6027;&#xff1a;<strong>&#x552f;&#x4e00;&#x5141;&#x8bb8;&#x5728;&#x6761;&#x4ef6;&#x5224;&#x65ad;&#x8bed;&#x53e5; (if) &#x4e2d;&#x8c03;&#x7528;&#x7684; Hook</strong>","children":[],"payload":{"tag":"li","lines":"181,182"}}],"payload":{"tag":"li","lines":"179,182"}},{"content":"<strong>Actions &#x5f02;&#x6b65;&#x8868;&#x5355;&#x5904;&#x7406;</strong>","children":[{"content":"&#x673a;&#x5236;&#xff1a;&#x539f;&#x751f;&#x652f;&#x6301;&#x5728; <code>&lt;form&gt;</code> &#x7684; action &#x5c5e;&#x6027;&#x4e2d;&#x76f4;&#x63a5;&#x4f20;&#x5165;&#x5f02;&#x6b65;&#x51fd;&#x6570;","children":[],"payload":{"tag":"li","lines":"183,184"}},{"content":"<strong>&#x884d;&#x751f; Hooks</strong>","children":[{"content":"<code>useActionState</code>&#xff1a;&#x8f7b;&#x677e;&#x7ba1;&#x7406;&#x8868;&#x5355;&#x7684;&#x63d0;&#x4ea4;&#x72b6;&#x6001;&#x3001;&#x9519;&#x8bef;&#x548c;&#x6570;&#x636e;","children":[],"payload":{"tag":"li","lines":"185,186"}},{"content":"<code>useFormStatus</code>&#xff1a;&#x5b50;&#x7ec4;&#x4ef6;&#x4e2d;&#x5feb;&#x901f;&#x83b7;&#x53d6;&#x8868;&#x5355;&#x662f;&#x5426;&#x6b63;&#x5728;&#x63d0;&#x4ea4; (pending)","children":[],"payload":{"tag":"li","lines":"186,187"}},{"content":"<code>useOptimistic</code>&#xff1a;&#x5b9e;&#x73b0;&#x4e50;&#x89c2;&#x66f4;&#x65b0;&#xff0c;&#x5728;&#x63a5;&#x53e3;&#x8fd4;&#x56de;&#x524d;&#x5148;&#x6e32;&#x67d3;&#x9884;&#x671f; UI","children":[],"payload":{"tag":"li","lines":"187,188"}}],"payload":{"tag":"li","lines":"184,188"}}],"payload":{"tag":"li","lines":"182,188"}},{"content":"<strong>API &#x7b80;&#x5316;&#x4e0e;&#x91cd;&#x6784;</strong>","children":[{"content":"<strong>Ref &#x4f20;&#x9012;&#x5de8;&#x53d8;</strong>&#xff1a;&#x5265;&#x79bb; <code>forwardRef</code>&#xff0c;<code>ref</code> &#x73b0;&#x5728;&#x53ef;&#x4ee5;&#x76f4;&#x63a5;&#x4f5c;&#x4e3a;&#x666e;&#x901a; props &#x4f20;&#x9012;&#x7ed9;&#x51fd;&#x6570;&#x7ec4;&#x4ef6;","children":[],"payload":{"tag":"li","lines":"189,190"}},{"content":"<strong>Context &#x6781;&#x7b80;&#x5199;&#x6cd5;</strong>&#xff1a;&#x76f4;&#x63a5;&#x4f7f;&#x7528; <code>&lt;Context&gt;</code> &#x66ff;&#x4ee3;&#x7e41;&#x7410;&#x7684; <code>&lt;Context.Provider&gt;</code>","children":[],"payload":{"tag":"li","lines":"190,191"}}],"payload":{"tag":"li","lines":"188,191"}},{"content":"<strong>&#x670d;&#x52a1;&#x5668;&#x7ec4;&#x4ef6;&#x4e0e;&#x5e76;&#x53d1;&#x589e;&#x5f3a;</strong>","children":[{"content":"RSC (Server Components)&#xff1a;&#x5168;&#x9762;&#x63a8;&#x884c;&#x670d;&#x52a1;&#x7aef;&#x7ec4;&#x4ef6;&#x4e0e; Server Actions&#xff0c;&#x6781;&#x5927;&#x4f18;&#x5316; SEO &#x4e0e;&#x9996;&#x5c4f;&#x5305;&#x4f53;&#x79ef;","children":[],"payload":{"tag":"li","lines":"192,193"}},{"content":"&#x5e76;&#x53d1;&#x5ef6;&#x7eed;&#xff1a;&#x7ee7;&#x627f; 18 &#x7684; <code>useTransition</code> &#x548c; <code>useDeferredValue</code> &#x673a;&#x5236;&#x5e76;&#x66f4;&#x6df1;&#x5ea6;&#x878d;&#x5408;","children":[],"payload":{"tag":"li","lines":"193,195"}}],"payload":{"tag":"li","lines":"191,195"}}],"payload":{"tag":"h2","lines":"177,178"}},{"content":"&#x4f01;&#x4e1a;&#x7ea7;&#x5f00;&#x53d1;&#x4e0e;&#x751f;&#x6001;","children":[{"content":"&#x8868;&#x5355;&#x5904;&#x7406;&#x6a21;&#x5f0f;","children":[{"content":"<strong>&#x53d7;&#x63a7;&#x7ec4;&#x4ef6;</strong>","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;&#x8868;&#x5355;&#x9879;&#x7684;&#x771f;&#x5b9e;&#x503c;&#x4e0e; <code>useState</code> &#x6570;&#x636e;&#x53d8;&#x91cf;&#x5f3a;&#x884c;&#x53cc;&#x5411;&#x7ed1;&#x5b9a;","children":[],"payload":{"tag":"li","lines":"199,200"}},{"content":"&#x5b9e;&#x73b0;&#xff1a;&#x7ed1;&#x5b9a; <code>value={state}</code> &#x4e0e; <code>onChange={(e) =&gt; setState(e.target.value)}</code>","children":[],"payload":{"tag":"li","lines":"200,201"}}],"payload":{"tag":"li","lines":"198,201"}},{"content":"<strong>&#x975e;&#x53d7;&#x63a7;&#x7ec4;&#x4ef6;</strong>","children":[{"content":"&#x6982;&#x5ff5;&#xff1a;&#x8868;&#x5355;&#x72b6;&#x6001;&#x7531; DOM &#x81ea;&#x8eab;&#x7ef4;&#x62a4;&#xff0c;&#x4e0d;&#x53d7; React &#x53d8;&#x91cf;&#x63a7;&#x5236;","children":[],"payload":{"tag":"li","lines":"202,203"}},{"content":"&#x5b9e;&#x73b0;&#xff1a;&#x4f7f;&#x7528; <strong><code>useRef</code></strong> &#x83b7;&#x53d6;&#x8868;&#x5355; DOM &#x5b9e;&#x4f8b;&#xff0c;&#x6309;&#x9700;&#x4e00;&#x6b21;&#x6027;&#x8bfb;&#x53d6;&#x6570;&#x503c;","children":[],"payload":{"tag":"li","lines":"203,204"}}],"payload":{"tag":"li","lines":"201,204"}}],"payload":{"tag":"li","lines":"197,204"}},{"content":"<strong>Umi &#x4f01;&#x4e1a;&#x7ea7;&#x6846;&#x67b6;</strong>","children":[{"content":"&#x6838;&#x5fc3;&#x5b9a;&#x4f4d;&#xff1a;&#x57fa;&#x4e8e; React &#x7684;&#x4f01;&#x4e1a;&#x7ea7;&#x524d;&#x7aef;&#x5e94;&#x7528;&#x6846;&#x67b6; (&#x7531;&#x8682;&#x8681;&#x91d1;&#x670d;&#x5f00;&#x6e90;)","children":[],"payload":{"tag":"li","lines":"205,206"}},{"content":"<strong>&#x7ea6;&#x5b9a;&#x5f0f;&#x8def;&#x7531;</strong>","children":[{"content":"&#x673a;&#x5236;&#xff1a;&#x65e0;&#x9700;&#x624b;&#x52a8;&#x7f16;&#x5199;&#x590d;&#x6742;&#x7684;&#x8def;&#x7531;&#x914d;&#x7f6e;&#x8868;","children":[],"payload":{"tag":"li","lines":"207,208"}},{"content":"&#x539f;&#x7406;&#xff1a;&#x76f4;&#x63a5;&#x6839;&#x636e; <code>src/pages</code> &#x4e0b;&#x7684;&#x76ee;&#x5f55;&#x548c;&#x6587;&#x4ef6;&#x7ed3;&#x6784;&#xff0c;&#x81ea;&#x52a8;&#x751f;&#x6210;&#x5bf9;&#x5e94;&#x7684;&#x8def;&#x7531;&#x914d;&#x7f6e;","children":[],"payload":{"tag":"li","lines":"208,209"}}],"payload":{"tag":"li","lines":"206,209"}},{"content":"<strong>&#x63d2;&#x4ef6;&#x5316;&#x67b6;&#x6784;</strong>","children":[{"content":"&#x7279;&#x6027;&#xff1a;&#x4e00;&#x5207;&#x7686;&#x63d2;&#x4ef6;&#xff0c;&#x901a;&#x8fc7;&#x7b80;&#x5355;&#x7684;&#x914d;&#x7f6e;&#x5373;&#x53ef;&#x6781;&#x901f;&#x5f00;&#x542f;&#x6269;&#x5c55;&#x529f;&#x80fd;","children":[],"payload":{"tag":"li","lines":"210,211"}},{"content":"&#x6db5;&#x76d6;&#xff1a;&#x5fae;&#x524d;&#x7aef; Qiankun&#x3001;&#x6743;&#x9650;&#x63a7;&#x5236; access&#x3001;&#x6570;&#x636e;&#x6d41;&#x7ba1;&#x7406;&#x7b49;","children":[],"payload":{"tag":"li","lines":"211,212"}}],"payload":{"tag":"li","lines":"209,212"}},{"content":"<strong>&#x5185;&#x7f6e;&#x6570;&#x636e;&#x6d41;&#x65b9;&#x6848;</strong>","children":[{"content":"&#x65e7;&#x7248;&#xff1a;&#x5185;&#x7f6e;&#x57fa;&#x4e8e; Redux + Redux-Saga &#x7684; Dva &#x6570;&#x636e;&#x6d41;&#x6a21;&#x578b;","children":[],"payload":{"tag":"li","lines":"213,214"}},{"content":"&#x65b0;&#x7248;&#xff1a;Umi 4 (Max) &#x4e3b;&#x63a8;&#x7b80;&#x5316;&#x7684;&#x8f7b;&#x91cf;&#x7ea7;&#x6570;&#x636e;&#x6d41;&#x4e0e;&#x5185;&#x7f6e; Zustand &#x65b9;&#x6848;","children":[],"payload":{"tag":"li","lines":"214,215"}}],"payload":{"tag":"li","lines":"212,215"}},{"content":"<strong>MFSU &#x7f16;&#x8bd1;&#x63d0;&#x6548;</strong>","children":[{"content":"&#x539f;&#x7406;&#xff1a;&#x57fa;&#x4e8e; Webpack &#x8054;&#x90a6;&#x6a21;&#x5757; (Module Federation) &#x6280;&#x672f;","children":[],"payload":{"tag":"li","lines":"216,217"}},{"content":"&#x6548;&#x679c;&#xff1a;&#x5c06;&#x5e95;&#x5c42;&#x5e9e;&#x5927;&#x7684;&#x4f9d;&#x8d56;&#x9884;&#x5148;&#x7f16;&#x8bd1;&#x5e76;&#x7f13;&#x5b58;&#xff0c;&#x6781;&#x5927;&#x63d0;&#x5347;&#x672c;&#x5730;&#x670d;&#x52a1;&#x5668;&#x51b7;&#x542f;&#x52a8;&#x4e0e;&#x70ed;&#x66f4;&#x65b0;&#x7684;&#x901f;&#x5ea6;","children":[],"payload":{"tag":"li","lines":"217,218"}}],"payload":{"tag":"li","lines":"215,218"}}],"payload":{"tag":"li","lines":"204,218"}},{"content":"&#x8de8;&#x7aef;&#x4e0e;&#x670d;&#x52a1;&#x7aef;","children":[{"content":"<strong>Taro &#x8de8;&#x7aef;&#x673a;&#x5236;</strong>","children":[{"content":"&#x5e95;&#x5c42;&#xff1a;&#x5728;&#x6784;&#x5efa;&#x65f6;&#x5c06; React &#x7684; JSX &#x8bed;&#x6cd5;&#x6811; (AST) &#x8fdb;&#x884c;&#x89e3;&#x6790;","children":[],"payload":{"tag":"li","lines":"220,221"}},{"content":"&#x4ea7;&#x7269;&#xff1a;&#x7ffb;&#x8bd1;&#x7f16;&#x8bd1;&#x4e3a;&#x5404;&#x5c0f;&#x7a0b;&#x5e8f;&#x5e73;&#x53f0;&#x7684; XML/WXML &#x6a21;&#x677f;&#x7ed3;&#x6784;&#x548c;&#x6837;&#x5f0f;","children":[],"payload":{"tag":"li","lines":"221,222"}}],"payload":{"tag":"li","lines":"219,222"}},{"content":"<strong>SSR &#x4e0e; Hydration</strong>","children":[{"content":"SSR&#xff1a;&#x670d;&#x52a1;&#x5668;&#x6e32;&#x67d3;&#x51fa;&#x5b8c;&#x6574;&#x7684; HTML &#x76f4;&#x63a5;&#x8fd4;&#x56de;&#xff0c;&#x4f18;&#x5316; SEO &#x4e0e;&#x767d;&#x5c4f;&#x65f6;&#x95f4;","children":[],"payload":{"tag":"li","lines":"223,224"}},{"content":"Hydration&#xff1a;React &#x5728;&#x5ba2;&#x6237;&#x7aef;&#x91cd;&#x65b0;&#x626b;&#x63cf;&#x8fd4;&#x56de;&#x7684;&#x9759;&#x6001; DOM&#xff0c;&#x4e3a;&#x5176;&#x7ed1;&#x5b9a;&#x4e8b;&#x4ef6;&#x76d1;&#x542c;&#x5668;&#x7684;&#x6fc0;&#x6d3b;&#x8fc7;&#x7a0b;","children":[],"payload":{"tag":"li","lines":"224,225"}}],"payload":{"tag":"li","lines":"222,225"}}],"payload":{"tag":"li","lines":"218,225"}}],"payload":{"tag":"h2","lines":"195,196"}}],"payload":{"tag":"h1","lines":"1,2"}}</script>
+      <script type="application/json">{}</script>
+    </div>
+
+<h1 id="问题汇总"><a href="#问题汇总" class="headerlink" title="问题汇总"></a>问题汇总</h1><h2 id="一、-组件基础与架构演进"><a href="#一、-组件基础与架构演进" class="headerlink" title="一、 组件基础与架构演进"></a>一、 组件基础与架构演进</h2><h3 id="1-主问：类组件-Class-Component-与-函数式组件-Functional-Component-有什么本质区别？"><a href="#1-主问：类组件-Class-Component-与-函数式组件-Functional-Component-有什么本质区别？" class="headerlink" title="1. 主问：类组件 (Class Component) 与 函数式组件 (Functional Component) 有什么本质区别？"></a>1. 主问：类组件 (Class Component) 与 函数式组件 (Functional Component) 有什么本质区别？</h3><ul>
+<li><strong>追问 1</strong>：为什么现在前端社区和官方都全面推崇函数式组件？Hooks 究竟解决了类组件的什么痛点？</li>
+<li><strong>追问 2</strong>：<code>useState</code> 触发的更新属于宏任务还是微任务？函数组件又是如何利用 <code>useEffect</code> 完美替代类组件生命周期的？其闭包陷阱（Capturing Value）的本质原因是什么？</li>
+</ul>
+<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  green" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>参考答案&简要代码</summary><div class="content p-4 "><h4 id="1-本质区别"><a href="#1-本质区别" class="headerlink" title="1. 本质区别"></a>1. 本质区别</p><ul>
+<li><strong>心智模型</strong>：类组件是面向对象编程（OOP）的体现，依赖 <code>this</code> 指向和实例状态；函数组件是函数式编程（FP）的体现，主打“输入驱动输出”（$UI &#x3D; f(state)$），本质是一个纯函数。</li>
+<li><strong>内存与底层机制</strong>：类组件在 React 内部需要经历实例化过程，生命周期和状态挂载在组件实例（<code>this</code>）上；而函数组件每次渲染（Render）都会重新执行整个函数，其状态和副作用通过 Hooks 闭包保存在与之对应的 Fiber 节点的 <code>memoizedState</code> 链表上。</li>
+</ul>
+<h4 id="2-Hooks-解决的类组件痛点"><a href="#2-Hooks-解决的类组件痛点" class="headerlink" title="2. Hooks 解决的类组件痛点"></a>2. Hooks 解决的类组件痛点</p><ul>
+<li><strong>状态逻辑复用困难</strong>：类组件过去只能靠高阶组件（HOC）或 Render Props 来复用状态逻辑，容易陷入“嵌套地狱”（Wrapper Hell），使组件树层级过深。Hooks 允许将状态逻辑提取到独立的自定义 Hook 中。</li>
+<li><strong>巨石组件难以维护</strong>：类组件的逻辑被迫按照生命周期割裂（例如在 <code>componentDidMount</code> 和 <code>componentWillUnmount</code> 中同时写定时器的监听与解绑），而 Hooks 可以将相关的逻辑聚合在一起。</li>
+<li><strong>this 指向困扰</strong>：类组件中需要频繁绑定 <code>bind(this)</code>，一旦漏写极易引发指向错误。</li>
+</ul>
+<h4 id="3-追问-2-深度剖析"><a href="#3-追问-2-深度剖析" class="headerlink" title="3. 追问 2 深度剖析"></a>3. 追问 2 深度剖析</p><ul>
+<li><strong>useState 的更新归属</strong>：<ul>
+<li><strong>这是一个高频陷阱题</strong>。<code>useState</code> 触发的更新既<strong>不属于原生的宏任务，也不属于微任务</strong>，它是 React 自身调度系统（Scheduler）管理的用户交互任务。</li>
+<li>在内部，React 会将多次 <code>useState</code> 调用放进更新队列中（Batching 批处理）。</li>
+<li>在当前事件循环的同步代码执行完后，React 调度系统会利用<strong>微任务</strong>（如 <code>queueMicrotask</code> 或 <code>Promise.resolve</code>）或者<strong>宏任务</strong>（在不支持微任务或在低版本下利用 <code>MessageChannel</code>，取决于 React 的版本和并发模式）去触发 Fiber 树的 Reconciliation（调和）与重新渲染。</li>
+</ul>
+</li>
+<li><strong>useEffect 替代生命周期</strong>：<ul>
+<li><code>useEffect(cb, [])</code> 类似 <code>componentDidMount</code>。</li>
+<li><code>useEffect(cb, [deps])</code> 类似 <code>componentDidUpdate</code>。</li>
+<li><code>useEffect(() =&gt; cb, [])</code> 返回的清理函数类似 <code>componentWillUnmount</code>。</li>
+</ul>
+</li>
+<li><strong>闭包陷阱（Capturing Value）的本质</strong>：<ul>
+<li>函数组件在每次 Render 时都会形成一个全新的闭包。在这个闭包里，所有的 state 和 props 都冻结在“当前渲染”的那一刻。</li>
+<li>如果我们在异步回调（如 <code>setTimeout</code>）中读取旧状态，拿到的依然是触发该异步操作时的那一帧状态。</li>
+<li><strong>解决方案</strong>：<ol>
+<li>使用 <code>useRef</code> 保存状态（因为 <code>ref.current</code> 始终指向同一个内存地址）。</li>
+<li>使用 <code>useState</code> 的函数式更新：<code>setState(prev =&gt; prev + 1)</code>。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Javascript"><figure class="iseeu highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 闭包陷阱示例</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Counter</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [count, setCount] = <span class="title function_">useState</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">handleAlertClick</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 3秒后弹出的 count 依然是点击时的那一帧值，而不是最新值</span></span><br><span class="line">      <span class="title function_">alert</span>(<span class="string">&#x27;You clicked on: &#x27;</span> + count); </span><br><span class="line">    &#125;, <span class="number">3000</span>);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>You clicked &#123;count&#125; times<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setCount(count + 1)&#125;&gt;Click me<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;handleAlertClick&#125;</span>&gt;</span>Show alert<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+</div></details>
+
+<h3 id="2-主问：谈谈你对受控组件与非受控组件的理解，实现一个受控-Input-的关键点是什么？"><a href="#2-主问：谈谈你对受控组件与非受控组件的理解，实现一个受控-Input-的关键点是什么？" class="headerlink" title="2. 主问：谈谈你对受控组件与非受控组件的理解，实现一个受控 Input 的关键点是什么？"></a>2. 主问：谈谈你对受控组件与非受控组件的理解，实现一个受控 Input 的关键点是什么？</h3><ul>
+<li><strong>追问 1</strong>：原生 DOM 事件对象与 React 合成事件（SyntheticEvent）对象有何区别？React 为什么要多此一举设计合成事件？</li>
+<li><strong>追问 2</strong>：【手写实战】请用 React 原生 Hooks 实现一个通用的弹窗组件（Dialog&#x2F;Modal），要求支持 <code>title</code>、<code>children</code> 自定义内容以及 <code>onClose</code> 关闭回调。</li>
+</ul>
+<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  green" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>参考答案&简要代码</summary><div class="content p-4 "><h4 id="1-受控与非受控组件"><a href="#1-受控与非受控组件" class="headerlink" title="1. 受控与非受控组件"></a>1. 受控与非受控组件</p><ul>
+<li><strong>受控组件</strong>：表单元素的值完全由 React 的 state 控制，必须通过 <code>value</code> 属性绑定 state，并通过 <code>onChange</code> 事件监听用户输入，再同步更新 state。</li>
+<li><strong>非受控组件</strong>：表单元素的值由 DOM 节点自身管理，React 使用 <code>useRef</code> 直接在需要时去获取 DOM 节点以提取数据。</li>
+<li><strong>受控 Input 关键点</strong>：<ul>
+<li>必须显式声明 <code>value=&#123;state&#125;</code>。</li>
+<li>必须绑定 <code>onChange=&#123;(e) =&gt; setState(e.target.value)&#125;</code>。</li>
+<li>要避免由于 <code>value</code> 为 <code>undefined</code> 导致组件在受控与非受控状态间切换报错（应提供兜底值 <code>value=&#123;state || &#39;&#39;&#125;</code>）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-原生-DOM-事件-vs-React-合成事件"><a href="#2-原生-DOM-事件-vs-React-合成事件" class="headerlink" title="2. 原生 DOM 事件 vs React 合成事件"></a>2. 原生 DOM 事件 vs React 合成事件</p><ul>
+<li><strong>底层区别</strong>：<ol>
+<li><strong>挂载位置不同</strong>：原生事件直接挂载在真实 DOM 上；而 React 合成事件并不直接挂载到每个真实 DOM 节点，在 React 17 之后，它们被统一绑定在应用的<strong>根容器</strong>（Root Container，如 <code>#root</code>）上。</li>
+<li><strong>事件机制不同</strong>：React 内部实现了一套事件冒泡和捕获机制，并在根节点进行事件分发（Event Distribute）。</li>
+<li><strong>对象不同</strong>：React 传递给回调的是经过封装的 <code>SyntheticEvent</code>，该对象符合 W3C 标准，跨浏览器兼容性极佳。</li>
+</ol>
+</li>
+<li><strong>为什么要设计合成事件</strong>：<ul>
+<li><strong>跨平台兼容性</strong>：抹平不同浏览器之间的差异（例如 <code>transitionend</code>、<code>animationend</code> 等）。</li>
+<li><strong>性能优化</strong>：通过事件委托（Event Delegation）机制，避免了在每个子 DOM 元素上重复绑定监听器，极大降低了内存消耗。</li>
+<li><strong>配合 Fiber 与并发模式</strong>：合成事件方便 React 调度系统对其进行优先级标记，从而更好地支持中断与批处理（Batching）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-手写通用弹窗组件（Modal-Dialog）"><a href="#3-手写通用弹窗组件（Modal-Dialog）" class="headerlink" title="3. 手写通用弹窗组件（Modal&#x2F;Dialog）"></a>3. 手写通用弹窗组件（Modal&#x2F;Dialog）</p><div class="code-container" data-rel="Typescript"><figure class="iseeu highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; useEffect &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ReactDOM</span> <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">ModalProps</span> &#123;</span><br><span class="line">  <span class="attr">isOpen</span>: <span class="built_in">boolean</span>;</span><br><span class="line">  <span class="attr">title</span>?: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">onClose</span>: <span class="function">() =&gt;</span> <span class="built_in">void</span>;</span><br><span class="line">  <span class="attr">children</span>: <span class="title class_">React</span>.<span class="property">ReactNode</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Modal</span>: <span class="title class_">React</span>.<span class="property">FC</span>&lt;<span class="title class_">ModalProps</span>&gt; = <span class="function">(<span class="params">&#123; isOpen, title, onClose, children &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 监听 ESC 键关闭弹窗</span></span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">handleKeyDown</span> = (<span class="params"><span class="attr">e</span>: <span class="title class_">KeyboardEvent</span></span>) =&gt; &#123;</span><br><span class="line">      <span class="keyword">if</span> (e.<span class="property">key</span> === <span class="string">&#x27;Escape&#x27;</span>) &#123;</span><br><span class="line">        <span class="title function_">onClose</span>();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (isOpen) &#123;</span><br><span class="line">      <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;keydown&#x27;</span>, handleKeyDown);</span><br><span class="line">      <span class="comment">// 阻止背景滚动</span></span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="property">overflow</span> = <span class="string">&#x27;hidden&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">document</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;keydown&#x27;</span>, handleKeyDown);</span><br><span class="line">      <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="property">overflow</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, [isOpen, onClose]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!isOpen) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用 Portal 将弹窗渲染到 body 最外层，避免父组件 CSS 污染（如 overflow: hidden / transform）</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">ReactDOM</span>.<span class="title function_">createPortal</span>(</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;styles.overlay&#125;</span> <span class="attr">onClick</span>=<span class="string">&#123;onClose&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;styles.modalContainer&#125;</span> <span class="attr">onClick</span>=<span class="string">&#123;(e)</span> =&gt;</span> e.stopPropagation()&#125;&gt;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;styles.header&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">h3</span> <span class="attr">style</span>=<span class="string">&#123;styles.title&#125;</span>&gt;</span>&#123;title || &#x27;提示&#x27;&#125;<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          <span class="tag">&lt;<span class="name">button</span> <span class="attr">style</span>=<span class="string">&#123;styles.closeBtn&#125;</span> <span class="attr">onClick</span>=<span class="string">&#123;onClose&#125;</span>&gt;</span><span class="symbol">&amp;times;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;styles.content&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          &#123;children&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>,</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span></span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">styles</span>: <span class="title class_">Record</span>&lt;<span class="built_in">string</span>, <span class="title class_">React</span>.<span class="property">CSSProperties</span>&gt; = &#123;</span><br><span class="line">  <span class="attr">overlay</span>: &#123;</span><br><span class="line">    <span class="attr">position</span>: <span class="string">&#x27;fixed&#x27;</span>,</span><br><span class="line">    <span class="attr">top</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">left</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">right</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">bottom</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">backgroundColor</span>: <span class="string">&#x27;rgba(0, 0, 0, 0.5)&#x27;</span>,</span><br><span class="line">    <span class="attr">display</span>: <span class="string">&#x27;flex&#x27;</span>,</span><br><span class="line">    <span class="attr">justifyContent</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">    <span class="attr">alignItems</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">    <span class="attr">zIndex</span>: <span class="number">1000</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">modalContainer</span>: &#123;</span><br><span class="line">    <span class="attr">backgroundColor</span>: <span class="string">&#x27;#fff&#x27;</span>,</span><br><span class="line">    <span class="attr">borderRadius</span>: <span class="string">&#x27;8px&#x27;</span>,</span><br><span class="line">    <span class="attr">width</span>: <span class="string">&#x27;500px&#x27;</span>,</span><br><span class="line">    <span class="attr">maxWidth</span>: <span class="string">&#x27;90%&#x27;</span>,</span><br><span class="line">    <span class="attr">boxShadow</span>: <span class="string">&#x27;0 4px 12px rgba(0,0,0,0.15)&#x27;</span>,</span><br><span class="line">    <span class="attr">animation</span>: <span class="string">&#x27;fade-in 0.3s ease&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">header</span>: &#123;</span><br><span class="line">    <span class="attr">padding</span>: <span class="string">&#x27;16px&#x27;</span>,</span><br><span class="line">    <span class="attr">borderBottom</span>: <span class="string">&#x27;1px solid #f0f0f0&#x27;</span>,</span><br><span class="line">    <span class="attr">display</span>: <span class="string">&#x27;flex&#x27;</span>,</span><br><span class="line">    <span class="attr">justifyContent</span>: <span class="string">&#x27;space-between&#x27;</span>,</span><br><span class="line">    <span class="attr">alignItems</span>: <span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">title</span>: &#123;</span><br><span class="line">    <span class="attr">margin</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">fontSize</span>: <span class="string">&#x27;18px&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">closeBtn</span>: &#123;</span><br><span class="line">    <span class="attr">background</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">    <span class="attr">border</span>: <span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">    <span class="attr">fontSize</span>: <span class="string">&#x27;24px&#x27;</span>,</span><br><span class="line">    <span class="attr">cursor</span>: <span class="string">&#x27;pointer&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">content</span>: &#123;</span><br><span class="line">    <span class="attr">padding</span>: <span class="string">&#x27;16px&#x27;</span>,</span><br><span class="line">    <span class="attr">fontSize</span>: <span class="string">&#x27;14px&#x27;</span>,</span><br><span class="line">    <span class="attr">color</span>: <span class="string">&#x27;#333&#x27;</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">Modal</span>;</span><br></pre></td></tr></table></figure></div>
+</div></details>
+
+<h2 id="二、-状态管理与数据流转"><a href="#二、-状态管理与数据流转" class="headerlink" title="二、 状态管理与数据流转"></a>二、 状态管理与数据流转</h2><h3 id="3-主问：React-的状态更新机制是什么？useState-与-Redux-中的全局状态有什么本质区别？"><a href="#3-主问：React-的状态更新机制是什么？useState-与-Redux-中的全局状态有什么本质区别？" class="headerlink" title="3. 主问：React 的状态更新机制是什么？useState 与 Redux 中的全局状态有什么本质区别？"></a>3. 主问：React 的状态更新机制是什么？<code>useState</code> 与 Redux 中的全局状态有什么本质区别？</h3><ul>
+<li><strong>追问 1</strong>：Redux 中的变量变化后，页面为什么能自动渲染？它的核心触发机制（如 <code>useSelector</code>）是如何感知状态改变并通知 React 重新执行的？</li>
+<li><strong>追问 2</strong>：请横向对比 <code>Redux</code>、<code>Dva</code>、<code>Zustand</code>、<code>Jotai</code> 等状态管理库，在真实中大型项目落地中，状态管理的划分原则（Local State vs Global State）是怎样的？</li>
+</ul>
+<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  green" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>参考答案&简要代码</summary><div class="content p-4 "><h4 id="1-React-状态更新机制与区别"><a href="#1-React-状态更新机制与区别" class="headerlink" title="1. React 状态更新机制与区别"></a>1. React 状态更新机制与区别</p><ul>
+<li><strong>状态更新机制</strong>：React 的状态更新基于“单向数据流”和“不可变数据（Immutability）”。状态变化时，会调用 <code>setState/dispatch</code>，在当前 Fiber 树上创建一个 <code>Update</code> 对象并挂载到待处理队列，然后触发 React 的调和与 Diff 过程，生成新的 Virtual DOM 并打补丁渲染到真实 DOM。</li>
+<li><strong>本质区别</strong>：<ul>
+<li><code>useState</code> 是<strong>组件局部状态</strong>。状态存储在当前组件对应的 Fiber 节点的 <code>memoizedState</code> 属性中，生命周期随组件销毁而销毁。</li>
+<li><code>Redux</code> 是<strong>应用全局状态</strong>。状态存储在内存中的一个单一 Store（JS 对象）里，与 React 组件树完全脱离，生命周期贯穿整个应用的生命周期。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Redux-变量变化触发渲染的底层原理"><a href="#2-Redux-变量变化触发渲染的底层原理" class="headerlink" title="2. Redux 变量变化触发渲染的底层原理"></a>2. Redux 变量变化触发渲染的底层原理</p><p>Redux 的状态更新和 React 渲染本来是独立的，之所以能联动，全靠 <code>react-redux</code> 库架设的桥梁。</p>
+<ul>
+<li><strong>Redux 核心流转过程</strong>：<ol>
+<li>调用 <code>store.dispatch(action)</code> $\rightarrow$ 触发 <code>reducer</code> $\rightarrow$ 计算出全新的 <code>state</code>。</li>
+<li><code>react-redux</code> 内部通过 <code>store.subscribe(listener)</code> 注册了订阅器。当 Store 状态改变，所有的订阅 listener 被触发。</li>
+</ol>
+</li>
+<li><strong><code>useSelector</code> 的核心感知机制</strong>：<ul>
+<li><code>useSelector</code> 内部通过 React 的 <code>useSyncExternalStore</code>（React 18）或底层的 <code>useReducer/useState</code> 维持了一个用于强制更新的 <code>forceUpdate</code> 标记。</li>
+<li>在订阅函数触发时，<code>useSelector</code> 会获取最新的 <code>storeState</code>，并利用传入的 selector 函数计算出你选择的切片值。</li>
+<li>它将新计算的值与上一次缓存的值进行<strong>浅比较（Shallow Compare）</strong>。</li>
+<li>若发现值变了，就会触发 <code>forceUpdate()</code>，使当前组件重新 Render；若没变，则直接拦截，防止不相关的全局状态修改导致无关组件重绘。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-常见状态管理库横向对比"><a href="#3-常见状态管理库横向对比" class="headerlink" title="3. 常见状态管理库横向对比"></a>3. 常见状态管理库横向对比</p><table>
+<thead>
+<tr>
+<th>状态管理库</th>
+<th>状态心智模型</th>
+<th>状态更新范式</th>
+<th>优点</th>
+<th>缺点 &#x2F; 适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Redux</strong></td>
+<td>单一数据源，全局树</td>
+<td>不可变数据，<code>dispatch(action)</code></td>
+<td>极其严格、可预测、单向流，调试工具强大</td>
+<td>样板代码极多（Action&#x2F;Reducer），适合超大型、规范度要求极高的项目</td>
+</tr>
+<tr>
+<td><strong>Dva</strong></td>
+<td>基于 Redux</td>
+<td>基于 <code>Redux-saga</code> 的数据流整合方案</td>
+<td>内置副作用处理（Effects），开发体验较好</td>
+<td>社区活跃度降低，逐渐被现代工具取代</td>
+</tr>
+<tr>
+<td><strong>Zustand</strong></td>
+<td>单一&#x2F;多数据源，切片式</td>
+<td>直接修改&#x2F;不可变数据组合</td>
+<td>零样板代码，极其轻量，支持 hooks API，不需要 Provider 包裹</td>
+<td>相比 Redux 约束力略弱，适合中大型敏捷开发项目</td>
+</tr>
+<tr>
+<td><strong>Jotai</strong></td>
+<td>原子化状态（Atom）</td>
+<td>响应式&#x2F;细粒度更新（类似 Vue）</td>
+<td>极其精确的局部重绘，状态细粒度拆分，无冗余重绘</td>
+<td>原子管理复杂时结构零散，适合高频交互、局部状态高联动的场景</td>
+</tr>
+</tbody></table>
+<h4 id="4-中大型项目状态划分原则"><a href="#4-中大型项目状态划分原则" class="headerlink" title="4. 中大型项目状态划分原则"></a>4. 中大型项目状态划分原则</p><p>在落地中，应严格遵循“状态就近原则”：</p>
+<ol>
+<li><strong>Local State（组件私有状态）</strong>：如弹窗的开关（<code>isOpen</code>）、输入框临时内容（<code>inputValue</code>）、仅限当前页面使用的分页参数（<code>pageNum</code>）。绝不放入全局。</li>
+<li><strong>Global State（全局共享状态）</strong>：跨页面、多组件深度嵌套共享的数据。如用户信息、全局权限路由、购物车列表、系统全局配置。</li>
+<li><strong>Server State（服务端缓存状态）</strong>：通过 React Query 或 SWR 管理，将接口返回的数据作为缓存处理，不污染全局 UI 状态。</li>
+</ol>
+</div></details>
+
+<h2 id="三、-性能优化与-Hook-底层原理"><a href="#三、-性能优化与-Hook-底层原理" class="headerlink" title="三、 性能优化与 Hook 底层原理"></a>三、 性能优化与 Hook 底层原理</h2><h3 id="4-主问：谈谈你对-useCallback-和-useMemo-的理解与使用场景？何时不应该使用它们？"><a href="#4-主问：谈谈你对-useCallback-和-useMemo-的理解与使用场景？何时不应该使用它们？" class="headerlink" title="4. 主问：谈谈你对 useCallback 和 useMemo 的理解与使用场景？何时不应该使用它们？"></a>4. 主问：谈谈你对 <code>useCallback</code> 和 <code>useMemo</code> 的理解与使用场景？何时不应该使用它们？</h3><ul>
+<li><strong>追问 1</strong>：React Fiber 架构下，Hooks 是如何存储在 Fiber 节点上的？为什么不能在 <code>if</code> 或循环中调用 Hooks？</li>
+<li><strong>追问 2</strong>：在实际项目中，除了这两个 Hooks，你还用过哪些前端性能优化的实战手段？（要求结合瀑布流虚拟列表、下拉刷新防二次请求等真实场景）。</li>
+</ul>
+<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  green" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>参考答案&简要代码</summary><div class="content p-4 "><h4 id="1-useCallback-与-useMemo"><a href="#1-useCallback-与-useMemo" class="headerlink" title="1. useCallback 与 useMemo"></a>1. <code>useCallback</code> 与 <code>useMemo</code></p><ul>
+<li><strong>本质区别</strong>：<ul>
+<li><code>useCallback(fn, deps)</code> 缓存的是<strong>函数引用</strong>本身。</li>
+<li><code>useMemo(() =&gt; val, deps)</code> 缓存的是<strong>函数执行后返回的值</strong>。</li>
+</ul>
+</li>
+<li><strong>何时不该使用（高频误区）</strong>：<ul>
+<li><strong>不要闭眼到处使用</strong>！<code>useCallback</code> 和 <code>useMemo</code> 本身也是有计算和内存开销的。每次渲染，React 都需要创建新依赖数组、做依赖项浅比较、在内存中存储前一次的函数&#x2F;值。</li>
+<li>若传递给子组件的是普通原生元素（如 <code>&lt;button onClick=&#123;cb&#125;&gt;</code>），使用 <code>useCallback</code> 属于无意义消耗。</li>
+<li><strong>何时该用</strong>：<ol>
+<li>传递给子组件的函数，且该子组件被 <code>React.memo</code> 包裹进行性能拦截。</li>
+<li>函数或计算值作为其他 Hooks（如 <code>useEffect</code>）的依赖项。</li>
+<li>极其昂贵的 CPU 计算逻辑（如过滤几万条数据的过滤算法）。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Hooks-存储结构与不能在条件句中使用的底层原因"><a href="#2-Hooks-存储结构与不能在条件句中使用的底层原因" class="headerlink" title="2. Hooks 存储结构与不能在条件句中使用的底层原因"></a>2. Hooks 存储结构与不能在条件句中使用的底层原因</p><ul>
+<li><p><strong>存储结构</strong>：</p>
+<ul>
+<li><p>每个 React 组件对应一个 Fiber 节点。</p>
+</li>
+<li><p>Fiber 节点上有一个 <code>memoizedState</code> 属性。在函数组件中，它存的不是普通的 state，而是一个<strong>单向链表</strong>。</p>
+</li>
+<li><p>链表的每个节点（<code>Hook</code> 对象）对应一个 Hook 的调用次序，格式类似：</p>
+</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Typescript"><figure class="iseeu highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Hook</span> &#123;</span><br><span class="line">  <span class="attr">memoizedState</span>: <span class="built_in">any</span>; <span class="comment">// 存储当前 hook 的真实值 (如 useState 的 val, useEffect 的 destroy)</span></span><br><span class="line">  <span class="attr">baseState</span>: <span class="built_in">any</span>;</span><br><span class="line">  <span class="attr">queue</span>: <span class="built_in">any</span>;         <span class="comment">// 更新队列</span></span><br><span class="line">  <span class="attr">next</span>: <span class="title class_">Hook</span> | <span class="literal">null</span>;  <span class="comment">// 指向下一个 Hook 节点的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><p><strong>为什么不能在 if&#x2F;循环中调用</strong>：</p>
+<ul>
+<li>React 在更新阶段，是完全依赖 Hook 的调用顺序（即链表的指针移动指针 <code>next</code>）来将当前的 state 状态与上一次的值匹配起来的。</li>
+<li>如果把 Hook 写在条件句中，导致某次渲染时其中一个 Hook 没有执行，<strong>整个链表节点的访问顺序就会发生错乱</strong>，后面的 Hook 读取到的就是前一个 Hook 的历史状态，从而引发灾难性的 Bug。React 团队通过 ESLint 插件强制规定此规则。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-前端性能优化实战手段（结合面经热点）"><a href="#3-前端性能优化实战手段（结合面经热点）" class="headerlink" title="3. 前端性能优化实战手段（结合面经热点）"></a>3. 前端性能优化实战手段（结合面经热点）</p><ul>
+<li><strong>场景 1：瀑布流虚拟列表（Virtual List）实现思路</strong>：<ul>
+<li>在加载海量图片瀑布流时，直接渲染全部 DOM 导致页面卡顿死机。</li>
+<li><strong>实现思路</strong>：<ol>
+<li>容器监听 <code>onScroll</code>。</li>
+<li>根据视口高度 <code>clientHeight</code> 和当前滚动距离 <code>scrollTop</code>，动态计算出当前可视区应该渲染的 item 范围（如 <code>[start, end]</code>）。</li>
+<li>用绝对定位（<code>absolute</code>）将可视区内的 DOM 渲染出来，并加上对应的 <code>top</code> 偏移。</li>
+<li>未在可视区的内容只保留空的占位容器高度，减少 90% 以上的真实 DOM 渲染，解决卡顿。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>场景 2：下拉刷新遇到刷新两次问题（艾未恩面经高频）</strong>：<ul>
+<li><strong>原因分析</strong>：往往是因为没有做防抖&#x2F;节流控制，或者手势触发（<code>touchmove</code> &#x2F; <code>touchend</code>）判定距离不明确，导致在网络请求返回前重复触发了接口。</li>
+<li><strong>解决思路（双重防御）</strong>：<ol>
+<li>引入状态锁 <code>loading</code>，一旦开始请求，直接置为 <code>true</code>，拦截后续的刷新信号。</li>
+<li>为请求提供唯一标识，或者结合 <code>AbortController</code> 在第二次刷新动作触发时，直接 cancel 掉上一次未完成的请求。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Typescript"><figure class="iseeu highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下拉刷新防二次触发锁逻辑</span></span><br><span class="line"><span class="keyword">const</span> [isLoading, setIsLoading] = <span class="title function_">useState</span>(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">handleRefresh</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (isLoading) <span class="keyword">return</span>; <span class="comment">// 锁住</span></span><br><span class="line">  <span class="title function_">setIsLoading</span>(<span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">fetchNewData</span>();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(err);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="title function_">setIsLoading</span>(<span class="literal">false</span>); <span class="comment">// 释放锁</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+</div></details>
+
+<h2 id="四、-TypeScript-与-React-实战进阶"><a href="#四、-TypeScript-与-React-实战进阶" class="headerlink" title="四、 TypeScript 与 React 实战进阶"></a>四、 TypeScript 与 React 实战进阶</h2><h3 id="5-主问：TypeScript-中-type-和-interface-的本质区别是什么？"><a href="#5-主问：TypeScript-中-type-和-interface-的本质区别是什么？" class="headerlink" title="5. 主问：TypeScript 中 type 和 interface 的本质区别是什么？"></a>5. 主问：TypeScript 中 <code>type</code> 和 <code>interface</code> 的本质区别是什么？</h3><ul>
+<li><strong>追问 1</strong>：在声明 React Props 和函数组件时，你会优先选用哪一个？如何利用 TS 约束一个组件支持任意泛型？</li>
+<li><strong>追问 2</strong>：对泛型工具 <code>Pick</code> 的底层源码实现有何理解？此外，TypeScript 中的 <code>unknown</code> 和 <code>never</code> 有什么区别，分别在什么业务场景下使用？</li>
+</ul>
+<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  green" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>参考答案&简要代码</summary><div class="content p-4 "><h4 id="1-type-vs-interface"><a href="#1-type-vs-interface" class="headerlink" title="1. type vs interface"></a>1. type vs interface</p><ul>
+<li><strong>扩展方式（主要区别）</strong>：<ul>
+<li><code>interface</code> 通过 <code>extends</code> 进行扩展；且支持<strong>声明合并（Declaration Merging）</strong>，在不同地方重复声明同名 <code>interface</code>，TS 会自动将其属性合并。</li>
+<li><code>type</code> 通过交叉类型 <code>&amp;</code> 进行扩展；不支持声明合并，重复定义会直接报错。</li>
+</ul>
+</li>
+<li><strong>能力范围</strong>：<ul>
+<li><code>type</code> 表达能力更强，可以声明基本类型别名、联合类型（<code>Union</code>）、元组（<code>Tuple</code>）以及进行复杂条件类型计算。</li>
+<li><code>interface</code> 只能声明对象、函数和类的形状。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-React-实战选型与泛型组件约束"><a href="#2-React-实战选型与泛型组件约束" class="headerlink" title="2. React 实战选型与泛型组件约束"></a>2. React 实战选型与泛型组件约束</p><ul>
+<li><strong>团队规范与选型</strong>：<ul>
+<li>日常组件的 Props 定义优先使用 <code>interface</code>（方便其他模块或三方库继承扩展）。</li>
+<li>遇到需要使用联合类型（如 <code>type Theme = &#39;light&#39; | &#39;dark&#39;</code>）或需要进行映射类型处理时，使用 <code>type</code>。</li>
+</ul>
+</li>
+<li><strong>React 泛型组件应用</strong>：<ul>
+<li>常见场景：通用的下拉选择框（Select）、表格（Table），数据项的 <code>value</code> 或 <code>record</code> 格式是不确定的。</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Typescript"><figure class="iseeu highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 泛型列表组件：约束输入项必须含有 id</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">ListProps</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="attr">items</span>: T[];</span><br><span class="line">  <span class="attr">renderItem</span>: <span class="function">(<span class="params"><span class="attr">item</span>: T</span>) =&gt;</span> <span class="title class_">React</span>.<span class="property">ReactNode</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title class_">GenericList</span>&lt;T <span class="keyword">extends</span> &#123; <span class="attr">id</span>: <span class="built_in">string</span> | <span class="built_in">number</span> &#125;&gt;(&#123; items, renderItem &#125;: <span class="title class_">ListProps</span>&lt;T&gt;) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;items.map((item) =&gt; (</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;item.id&#125;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">          &#123;renderItem(item)&#125;</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      ))&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="3-Pick-的底层实现"><a href="#3-Pick-的底层实现" class="headerlink" title="3. Pick 的底层实现"></a>3. Pick 的底层实现</p><ul>
+<li><code>Pick</code> 用于从一个类型中挑选出几个属性组成新的类型：</li>
+</ul>
+<div class="code-container" data-rel="Typescript"><figure class="iseeu highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 底层源码实现</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">MyPick</span>&lt;T, K <span class="keyword">extends</span> keyof T&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> K]: T[P];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><strong>解析</strong>：<ul>
+<li><code>keyof T</code> 获取 <code>T</code> 的所有属性键组成的联合类型。</li>
+<li><code>K extends keyof T</code> 约束传入的要挑选的键 <code>K</code> 必须是 <code>T</code> 已有的属性子集。</li>
+<li><code>[P in K]</code> 是映射类型，遍历联合类型 <code>K</code> 中的每一个属性 <code>P</code>。</li>
+<li><code>T[P]</code> 为类型索引访问，获取对应属性的具体类型。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-unknown-vs-never"><a href="#4-unknown-vs-never" class="headerlink" title="4. unknown vs never"></a>4. unknown vs never</p><ul>
+<li><strong><code>unknown</code>（安全未知类型）</strong>：<ul>
+<li>是所有类型的<strong>Top Type</strong>（任何类型都可以赋值给 <code>unknown</code>）。</li>
+<li><strong>区别点</strong>：与 <code>any</code> 不同，<code>unknown</code> 类型的值<strong>不能直接调用方法或属性</strong>，在使用前必须通过类型守卫（Type Guard）或类型断言进行“类型缩小（Narrowing）”。</li>
+<li><strong>场景</strong>：用于处理后端返回的格式不确定的不安全数据，或者编写高度通用的底层库（如 Axios 响应体拦截器、全局 Loading 拦截器等）。</li>
+</ul>
+</li>
+<li><strong><code>never</code>（永不存在的类型）</strong>：<ul>
+<li>是所有类型的<strong>Bottom Type</strong>（没有任何值可以赋值给 <code>never</code>，除了 <code>never</code> 本身）。</li>
+<li><strong>场景</strong>：<ol>
+<li>抛出异常或死循环函数的返回值类型：<code>function error(): never &#123; throw new Error() &#125;</code>。</li>
+<li>全面性检查（Exhaustiveness Check），在 <code>switch/case</code> 分支中防止遗漏新增的联合类型分支：</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Typescript"><figure class="iseeu highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Direction</span> = <span class="string">&#x27;Up&#x27;</span> | <span class="string">&#x27;Down&#x27;</span> | <span class="string">&#x27;Left&#x27;</span> | <span class="string">&#x27;Right&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">handleMove</span>(<span class="params"><span class="attr">dir</span>: <span class="title class_">Direction</span></span>) &#123;</span><br><span class="line">  <span class="keyword">switch</span> (dir) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Up&#x27;</span>: <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Down&#x27;</span>: <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Left&#x27;</span>: <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Right&#x27;</span>: <span class="keyword">break</span>;</span><br><span class="line">    <span class="attr">default</span>:</span><br><span class="line">      <span class="comment">// 如果后期有人给 Direction 新增了 &#x27;Forward&#x27; 类型，而这里没有写对应的 case，</span></span><br><span class="line">      <span class="comment">// 那么编译到这里时就会报错，因为 &#x27;Forward&#x27; 不能赋值给 never。</span></span><br><span class="line">      <span class="keyword">const</span> <span class="attr">exhaustiveCheck</span>: <span class="built_in">never</span> = dir;</span><br><span class="line">      <span class="keyword">return</span> exhaustiveCheck;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+</div></details>
+
+<h2 id="五、-跨端、跨框架与调和"><a href="#五、-跨端、跨框架与调和" class="headerlink" title="五、 跨端、跨框架与调和"></a>五、 跨端、跨框架与调和</h2><h3 id="6-主问：React-和-Vue-在底层的数据绑定与更新原理上有什么本质区别？"><a href="#6-主问：React-和-Vue-在底层的数据绑定与更新原理上有什么本质区别？" class="headerlink" title="6. 主问：React 和 Vue 在底层的数据绑定与更新原理上有什么本质区别？"></a>6. 主问：React 和 Vue 在底层的数据绑定与更新原理上有什么本质区别？</h3><ul>
+<li><strong>追问 1</strong>：React 的虚拟 DOM (Virtual DOM) 是怎么生成的？它的 Diff 算法与 Vue 的双端 Diff &#x2F; 快速 Diff 有什么不同？</li>
+<li><strong>追问 2</strong>：在跨端方案中，<code>Uniapp</code> 和 <code>Taro</code> 各有什么特点？为什么在中大型跨端项目中，不少团队更倾向于选用 <code>Taro</code>？</li>
+</ul>
+<details class="relative my-4 border border-border-color bg-second-background-color rounded-md  green" data-header-exclude><summary class="px-4 py-2 rounded-md shadow-[0_0_2px_0_var(--shadow-color-1)] cursor-pointer not-markdown"><i class="fa-solid fa-chevron-right"></i>参考答案&简要代码</summary><div class="content p-4 "><h4 id="1-数据绑定与更新原理区别"><a href="#1-数据绑定与更新原理区别" class="headerlink" title="1. 数据绑定与更新原理区别"></a>1. 数据绑定与更新原理区别</p><ul>
+<li><strong>React：单向数据流 + 显式状态更新</strong><ul>
+<li>数据单向流转。更新依赖显式调用 <code>setState</code>，React 本身对具体哪个数据发生了变化“一无所知”。</li>
+<li>它采用<strong>粗粒度</strong>的更新策略：一旦组件状态改变，React 会自顶向下重新执行该组件及其所有子组件的渲染逻辑。</li>
+<li>必须通过虚拟 DOM 进行调和与 Diff 算法对比，找出差异后再打补丁到真实 DOM（可以通过 <code>useMemo</code> 或 <code>React.memo</code> 做手动阻断优化）。</li>
+</ul>
+</li>
+<li><strong>Vue：响应式劫持 + 依赖收集（双向数据绑定）</strong><ul>
+<li>使用 <code>Object.defineProperty</code> (Vue2) 或 <code>Proxy</code> (Vue3) 对数据进行属性劫持。</li>
+<li>它采用<strong>细粒度</strong>的更新策略：组件渲染时会自动触发 <code>getter</code> 进行<strong>依赖收集</strong>（Collect Dependency），将当前的副作用函数（Render Watcher&#x2F;Effect）与数据键绑定。</li>
+<li>一旦数据变化，触发 <code>setter</code> 精准派发更新，直接告知 Reactivity 系统哪些组件发生了变化，从而只对变化了的组件进行局部精准渲染。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-虚拟-DOM-生成与-Diff-算法大厂对比"><a href="#2-虚拟-DOM-生成与-Diff-算法大厂对比" class="headerlink" title="2. 虚拟 DOM 生成与 Diff 算法大厂对比"></a>2. 虚拟 DOM 生成与 Diff 算法大厂对比</p><ul>
+<li><strong>虚拟 DOM 生成</strong>：<ul>
+<li>在 React 中，我们写的 JSX 经由 Babel 编译，转化为 React 17+ 的 <code>_jsxRuntime.jsx(...)</code> 或低版本的 <code>React.createElement(...)</code> 函数调用。</li>
+<li>这些函数执行后，会返回一个描述 DOM 结构的普通 JS 对象（即 Virtual DOM）。</li>
+</ul>
+</li>
+<li><strong>Diff 算法差异</strong>：<ul>
+<li><strong>React Diff（单端&#x2F;单向遍历）</strong>：<ul>
+<li>为了降低计算成本，React 做出了三大假设：相同层级节点对比；不同类型组件产生不同树；通过 <code>key</code> 识别移动。</li>
+<li><strong>算法过程</strong>：只做单向从左到右遍历。<ul>
+<li>第一轮遍历：尝试复用新旧节点中位置没有发生改变的节点。一旦遇到不能复用的，终止遍历。</li>
+<li>第二轮遍历：将剩余旧节点放入一个以 <code>key</code> 为键的 Map 中，然后遍历新节点，从 Map 中查找复用。通过对比新旧节点在旧树中的索引 <code>lastPlacedIndex</code>，决定节点是插入、删除还是移动。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Vue2 Diff（双端指针）</strong>：<ul>
+<li>采用双端指针算法（头头、尾尾、头尾、尾头四路对比）。从两端向中间收拢，在处理“首尾互换”、“倒序”等场景下，比起 React 的单向对比，能够显著减少真实 DOM 的移动次数。</li>
+</ul>
+</li>
+<li><strong>Vue3 Diff（快速 Diff &#x2F; 最长递增子序列）</strong>：<ul>
+<li>借鉴了 <code>ivi</code> 和 <code>inferno</code> 算法。</li>
+<li>首先自前向后、自后向前进行相同节点的预处理。</li>
+<li>对于中间乱序部分，Vue3 建立了一个“新旧节点位置映射表”，并利用“最长递增子序列（LIS）”算法计算出不需要移动的节点索引。只对处于子序列之外的节点进行移动，达到了最少移动 DOM 的极致性能。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-跨端方案对比：Uniapp-vs-Taro"><a href="#3-跨端方案对比：Uniapp-vs-Taro" class="headerlink" title="3. 跨端方案对比：Uniapp vs Taro"></a>3. 跨端方案对比：Uniapp vs Taro</p><ul>
+<li><strong>开发心智与技术栈</strong>：<ul>
+<li><code>Uniapp</code>：基于 Vue 生态。对于习惯 Vue 语法的开发者极为友好，开发上手简单，生态和组件库在小程序端非常庞大。</li>
+<li><code>Taro</code>：由京东凹凸实验室开发，主要支持 React 技术栈（虽然目前也兼容 Vue，但 React 仍是主流生态）。</li>
+</ul>
+</li>
+<li><strong>多端一致性与架构优势</strong>：<ul>
+<li><code>Uniapp</code> 的重心在于微信小程序的高效输出，对于多端（Web, App, H5）的细节抹平在大型复杂业务中可能存在兼容性缺陷。</li>
+<li><code>Taro</code> 在设计之初就高度重视<strong>多端一致性</strong>。它通过高度重构的编译时（利用 Babel 转换 React JSX 代码为小程序模板）和强大的运行时（劫持小程序 DOM&#x2F;BOM 接口）设计，使得在多端代码编译时表现得极其稳定。</li>
+</ul>
+</li>
+<li><strong>为什么中大型项目更倾向于 Taro</strong>：<ul>
+<li><strong>逻辑复用性</strong>：React 的 Hooks 设计使得非 UI 的纯业务逻辑复用率高达 95% 以上，且无需考虑 Vue 复杂的 <code>watch/computed</code> 依赖链路。</li>
+<li><strong>大型团队协作与 TS 契合度</strong>：React 技术栈天然与 TypeScript 完美契合，配合 Taro 能够实现完美的静态类型检查。这对于数十人协作、维护周期长达数年的中大型复杂跨端项目来说，能极大地降低线上故障率，保证代码的高可维护性。</li>
+</ul>
+</li>
+</ul>
+</div></details>
+<link rel="stylesheet" href="https://unpkg.com/markmap-toolbar@0.18.10/dist/style.css"><script src="https://unpkg.com/d3@7"></script><script src="https://unpkg.com/markmap-view@0.18.10"></script><script src="https://unpkg.com/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> React 知识点总结</li>
+        <li><strong>作者:</strong> BYWled</li>
+        <li><strong>创建于
+                :</strong> 2026-07-01 17:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2026-07-01 10:02:19
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.wled.top/2026/07/01/ReactXMind/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/XMind/">#XMind</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/06/25/VueXMind/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">Vue 知识点总结</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="giscus-container"></div>
+    <script data-swup-reload-script defer>
+        (function() {
+            const containerId = "giscus-container";
+            const mapping = "pathname";
+            const lang = "zh-CN";
+            const inputPosition = "bottom";
+            const reactionsEnabled = "1" === "1";
+            const emitMetadata = "1" === "1";
+            const strict = "0" === "1";
+            const loading = "lazy";
+
+            const getTerm = () => {
+                if (mapping === "pathname") return location.pathname;
+                if (mapping === "url") return location.href;
+                if (mapping === "title") return document.title;
+                if (mapping === "og:title") {
+                    const ogTitle = document.querySelector("meta[property='og:title']");
+                    return ogTitle?.content || document.title;
+                }
+                return "";
+            };
+
+            const sendUpdate = () => {
+                const iframe = document.querySelector("iframe.giscus-frame");
+                if (!iframe) {
+                    return;
+                }
+
+                const setConfig = {
+                    theme: "preferred_color_scheme",
+                    lang,
+                    inputPosition,
+                    reactionsEnabled,
+                    emitMetadata,
+                    strict,
+                };
+
+                if (mapping !== "number") {
+                    const term = getTerm();
+                    if (term) {
+                        setConfig.term = term;
+                    }
+                }
+
+                iframe.contentWindow.postMessage(
+                    { giscus: { setConfig } },
+                    "https://giscus.app",
+                );
+            };
+
+            const loadGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                const iframe = container.querySelector("iframe.giscus-frame");
+                if (iframe) {
+                    sendUpdate();
+                    return;
+                }
+
+                if (container.dataset.giscusInit === "true") {
+                    return;
+                }
+
+                const giscusConfig = {
+                    src: "https://giscus.app/client.js",
+                    "data-repo": "BYWled/Takling",
+                    "data-repo-id": "R_kgDOM2X6Kg",
+                    "data-category": "Announcements",
+                    "data-category-id": "DIC_kwDOM2X6Ks4Civf9",
+                    "data-mapping": mapping,
+                    "data-strict": "0",
+                    "data-reactions-enabled": "1",
+                    "data-emit-metadata": "1",
+                    "data-theme": "preferred_color_scheme",
+                    "data-lang": lang,
+                    "data-input-position": inputPosition,
+                    "data-loading": loading,
+                    crossorigin: "anonymous",
+                    async: true,
+                };
+
+                const giscusScript = document.createElement("script");
+                for (const key in giscusConfig) {
+                    giscusScript.setAttribute(key, giscusConfig[key]);
+                }
+                container.appendChild(giscusScript);
+                container.dataset.giscusInit = "true";
+            };
+
+            const runGiscus = () => {
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+
+                if (container.querySelector("iframe.giscus-frame")) {
+                    sendUpdate();
+                    return;
+                }
+
+                loadGiscus();
+            };
+
+            runGiscus();
+        })();
+    </script>
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">React 知识点总结</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1"><span class="nav-text">知识图谱</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB"><span class="nav-text">问题汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B"><span class="nav-text">一、 组件基础与架构演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BB%E9%97%AE%EF%BC%9A%E7%B1%BB%E7%BB%84%E4%BB%B6-Class-Component-%E4%B8%8E-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6-Functional-Component-%E6%9C%89%E4%BB%80%E4%B9%88%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-text">1. 主问：类组件 (Class Component) 与 函数式组件 (Functional Component) 有什么本质区别？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB"><span class="nav-text">1. 本质区别
+心智模型：类组件是面向对象编程（OOP）的体现，依赖 this 指向和实例状态；函数组件是函数式编程（FP）的体现，主打“输入驱动输出”（$UI &#x3D; f(state)$），本质是一个纯函数。
+内存与底层机制：类组件在 React 内部需要经历实例化过程，生命周期和状态挂载在组件实例（this）上；而函数组件每次渲染（Render）都会重新执行整个函数，其状态和副作用通过 Hooks 闭包保存在与之对应的 Fiber 节点的 memoizedState 链表上。
+
+2. Hooks 解决的类组件痛点
+状态逻辑复用困难：类组件过去只能靠高阶组件（HOC）或 Render Props 来复用状态逻辑，容易陷入“嵌套地狱”（Wrapper Hell），使组件树层级过深。Hooks 允许将状态逻辑提取到独立的自定义 Hook 中。
+巨石组件难以维护：类组件的逻辑被迫按照生命周期割裂（例如在 componentDidMount 和 componentWillUnmount 中同时写定时器的监听与解绑），而 Hooks 可以将相关的逻辑聚合在一起。
+this 指向困扰：类组件中需要频繁绑定 bind(this)，一旦漏写极易引发指向错误。
+
+3. 追问 2 深度剖析
+useState 的更新归属：
+这是一个高频陷阱题。useState 触发的更新既不属于原生的宏任务，也不属于微任务，它是 React 自身调度系统（Scheduler）管理的用户交互任务。
+在内部，React 会将多次 useState 调用放进更新队列中（Batching 批处理）。
+在当前事件循环的同步代码执行完后，React 调度系统会利用微任务（如 queueMicrotask 或 Promise.resolve）或者宏任务（在不支持微任务或在低版本下利用 MessageChannel，取决于 React 的版本和并发模式）去触发 Fiber 树的 Reconciliation（调和）与重新渲染。
+
+
+useEffect 替代生命周期：
+useEffect(cb, []) 类似 componentDidMount。
+useEffect(cb, [deps]) 类似 componentDidUpdate。
+useEffect(() &#x3D;&gt; cb, []) 返回的清理函数类似 componentWillUnmount。
+
+
+闭包陷阱（Capturing Value）的本质：
+函数组件在每次 Render 时都会形成一个全新的闭包。在这个闭包里，所有的 state 和 props 都冻结在“当前渲染”的那一刻。
+如果我们在异步回调（如 setTimeout）中读取旧状态，拿到的依然是触发该异步操作时的那一帧状态。
+解决方案：
+使用 useRef 保存状态（因为 ref.current 始终指向同一个内存地址）。
+使用 useState 的函数式更新：setState(prev &#x3D;&gt; prev + 1)。
+
+
+
+
+
+12345678910111213141516171819&#x2F;&#x2F; 闭包陷阱示例function Counter() {  const [count, setCount] &#x3D; useState(0);  const handleAlertClick &#x3D; () &#x3D;&gt; {    setTimeout(() &#x3D;&gt; {      &#x2F;&#x2F; 3秒后弹出的 count 依然是点击时的那一帧值，而不是最新值      alert(&#39;You clicked on: &#39; + count);     }, 3000);  };  return (    &lt;div&gt;      &lt;p&gt;You clicked {count} times&lt;&#x2F;p&gt;      &lt;button onClick&#x3D;{() &#x3D;&gt; setCount(count + 1)}&gt;Click me&lt;&#x2F;button&gt;      &lt;button onClick&#x3D;{handleAlertClick}&gt;Show alert&lt;&#x2F;button&gt;    &lt;&#x2F;div&gt;  );}
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Hooks-%E8%A7%A3%E5%86%B3%E7%9A%84%E7%B1%BB%E7%BB%84%E4%BB%B6%E7%97%9B%E7%82%B9"><span class="nav-text">2. Hooks 解决的类组件痛点
+状态逻辑复用困难：类组件过去只能靠高阶组件（HOC）或 Render Props 来复用状态逻辑，容易陷入“嵌套地狱”（Wrapper Hell），使组件树层级过深。Hooks 允许将状态逻辑提取到独立的自定义 Hook 中。
+巨石组件难以维护：类组件的逻辑被迫按照生命周期割裂（例如在 componentDidMount 和 componentWillUnmount 中同时写定时器的监听与解绑），而 Hooks 可以将相关的逻辑聚合在一起。
+this 指向困扰：类组件中需要频繁绑定 bind(this)，一旦漏写极易引发指向错误。
+
+3. 追问 2 深度剖析
+useState 的更新归属：
+这是一个高频陷阱题。useState 触发的更新既不属于原生的宏任务，也不属于微任务，它是 React 自身调度系统（Scheduler）管理的用户交互任务。
+在内部，React 会将多次 useState 调用放进更新队列中（Batching 批处理）。
+在当前事件循环的同步代码执行完后，React 调度系统会利用微任务（如 queueMicrotask 或 Promise.resolve）或者宏任务（在不支持微任务或在低版本下利用 MessageChannel，取决于 React 的版本和并发模式）去触发 Fiber 树的 Reconciliation（调和）与重新渲染。
+
+
+useEffect 替代生命周期：
+useEffect(cb, []) 类似 componentDidMount。
+useEffect(cb, [deps]) 类似 componentDidUpdate。
+useEffect(() &#x3D;&gt; cb, []) 返回的清理函数类似 componentWillUnmount。
+
+
+闭包陷阱（Capturing Value）的本质：
+函数组件在每次 Render 时都会形成一个全新的闭包。在这个闭包里，所有的 state 和 props 都冻结在“当前渲染”的那一刻。
+如果我们在异步回调（如 setTimeout）中读取旧状态，拿到的依然是触发该异步操作时的那一帧状态。
+解决方案：
+使用 useRef 保存状态（因为 ref.current 始终指向同一个内存地址）。
+使用 useState 的函数式更新：setState(prev &#x3D;&gt; prev + 1)。
+
+
+
+
+
+12345678910111213141516171819&#x2F;&#x2F; 闭包陷阱示例function Counter() {  const [count, setCount] &#x3D; useState(0);  const handleAlertClick &#x3D; () &#x3D;&gt; {    setTimeout(() &#x3D;&gt; {      &#x2F;&#x2F; 3秒后弹出的 count 依然是点击时的那一帧值，而不是最新值      alert(&#39;You clicked on: &#39; + count);     }, 3000);  };  return (    &lt;div&gt;      &lt;p&gt;You clicked {count} times&lt;&#x2F;p&gt;      &lt;button onClick&#x3D;{() &#x3D;&gt; setCount(count + 1)}&gt;Click me&lt;&#x2F;button&gt;      &lt;button onClick&#x3D;{handleAlertClick}&gt;Show alert&lt;&#x2F;button&gt;    &lt;&#x2F;div&gt;  );}
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%BF%BD%E9%97%AE-2-%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90"><span class="nav-text">3. 追问 2 深度剖析
+useState 的更新归属：
+这是一个高频陷阱题。useState 触发的更新既不属于原生的宏任务，也不属于微任务，它是 React 自身调度系统（Scheduler）管理的用户交互任务。
+在内部，React 会将多次 useState 调用放进更新队列中（Batching 批处理）。
+在当前事件循环的同步代码执行完后，React 调度系统会利用微任务（如 queueMicrotask 或 Promise.resolve）或者宏任务（在不支持微任务或在低版本下利用 MessageChannel，取决于 React 的版本和并发模式）去触发 Fiber 树的 Reconciliation（调和）与重新渲染。
+
+
+useEffect 替代生命周期：
+useEffect(cb, []) 类似 componentDidMount。
+useEffect(cb, [deps]) 类似 componentDidUpdate。
+useEffect(() &#x3D;&gt; cb, []) 返回的清理函数类似 componentWillUnmount。
+
+
+闭包陷阱（Capturing Value）的本质：
+函数组件在每次 Render 时都会形成一个全新的闭包。在这个闭包里，所有的 state 和 props 都冻结在“当前渲染”的那一刻。
+如果我们在异步回调（如 setTimeout）中读取旧状态，拿到的依然是触发该异步操作时的那一帧状态。
+解决方案：
+使用 useRef 保存状态（因为 ref.current 始终指向同一个内存地址）。
+使用 useState 的函数式更新：setState(prev &#x3D;&gt; prev + 1)。
+
+
+
+
+
+12345678910111213141516171819&#x2F;&#x2F; 闭包陷阱示例function Counter() {  const [count, setCount] &#x3D; useState(0);  const handleAlertClick &#x3D; () &#x3D;&gt; {    setTimeout(() &#x3D;&gt; {      &#x2F;&#x2F; 3秒后弹出的 count 依然是点击时的那一帧值，而不是最新值      alert(&#39;You clicked on: &#39; + count);     }, 3000);  };  return (    &lt;div&gt;      &lt;p&gt;You clicked {count} times&lt;&#x2F;p&gt;      &lt;button onClick&#x3D;{() &#x3D;&gt; setCount(count + 1)}&gt;Click me&lt;&#x2F;button&gt;      &lt;button onClick&#x3D;{handleAlertClick}&gt;Show alert&lt;&#x2F;button&gt;    &lt;&#x2F;div&gt;  );}
+</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%BB%E9%97%AE%EF%BC%9A%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E4%B8%8E%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%8C%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%8F%97%E6%8E%A7-Input-%E7%9A%84%E5%85%B3%E9%94%AE%E7%82%B9%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-text">2. 主问：谈谈你对受控组件与非受控组件的理解，实现一个受控 Input 的关键点是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%97%E6%8E%A7%E4%B8%8E%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">1. 受控与非受控组件
+受控组件：表单元素的值完全由 React 的 state 控制，必须通过 value 属性绑定 state，并通过 onChange 事件监听用户输入，再同步更新 state。
+非受控组件：表单元素的值由 DOM 节点自身管理，React 使用 useRef 直接在需要时去获取 DOM 节点以提取数据。
+受控 Input 关键点：
+必须显式声明 value&#x3D;{state}。
+必须绑定 onChange&#x3D;{(e) &#x3D;&gt; setState(e.target.value)}。
+要避免由于 value 为 undefined 导致组件在受控与非受控状态间切换报错（应提供兜底值 value&#x3D;{state || &#39;&#39;}）。
+
+
+
+2. 原生 DOM 事件 vs React 合成事件
+底层区别：
+挂载位置不同：原生事件直接挂载在真实 DOM 上；而 React 合成事件并不直接挂载到每个真实 DOM 节点，在 React 17 之后，它们被统一绑定在应用的根容器（Root Container，如 #root）上。
+事件机制不同：React 内部实现了一套事件冒泡和捕获机制，并在根节点进行事件分发（Event Distribute）。
+对象不同：React 传递给回调的是经过封装的 SyntheticEvent，该对象符合 W3C 标准，跨浏览器兼容性极佳。
+
+
+为什么要设计合成事件：
+跨平台兼容性：抹平不同浏览器之间的差异（例如 transitionend、animationend 等）。
+性能优化：通过事件委托（Event Delegation）机制，避免了在每个子 DOM 元素上重复绑定监听器，极大降低了内存消耗。
+配合 Fiber 与并发模式：合成事件方便 React 调度系统对其进行优先级标记，从而更好地支持中断与批处理（Batching）。
+
+
+
+3. 手写通用弹窗组件（Modal&#x2F;Dialog）12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394import React, { useEffect } from &#39;react&#39;;import ReactDOM from &#39;react-dom&#39;;interface ModalProps {  isOpen: boolean;  title?: string;  onClose: () &#x3D;&gt; void;  children: React.ReactNode;}const Modal: React.FC&lt;ModalProps&gt; &#x3D; ({ isOpen, title, onClose, children }) &#x3D;&gt; {  &#x2F;&#x2F; 监听 ESC 键关闭弹窗  useEffect(() &#x3D;&gt; {    const handleKeyDown &#x3D; (e: KeyboardEvent) &#x3D;&gt; {      if (e.key &#x3D;&#x3D;&#x3D; &#39;Escape&#39;) {        onClose();      }    };    if (isOpen) {      document.addEventListener(&#39;keydown&#39;, handleKeyDown);      &#x2F;&#x2F; 阻止背景滚动      document.body.style.overflow &#x3D; &#39;hidden&#39;;    }    return () &#x3D;&gt; {      document.removeEventListener(&#39;keydown&#39;, handleKeyDown);      document.body.style.overflow &#x3D; &#39;&#39;;    };  }, [isOpen, onClose]);  if (!isOpen) return null;  &#x2F;&#x2F; 使用 Portal 将弹窗渲染到 body 最外层，避免父组件 CSS 污染（如 overflow: hidden &#x2F; transform）  return ReactDOM.createPortal(    &lt;div style&#x3D;{styles.overlay} onClick&#x3D;{onClose}&gt;      &lt;div style&#x3D;{styles.modalContainer} onClick&#x3D;{(e) &#x3D;&gt; e.stopPropagation()}&gt;        &lt;div style&#x3D;{styles.header}&gt;          &lt;h3 style&#x3D;{styles.title}&gt;{title || &#39;提示&#39;}&lt;&#x2F;h3&gt;          &lt;button style&#x3D;{styles.closeBtn} onClick&#x3D;{onClose}&gt;&times;&lt;&#x2F;button&gt;        &lt;&#x2F;div&gt;        &lt;div style&#x3D;{styles.content}&gt;          {children}        &lt;&#x2F;div&gt;      &lt;&#x2F;div&gt;    &lt;&#x2F;div&gt;,    document.body  );};const styles: Record&lt;string, React.CSSProperties&gt; &#x3D; {  overlay: {    position: &#39;fixed&#39;,    top: 0,    left: 0,    right: 0,    bottom: 0,    backgroundColor: &#39;rgba(0, 0, 0, 0.5)&#39;,    display: &#39;flex&#39;,    justifyContent: &#39;center&#39;,    alignItems: &#39;center&#39;,    zIndex: 1000,  },  modalContainer: {    backgroundColor: &#39;#fff&#39;,    borderRadius: &#39;8px&#39;,    width: &#39;500px&#39;,    maxWidth: &#39;90%&#39;,    boxShadow: &#39;0 4px 12px rgba(0,0,0,0.15)&#39;,    animation: &#39;fade-in 0.3s ease&#39;,  },  header: {    padding: &#39;16px&#39;,    borderBottom: &#39;1px solid #f0f0f0&#39;,    display: &#39;flex&#39;,    justifyContent: &#39;space-between&#39;,    alignItems: &#39;center&#39;,  },  title: {    margin: 0,    fontSize: &#39;18px&#39;,  },  closeBtn: {    background: &#39;none&#39;,    border: &#39;none&#39;,    fontSize: &#39;24px&#39;,    cursor: &#39;pointer&#39;,  },  content: {    padding: &#39;16px&#39;,    fontSize: &#39;14px&#39;,    color: &#39;#333&#39;,  }};export default Modal;
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8E%9F%E7%94%9F-DOM-%E4%BA%8B%E4%BB%B6-vs-React-%E5%90%88%E6%88%90%E4%BA%8B%E4%BB%B6"><span class="nav-text">2. 原生 DOM 事件 vs React 合成事件
+底层区别：
+挂载位置不同：原生事件直接挂载在真实 DOM 上；而 React 合成事件并不直接挂载到每个真实 DOM 节点，在 React 17 之后，它们被统一绑定在应用的根容器（Root Container，如 #root）上。
+事件机制不同：React 内部实现了一套事件冒泡和捕获机制，并在根节点进行事件分发（Event Distribute）。
+对象不同：React 传递给回调的是经过封装的 SyntheticEvent，该对象符合 W3C 标准，跨浏览器兼容性极佳。
+
+
+为什么要设计合成事件：
+跨平台兼容性：抹平不同浏览器之间的差异（例如 transitionend、animationend 等）。
+性能优化：通过事件委托（Event Delegation）机制，避免了在每个子 DOM 元素上重复绑定监听器，极大降低了内存消耗。
+配合 Fiber 与并发模式：合成事件方便 React 调度系统对其进行优先级标记，从而更好地支持中断与批处理（Batching）。
+
+
+
+3. 手写通用弹窗组件（Modal&#x2F;Dialog）12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394import React, { useEffect } from &#39;react&#39;;import ReactDOM from &#39;react-dom&#39;;interface ModalProps {  isOpen: boolean;  title?: string;  onClose: () &#x3D;&gt; void;  children: React.ReactNode;}const Modal: React.FC&lt;ModalProps&gt; &#x3D; ({ isOpen, title, onClose, children }) &#x3D;&gt; {  &#x2F;&#x2F; 监听 ESC 键关闭弹窗  useEffect(() &#x3D;&gt; {    const handleKeyDown &#x3D; (e: KeyboardEvent) &#x3D;&gt; {      if (e.key &#x3D;&#x3D;&#x3D; &#39;Escape&#39;) {        onClose();      }    };    if (isOpen) {      document.addEventListener(&#39;keydown&#39;, handleKeyDown);      &#x2F;&#x2F; 阻止背景滚动      document.body.style.overflow &#x3D; &#39;hidden&#39;;    }    return () &#x3D;&gt; {      document.removeEventListener(&#39;keydown&#39;, handleKeyDown);      document.body.style.overflow &#x3D; &#39;&#39;;    };  }, [isOpen, onClose]);  if (!isOpen) return null;  &#x2F;&#x2F; 使用 Portal 将弹窗渲染到 body 最外层，避免父组件 CSS 污染（如 overflow: hidden &#x2F; transform）  return ReactDOM.createPortal(    &lt;div style&#x3D;{styles.overlay} onClick&#x3D;{onClose}&gt;      &lt;div style&#x3D;{styles.modalContainer} onClick&#x3D;{(e) &#x3D;&gt; e.stopPropagation()}&gt;        &lt;div style&#x3D;{styles.header}&gt;          &lt;h3 style&#x3D;{styles.title}&gt;{title || &#39;提示&#39;}&lt;&#x2F;h3&gt;          &lt;button style&#x3D;{styles.closeBtn} onClick&#x3D;{onClose}&gt;&times;&lt;&#x2F;button&gt;        &lt;&#x2F;div&gt;        &lt;div style&#x3D;{styles.content}&gt;          {children}        &lt;&#x2F;div&gt;      &lt;&#x2F;div&gt;    &lt;&#x2F;div&gt;,    document.body  );};const styles: Record&lt;string, React.CSSProperties&gt; &#x3D; {  overlay: {    position: &#39;fixed&#39;,    top: 0,    left: 0,    right: 0,    bottom: 0,    backgroundColor: &#39;rgba(0, 0, 0, 0.5)&#39;,    display: &#39;flex&#39;,    justifyContent: &#39;center&#39;,    alignItems: &#39;center&#39;,    zIndex: 1000,  },  modalContainer: {    backgroundColor: &#39;#fff&#39;,    borderRadius: &#39;8px&#39;,    width: &#39;500px&#39;,    maxWidth: &#39;90%&#39;,    boxShadow: &#39;0 4px 12px rgba(0,0,0,0.15)&#39;,    animation: &#39;fade-in 0.3s ease&#39;,  },  header: {    padding: &#39;16px&#39;,    borderBottom: &#39;1px solid #f0f0f0&#39;,    display: &#39;flex&#39;,    justifyContent: &#39;space-between&#39;,    alignItems: &#39;center&#39;,  },  title: {    margin: 0,    fontSize: &#39;18px&#39;,  },  closeBtn: {    background: &#39;none&#39;,    border: &#39;none&#39;,    fontSize: &#39;24px&#39;,    cursor: &#39;pointer&#39;,  },  content: {    padding: &#39;16px&#39;,    fontSize: &#39;14px&#39;,    color: &#39;#333&#39;,  }};export default Modal;
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%89%8B%E5%86%99%E9%80%9A%E7%94%A8%E5%BC%B9%E7%AA%97%E7%BB%84%E4%BB%B6%EF%BC%88Modal-Dialog%EF%BC%89"><span class="nav-text">3. 手写通用弹窗组件（Modal&#x2F;Dialog）12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394import React, { useEffect } from &#39;react&#39;;import ReactDOM from &#39;react-dom&#39;;interface ModalProps {  isOpen: boolean;  title?: string;  onClose: () &#x3D;&gt; void;  children: React.ReactNode;}const Modal: React.FC&lt;ModalProps&gt; &#x3D; ({ isOpen, title, onClose, children }) &#x3D;&gt; {  &#x2F;&#x2F; 监听 ESC 键关闭弹窗  useEffect(() &#x3D;&gt; {    const handleKeyDown &#x3D; (e: KeyboardEvent) &#x3D;&gt; {      if (e.key &#x3D;&#x3D;&#x3D; &#39;Escape&#39;) {        onClose();      }    };    if (isOpen) {      document.addEventListener(&#39;keydown&#39;, handleKeyDown);      &#x2F;&#x2F; 阻止背景滚动      document.body.style.overflow &#x3D; &#39;hidden&#39;;    }    return () &#x3D;&gt; {      document.removeEventListener(&#39;keydown&#39;, handleKeyDown);      document.body.style.overflow &#x3D; &#39;&#39;;    };  }, [isOpen, onClose]);  if (!isOpen) return null;  &#x2F;&#x2F; 使用 Portal 将弹窗渲染到 body 最外层，避免父组件 CSS 污染（如 overflow: hidden &#x2F; transform）  return ReactDOM.createPortal(    &lt;div style&#x3D;{styles.overlay} onClick&#x3D;{onClose}&gt;      &lt;div style&#x3D;{styles.modalContainer} onClick&#x3D;{(e) &#x3D;&gt; e.stopPropagation()}&gt;        &lt;div style&#x3D;{styles.header}&gt;          &lt;h3 style&#x3D;{styles.title}&gt;{title || &#39;提示&#39;}&lt;&#x2F;h3&gt;          &lt;button style&#x3D;{styles.closeBtn} onClick&#x3D;{onClose}&gt;&times;&lt;&#x2F;button&gt;        &lt;&#x2F;div&gt;        &lt;div style&#x3D;{styles.content}&gt;          {children}        &lt;&#x2F;div&gt;      &lt;&#x2F;div&gt;    &lt;&#x2F;div&gt;,    document.body  );};const styles: Record&lt;string, React.CSSProperties&gt; &#x3D; {  overlay: {    position: &#39;fixed&#39;,    top: 0,    left: 0,    right: 0,    bottom: 0,    backgroundColor: &#39;rgba(0, 0, 0, 0.5)&#39;,    display: &#39;flex&#39;,    justifyContent: &#39;center&#39;,    alignItems: &#39;center&#39;,    zIndex: 1000,  },  modalContainer: {    backgroundColor: &#39;#fff&#39;,    borderRadius: &#39;8px&#39;,    width: &#39;500px&#39;,    maxWidth: &#39;90%&#39;,    boxShadow: &#39;0 4px 12px rgba(0,0,0,0.15)&#39;,    animation: &#39;fade-in 0.3s ease&#39;,  },  header: {    padding: &#39;16px&#39;,    borderBottom: &#39;1px solid #f0f0f0&#39;,    display: &#39;flex&#39;,    justifyContent: &#39;space-between&#39;,    alignItems: &#39;center&#39;,  },  title: {    margin: 0,    fontSize: &#39;18px&#39;,  },  closeBtn: {    background: &#39;none&#39;,    border: &#39;none&#39;,    fontSize: &#39;24px&#39;,    cursor: &#39;pointer&#39;,  },  content: {    padding: &#39;16px&#39;,    fontSize: &#39;14px&#39;,    color: &#39;#333&#39;,  }};export default Modal;
+</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B5%81%E8%BD%AC"><span class="nav-text">二、 状态管理与数据流转</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%BB%E9%97%AE%EF%BC%9AReact-%E7%9A%84%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FuseState-%E4%B8%8E-Redux-%E4%B8%AD%E7%9A%84%E5%85%A8%E5%B1%80%E7%8A%B6%E6%80%81%E6%9C%89%E4%BB%80%E4%B9%88%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-text">3. 主问：React 的状态更新机制是什么？useState 与 Redux 中的全局状态有什么本质区别？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-React-%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6%E4%B8%8E%E5%8C%BA%E5%88%AB"><span class="nav-text">1. React 状态更新机制与区别
+状态更新机制：React 的状态更新基于“单向数据流”和“不可变数据（Immutability）”。状态变化时，会调用 setState&#x2F;dispatch，在当前 Fiber 树上创建一个 Update 对象并挂载到待处理队列，然后触发 React 的调和与 Diff 过程，生成新的 Virtual DOM 并打补丁渲染到真实 DOM。
+本质区别：
+useState 是组件局部状态。状态存储在当前组件对应的 Fiber 节点的 memoizedState 属性中，生命周期随组件销毁而销毁。
+Redux 是应用全局状态。状态存储在内存中的一个单一 Store（JS 对象）里，与 React 组件树完全脱离，生命周期贯穿整个应用的生命周期。
+
+
+
+2. Redux 变量变化触发渲染的底层原理Redux 的状态更新和 React 渲染本来是独立的，之所以能联动，全靠 react-redux 库架设的桥梁。
+
+Redux 核心流转过程：
+调用 store.dispatch(action) $\rightarrow$ 触发 reducer $\rightarrow$ 计算出全新的 state。
+react-redux 内部通过 store.subscribe(listener) 注册了订阅器。当 Store 状态改变，所有的订阅 listener 被触发。
+
+
+useSelector 的核心感知机制：
+useSelector 内部通过 React 的 useSyncExternalStore（React 18）或底层的 useReducer&#x2F;useState 维持了一个用于强制更新的 forceUpdate 标记。
+在订阅函数触发时，useSelector 会获取最新的 storeState，并利用传入的 selector 函数计算出你选择的切片值。
+它将新计算的值与上一次缓存的值进行浅比较（Shallow Compare）。
+若发现值变了，就会触发 forceUpdate()，使当前组件重新 Render；若没变，则直接拦截，防止不相关的全局状态修改导致无关组件重绘。
+
+
+
+3. 常见状态管理库横向对比
+
+
+状态管理库
+状态心智模型
+状态更新范式
+优点
+缺点 &#x2F; 适用场景
+
+
+
+Redux
+单一数据源，全局树
+不可变数据，dispatch(action)
+极其严格、可预测、单向流，调试工具强大
+样板代码极多（Action&#x2F;Reducer），适合超大型、规范度要求极高的项目
+
+
+Dva
+基于 Redux
+基于 Redux-saga 的数据流整合方案
+内置副作用处理（Effects），开发体验较好
+社区活跃度降低，逐渐被现代工具取代
+
+
+Zustand
+单一&#x2F;多数据源，切片式
+直接修改&#x2F;不可变数据组合
+零样板代码，极其轻量，支持 hooks API，不需要 Provider 包裹
+相比 Redux 约束力略弱，适合中大型敏捷开发项目
+
+
+Jotai
+原子化状态（Atom）
+响应式&#x2F;细粒度更新（类似 Vue）
+极其精确的局部重绘，状态细粒度拆分，无冗余重绘
+原子管理复杂时结构零散，适合高频交互、局部状态高联动的场景
+
+
+4. 中大型项目状态划分原则在落地中，应严格遵循“状态就近原则”：
+
+Local State（组件私有状态）：如弹窗的开关（isOpen）、输入框临时内容（inputValue）、仅限当前页面使用的分页参数（pageNum）。绝不放入全局。
+Global State（全局共享状态）：跨页面、多组件深度嵌套共享的数据。如用户信息、全局权限路由、购物车列表、系统全局配置。
+Server State（服务端缓存状态）：通过 React Query 或 SWR 管理，将接口返回的数据作为缓存处理，不污染全局 UI 状态。
+
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Redux-%E5%8F%98%E9%87%8F%E5%8F%98%E5%8C%96%E8%A7%A6%E5%8F%91%E6%B8%B2%E6%9F%93%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">2. Redux 变量变化触发渲染的底层原理Redux 的状态更新和 React 渲染本来是独立的，之所以能联动，全靠 react-redux 库架设的桥梁。
+
+Redux 核心流转过程：
+调用 store.dispatch(action) $\rightarrow$ 触发 reducer $\rightarrow$ 计算出全新的 state。
+react-redux 内部通过 store.subscribe(listener) 注册了订阅器。当 Store 状态改变，所有的订阅 listener 被触发。
+
+
+useSelector 的核心感知机制：
+useSelector 内部通过 React 的 useSyncExternalStore（React 18）或底层的 useReducer&#x2F;useState 维持了一个用于强制更新的 forceUpdate 标记。
+在订阅函数触发时，useSelector 会获取最新的 storeState，并利用传入的 selector 函数计算出你选择的切片值。
+它将新计算的值与上一次缓存的值进行浅比较（Shallow Compare）。
+若发现值变了，就会触发 forceUpdate()，使当前组件重新 Render；若没变，则直接拦截，防止不相关的全局状态修改导致无关组件重绘。
+
+
+
+3. 常见状态管理库横向对比
+
+
+状态管理库
+状态心智模型
+状态更新范式
+优点
+缺点 &#x2F; 适用场景
+
+
+
+Redux
+单一数据源，全局树
+不可变数据，dispatch(action)
+极其严格、可预测、单向流，调试工具强大
+样板代码极多（Action&#x2F;Reducer），适合超大型、规范度要求极高的项目
+
+
+Dva
+基于 Redux
+基于 Redux-saga 的数据流整合方案
+内置副作用处理（Effects），开发体验较好
+社区活跃度降低，逐渐被现代工具取代
+
+
+Zustand
+单一&#x2F;多数据源，切片式
+直接修改&#x2F;不可变数据组合
+零样板代码，极其轻量，支持 hooks API，不需要 Provider 包裹
+相比 Redux 约束力略弱，适合中大型敏捷开发项目
+
+
+Jotai
+原子化状态（Atom）
+响应式&#x2F;细粒度更新（类似 Vue）
+极其精确的局部重绘，状态细粒度拆分，无冗余重绘
+原子管理复杂时结构零散，适合高频交互、局部状态高联动的场景
+
+
+4. 中大型项目状态划分原则在落地中，应严格遵循“状态就近原则”：
+
+Local State（组件私有状态）：如弹窗的开关（isOpen）、输入框临时内容（inputValue）、仅限当前页面使用的分页参数（pageNum）。绝不放入全局。
+Global State（全局共享状态）：跨页面、多组件深度嵌套共享的数据。如用户信息、全局权限路由、购物车列表、系统全局配置。
+Server State（服务端缓存状态）：通过 React Query 或 SWR 管理，将接口返回的数据作为缓存处理，不污染全局 UI 状态。
+
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E5%BA%93%E6%A8%AA%E5%90%91%E5%AF%B9%E6%AF%94"><span class="nav-text">3. 常见状态管理库横向对比
+
+
+状态管理库
+状态心智模型
+状态更新范式
+优点
+缺点 &#x2F; 适用场景
+
+
+
+Redux
+单一数据源，全局树
+不可变数据，dispatch(action)
+极其严格、可预测、单向流，调试工具强大
+样板代码极多（Action&#x2F;Reducer），适合超大型、规范度要求极高的项目
+
+
+Dva
+基于 Redux
+基于 Redux-saga 的数据流整合方案
+内置副作用处理（Effects），开发体验较好
+社区活跃度降低，逐渐被现代工具取代
+
+
+Zustand
+单一&#x2F;多数据源，切片式
+直接修改&#x2F;不可变数据组合
+零样板代码，极其轻量，支持 hooks API，不需要 Provider 包裹
+相比 Redux 约束力略弱，适合中大型敏捷开发项目
+
+
+Jotai
+原子化状态（Atom）
+响应式&#x2F;细粒度更新（类似 Vue）
+极其精确的局部重绘，状态细粒度拆分，无冗余重绘
+原子管理复杂时结构零散，适合高频交互、局部状态高联动的场景
+
+
+4. 中大型项目状态划分原则在落地中，应严格遵循“状态就近原则”：
+
+Local State（组件私有状态）：如弹窗的开关（isOpen）、输入框临时内容（inputValue）、仅限当前页面使用的分页参数（pageNum）。绝不放入全局。
+Global State（全局共享状态）：跨页面、多组件深度嵌套共享的数据。如用户信息、全局权限路由、购物车列表、系统全局配置。
+Server State（服务端缓存状态）：通过 React Query 或 SWR 管理，将接口返回的数据作为缓存处理，不污染全局 UI 状态。
+
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%B8%AD%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E7%8A%B6%E6%80%81%E5%88%92%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">4. 中大型项目状态划分原则在落地中，应严格遵循“状态就近原则”：
+
+Local State（组件私有状态）：如弹窗的开关（isOpen）、输入框临时内容（inputValue）、仅限当前页面使用的分页参数（pageNum）。绝不放入全局。
+Global State（全局共享状态）：跨页面、多组件深度嵌套共享的数据。如用户信息、全局权限路由、购物车列表、系统全局配置。
+Server State（服务端缓存状态）：通过 React Query 或 SWR 管理，将接口返回的数据作为缓存处理，不污染全局 UI 状态。
+
+</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%8E-Hook-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-text">三、 性能优化与 Hook 底层原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%B8%BB%E9%97%AE%EF%BC%9A%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9-useCallback-%E5%92%8C-useMemo-%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9F%E4%BD%95%E6%97%B6%E4%B8%8D%E5%BA%94%E8%AF%A5%E4%BD%BF%E7%94%A8%E5%AE%83%E4%BB%AC%EF%BC%9F"><span class="nav-text">4. 主问：谈谈你对 useCallback 和 useMemo 的理解与使用场景？何时不应该使用它们？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-useCallback-%E4%B8%8E-useMemo"><span class="nav-text">1. useCallback 与 useMemo
+本质区别：
+useCallback(fn, deps) 缓存的是函数引用本身。
+useMemo(() &#x3D;&gt; val, deps) 缓存的是函数执行后返回的值。
+
+
+何时不该使用（高频误区）：
+不要闭眼到处使用！useCallback 和 useMemo 本身也是有计算和内存开销的。每次渲染，React 都需要创建新依赖数组、做依赖项浅比较、在内存中存储前一次的函数&#x2F;值。
+若传递给子组件的是普通原生元素（如 &lt;button onClick&#x3D;{cb}&gt;），使用 useCallback 属于无意义消耗。
+何时该用：
+传递给子组件的函数，且该子组件被 React.memo 包裹进行性能拦截。
+函数或计算值作为其他 Hooks（如 useEffect）的依赖项。
+极其昂贵的 CPU 计算逻辑（如过滤几万条数据的过滤算法）。
+
+
+
+
+
+2. Hooks 存储结构与不能在条件句中使用的底层原因
+存储结构：
+
+每个 React 组件对应一个 Fiber 节点。
+
+Fiber 节点上有一个 memoizedState 属性。在函数组件中，它存的不是普通的 state，而是一个单向链表。
+
+链表的每个节点（Hook 对象）对应一个 Hook 的调用次序，格式类似：
+
+
+
+
+123456interface Hook {  memoizedState: any; &#x2F;&#x2F; 存储当前 hook 的真实值 (如 useState 的 val, useEffect 的 destroy)  baseState: any;  queue: any;         &#x2F;&#x2F; 更新队列  next: Hook | null;  &#x2F;&#x2F; 指向下一个 Hook 节点的指针}
+
+
+为什么不能在 if&#x2F;循环中调用：
+
+React 在更新阶段，是完全依赖 Hook 的调用顺序（即链表的指针移动指针 next）来将当前的 state 状态与上一次的值匹配起来的。
+如果把 Hook 写在条件句中，导致某次渲染时其中一个 Hook 没有执行，整个链表节点的访问顺序就会发生错乱，后面的 Hook 读取到的就是前一个 Hook 的历史状态，从而引发灾难性的 Bug。React 团队通过 ESLint 插件强制规定此规则。
+
+
+
+3. 前端性能优化实战手段（结合面经热点）
+场景 1：瀑布流虚拟列表（Virtual List）实现思路：
+在加载海量图片瀑布流时，直接渲染全部 DOM 导致页面卡顿死机。
+实现思路：
+容器监听 onScroll。
+根据视口高度 clientHeight 和当前滚动距离 scrollTop，动态计算出当前可视区应该渲染的 item 范围（如 [start, end]）。
+用绝对定位（absolute）将可视区内的 DOM 渲染出来，并加上对应的 top 偏移。
+未在可视区的内容只保留空的占位容器高度，减少 90% 以上的真实 DOM 渲染，解决卡顿。
+
+
+
+
+场景 2：下拉刷新遇到刷新两次问题（艾未恩面经高频）：
+原因分析：往往是因为没有做防抖&#x2F;节流控制，或者手势触发（touchmove &#x2F; touchend）判定距离不明确，导致在网络请求返回前重复触发了接口。
+解决思路（双重防御）：
+引入状态锁 loading，一旦开始请求，直接置为 true，拦截后续的刷新信号。
+为请求提供唯一标识，或者结合 AbortController 在第二次刷新动作触发时，直接 cancel 掉上一次未完成的请求。
+
+
+
+
+
+1234567891011121314&#x2F;&#x2F; 下拉刷新防二次触发锁逻辑const [isLoading, setIsLoading] &#x3D; useState(false);const handleRefresh &#x3D; async () &#x3D;&gt; {  if (isLoading) return; &#x2F;&#x2F; 锁住  setIsLoading(true);  try {    await fetchNewData();  } catch (err) {    console.error(err);  } finally {    setIsLoading(false); &#x2F;&#x2F; 释放锁  }};
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Hooks-%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84%E4%B8%8E%E4%B8%8D%E8%83%BD%E5%9C%A8%E6%9D%A1%E4%BB%B6%E5%8F%A5%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E5%9B%A0"><span class="nav-text">2. Hooks 存储结构与不能在条件句中使用的底层原因
+存储结构：
+
+每个 React 组件对应一个 Fiber 节点。
+
+Fiber 节点上有一个 memoizedState 属性。在函数组件中，它存的不是普通的 state，而是一个单向链表。
+
+链表的每个节点（Hook 对象）对应一个 Hook 的调用次序，格式类似：
+
+
+
+
+123456interface Hook {  memoizedState: any; &#x2F;&#x2F; 存储当前 hook 的真实值 (如 useState 的 val, useEffect 的 destroy)  baseState: any;  queue: any;         &#x2F;&#x2F; 更新队列  next: Hook | null;  &#x2F;&#x2F; 指向下一个 Hook 节点的指针}
+
+
+为什么不能在 if&#x2F;循环中调用：
+
+React 在更新阶段，是完全依赖 Hook 的调用顺序（即链表的指针移动指针 next）来将当前的 state 状态与上一次的值匹配起来的。
+如果把 Hook 写在条件句中，导致某次渲染时其中一个 Hook 没有执行，整个链表节点的访问顺序就会发生错乱，后面的 Hook 读取到的就是前一个 Hook 的历史状态，从而引发灾难性的 Bug。React 团队通过 ESLint 插件强制规定此规则。
+
+
+
+3. 前端性能优化实战手段（结合面经热点）
+场景 1：瀑布流虚拟列表（Virtual List）实现思路：
+在加载海量图片瀑布流时，直接渲染全部 DOM 导致页面卡顿死机。
+实现思路：
+容器监听 onScroll。
+根据视口高度 clientHeight 和当前滚动距离 scrollTop，动态计算出当前可视区应该渲染的 item 范围（如 [start, end]）。
+用绝对定位（absolute）将可视区内的 DOM 渲染出来，并加上对应的 top 偏移。
+未在可视区的内容只保留空的占位容器高度，减少 90% 以上的真实 DOM 渲染，解决卡顿。
+
+
+
+
+场景 2：下拉刷新遇到刷新两次问题（艾未恩面经高频）：
+原因分析：往往是因为没有做防抖&#x2F;节流控制，或者手势触发（touchmove &#x2F; touchend）判定距离不明确，导致在网络请求返回前重复触发了接口。
+解决思路（双重防御）：
+引入状态锁 loading，一旦开始请求，直接置为 true，拦截后续的刷新信号。
+为请求提供唯一标识，或者结合 AbortController 在第二次刷新动作触发时，直接 cancel 掉上一次未完成的请求。
+
+
+
+
+
+1234567891011121314&#x2F;&#x2F; 下拉刷新防二次触发锁逻辑const [isLoading, setIsLoading] &#x3D; useState(false);const handleRefresh &#x3D; async () &#x3D;&gt; {  if (isLoading) return; &#x2F;&#x2F; 锁住  setIsLoading(true);  try {    await fetchNewData();  } catch (err) {    console.error(err);  } finally {    setIsLoading(false); &#x2F;&#x2F; 释放锁  }};
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98%E6%89%8B%E6%AE%B5%EF%BC%88%E7%BB%93%E5%90%88%E9%9D%A2%E7%BB%8F%E7%83%AD%E7%82%B9%EF%BC%89"><span class="nav-text">3. 前端性能优化实战手段（结合面经热点）
+场景 1：瀑布流虚拟列表（Virtual List）实现思路：
+在加载海量图片瀑布流时，直接渲染全部 DOM 导致页面卡顿死机。
+实现思路：
+容器监听 onScroll。
+根据视口高度 clientHeight 和当前滚动距离 scrollTop，动态计算出当前可视区应该渲染的 item 范围（如 [start, end]）。
+用绝对定位（absolute）将可视区内的 DOM 渲染出来，并加上对应的 top 偏移。
+未在可视区的内容只保留空的占位容器高度，减少 90% 以上的真实 DOM 渲染，解决卡顿。
+
+
+
+
+场景 2：下拉刷新遇到刷新两次问题（艾未恩面经高频）：
+原因分析：往往是因为没有做防抖&#x2F;节流控制，或者手势触发（touchmove &#x2F; touchend）判定距离不明确，导致在网络请求返回前重复触发了接口。
+解决思路（双重防御）：
+引入状态锁 loading，一旦开始请求，直接置为 true，拦截后续的刷新信号。
+为请求提供唯一标识，或者结合 AbortController 在第二次刷新动作触发时，直接 cancel 掉上一次未完成的请求。
+
+
+
+
+
+1234567891011121314&#x2F;&#x2F; 下拉刷新防二次触发锁逻辑const [isLoading, setIsLoading] &#x3D; useState(false);const handleRefresh &#x3D; async () &#x3D;&gt; {  if (isLoading) return; &#x2F;&#x2F; 锁住  setIsLoading(true);  try {    await fetchNewData();  } catch (err) {    console.error(err);  } finally {    setIsLoading(false); &#x2F;&#x2F; 释放锁  }};
+</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-TypeScript-%E4%B8%8E-React-%E5%AE%9E%E6%88%98%E8%BF%9B%E9%98%B6"><span class="nav-text">四、 TypeScript 与 React 实战进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%B8%BB%E9%97%AE%EF%BC%9ATypeScript-%E4%B8%AD-type-%E5%92%8C-interface-%E7%9A%84%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-text">5. 主问：TypeScript 中 type 和 interface 的本质区别是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-type-vs-interface"><span class="nav-text">1. type vs interface
+扩展方式（主要区别）：
+interface 通过 extends 进行扩展；且支持声明合并（Declaration Merging），在不同地方重复声明同名 interface，TS 会自动将其属性合并。
+type 通过交叉类型 &amp; 进行扩展；不支持声明合并，重复定义会直接报错。
+
+
+能力范围：
+type 表达能力更强，可以声明基本类型别名、联合类型（Union）、元组（Tuple）以及进行复杂条件类型计算。
+interface 只能声明对象、函数和类的形状。
+
+
+
+2. React 实战选型与泛型组件约束
+团队规范与选型：
+日常组件的 Props 定义优先使用 interface（方便其他模块或三方库继承扩展）。
+遇到需要使用联合类型（如 type Theme &#x3D; &#39;light&#39; | &#39;dark&#39;）或需要进行映射类型处理时，使用 type。
+
+
+React 泛型组件应用：
+常见场景：通用的下拉选择框（Select）、表格（Table），数据项的 value 或 record 格式是不确定的。
+
+
+
+12345678910111213141516171819import React from &#39;react&#39;;&#x2F;&#x2F; 泛型列表组件：约束输入项必须含有 idinterface ListProps&lt;T&gt; {  items: T[];  renderItem: (item: T) &#x3D;&gt; React.ReactNode;}function GenericList&lt;T extends { id: string | number }&gt;({ items, renderItem }: ListProps&lt;T&gt;) {  return (    &lt;ul&gt;      {items.map((item) &#x3D;&gt; (        &lt;li key&#x3D;{item.id}&gt;          {renderItem(item)}        &lt;&#x2F;li&gt;      ))}    &lt;&#x2F;ul&gt;  );}
+
+3. Pick 的底层实现
+Pick 用于从一个类型中挑选出几个属性组成新的类型：
+
+1234&#x2F;&#x2F; 底层源码实现type MyPick&lt;T, K extends keyof T&gt; &#x3D; {  [P in K]: T[P];};
+
+
+解析：
+keyof T 获取 T 的所有属性键组成的联合类型。
+K extends keyof T 约束传入的要挑选的键 K 必须是 T 已有的属性子集。
+[P in K] 是映射类型，遍历联合类型 K 中的每一个属性 P。
+T[P] 为类型索引访问，获取对应属性的具体类型。
+
+
+
+4. unknown vs never
+unknown（安全未知类型）：
+是所有类型的Top Type（任何类型都可以赋值给 unknown）。
+区别点：与 any 不同，unknown 类型的值不能直接调用方法或属性，在使用前必须通过类型守卫（Type Guard）或类型断言进行“类型缩小（Narrowing）”。
+场景：用于处理后端返回的格式不确定的不安全数据，或者编写高度通用的底层库（如 Axios 响应体拦截器、全局 Loading 拦截器等）。
+
+
+never（永不存在的类型）：
+是所有类型的Bottom Type（没有任何值可以赋值给 never，除了 never 本身）。
+场景：
+抛出异常或死循环函数的返回值类型：function error(): never { throw new Error() }。
+全面性检查（Exhaustiveness Check），在 switch&#x2F;case 分支中防止遗漏新增的联合类型分支：
+
+
+
+
+
+123456789101112131415type Direction &#x3D; &#39;Up&#39; | &#39;Down&#39; | &#39;Left&#39; | &#39;Right&#39;;function handleMove(dir: Direction) {  switch (dir) {    case &#39;Up&#39;: break;    case &#39;Down&#39;: break;    case &#39;Left&#39;: break;    case &#39;Right&#39;: break;    default:      &#x2F;&#x2F; 如果后期有人给 Direction 新增了 &#39;Forward&#39; 类型，而这里没有写对应的 case，      &#x2F;&#x2F; 那么编译到这里时就会报错，因为 &#39;Forward&#39; 不能赋值给 never。      const exhaustiveCheck: never &#x3D; dir;      return exhaustiveCheck;  }}
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-React-%E5%AE%9E%E6%88%98%E9%80%89%E5%9E%8B%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BB%84%E4%BB%B6%E7%BA%A6%E6%9D%9F"><span class="nav-text">2. React 实战选型与泛型组件约束
+团队规范与选型：
+日常组件的 Props 定义优先使用 interface（方便其他模块或三方库继承扩展）。
+遇到需要使用联合类型（如 type Theme &#x3D; &#39;light&#39; | &#39;dark&#39;）或需要进行映射类型处理时，使用 type。
+
+
+React 泛型组件应用：
+常见场景：通用的下拉选择框（Select）、表格（Table），数据项的 value 或 record 格式是不确定的。
+
+
+
+12345678910111213141516171819import React from &#39;react&#39;;&#x2F;&#x2F; 泛型列表组件：约束输入项必须含有 idinterface ListProps&lt;T&gt; {  items: T[];  renderItem: (item: T) &#x3D;&gt; React.ReactNode;}function GenericList&lt;T extends { id: string | number }&gt;({ items, renderItem }: ListProps&lt;T&gt;) {  return (    &lt;ul&gt;      {items.map((item) &#x3D;&gt; (        &lt;li key&#x3D;{item.id}&gt;          {renderItem(item)}        &lt;&#x2F;li&gt;      ))}    &lt;&#x2F;ul&gt;  );}
+
+3. Pick 的底层实现
+Pick 用于从一个类型中挑选出几个属性组成新的类型：
+
+1234&#x2F;&#x2F; 底层源码实现type MyPick&lt;T, K extends keyof T&gt; &#x3D; {  [P in K]: T[P];};
+
+
+解析：
+keyof T 获取 T 的所有属性键组成的联合类型。
+K extends keyof T 约束传入的要挑选的键 K 必须是 T 已有的属性子集。
+[P in K] 是映射类型，遍历联合类型 K 中的每一个属性 P。
+T[P] 为类型索引访问，获取对应属性的具体类型。
+
+
+
+4. unknown vs never
+unknown（安全未知类型）：
+是所有类型的Top Type（任何类型都可以赋值给 unknown）。
+区别点：与 any 不同，unknown 类型的值不能直接调用方法或属性，在使用前必须通过类型守卫（Type Guard）或类型断言进行“类型缩小（Narrowing）”。
+场景：用于处理后端返回的格式不确定的不安全数据，或者编写高度通用的底层库（如 Axios 响应体拦截器、全局 Loading 拦截器等）。
+
+
+never（永不存在的类型）：
+是所有类型的Bottom Type（没有任何值可以赋值给 never，除了 never 本身）。
+场景：
+抛出异常或死循环函数的返回值类型：function error(): never { throw new Error() }。
+全面性检查（Exhaustiveness Check），在 switch&#x2F;case 分支中防止遗漏新增的联合类型分支：
+
+
+
+
+
+123456789101112131415type Direction &#x3D; &#39;Up&#39; | &#39;Down&#39; | &#39;Left&#39; | &#39;Right&#39;;function handleMove(dir: Direction) {  switch (dir) {    case &#39;Up&#39;: break;    case &#39;Down&#39;: break;    case &#39;Left&#39;: break;    case &#39;Right&#39;: break;    default:      &#x2F;&#x2F; 如果后期有人给 Direction 新增了 &#39;Forward&#39; 类型，而这里没有写对应的 case，      &#x2F;&#x2F; 那么编译到这里时就会报错，因为 &#39;Forward&#39; 不能赋值给 never。      const exhaustiveCheck: never &#x3D; dir;      return exhaustiveCheck;  }}
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Pick-%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="nav-text">3. Pick 的底层实现
+Pick 用于从一个类型中挑选出几个属性组成新的类型：
+
+1234&#x2F;&#x2F; 底层源码实现type MyPick&lt;T, K extends keyof T&gt; &#x3D; {  [P in K]: T[P];};
+
+
+解析：
+keyof T 获取 T 的所有属性键组成的联合类型。
+K extends keyof T 约束传入的要挑选的键 K 必须是 T 已有的属性子集。
+[P in K] 是映射类型，遍历联合类型 K 中的每一个属性 P。
+T[P] 为类型索引访问，获取对应属性的具体类型。
+
+
+
+4. unknown vs never
+unknown（安全未知类型）：
+是所有类型的Top Type（任何类型都可以赋值给 unknown）。
+区别点：与 any 不同，unknown 类型的值不能直接调用方法或属性，在使用前必须通过类型守卫（Type Guard）或类型断言进行“类型缩小（Narrowing）”。
+场景：用于处理后端返回的格式不确定的不安全数据，或者编写高度通用的底层库（如 Axios 响应体拦截器、全局 Loading 拦截器等）。
+
+
+never（永不存在的类型）：
+是所有类型的Bottom Type（没有任何值可以赋值给 never，除了 never 本身）。
+场景：
+抛出异常或死循环函数的返回值类型：function error(): never { throw new Error() }。
+全面性检查（Exhaustiveness Check），在 switch&#x2F;case 分支中防止遗漏新增的联合类型分支：
+
+
+
+
+
+123456789101112131415type Direction &#x3D; &#39;Up&#39; | &#39;Down&#39; | &#39;Left&#39; | &#39;Right&#39;;function handleMove(dir: Direction) {  switch (dir) {    case &#39;Up&#39;: break;    case &#39;Down&#39;: break;    case &#39;Left&#39;: break;    case &#39;Right&#39;: break;    default:      &#x2F;&#x2F; 如果后期有人给 Direction 新增了 &#39;Forward&#39; 类型，而这里没有写对应的 case，      &#x2F;&#x2F; 那么编译到这里时就会报错，因为 &#39;Forward&#39; 不能赋值给 never。      const exhaustiveCheck: never &#x3D; dir;      return exhaustiveCheck;  }}
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-unknown-vs-never"><span class="nav-text">4. unknown vs never
+unknown（安全未知类型）：
+是所有类型的Top Type（任何类型都可以赋值给 unknown）。
+区别点：与 any 不同，unknown 类型的值不能直接调用方法或属性，在使用前必须通过类型守卫（Type Guard）或类型断言进行“类型缩小（Narrowing）”。
+场景：用于处理后端返回的格式不确定的不安全数据，或者编写高度通用的底层库（如 Axios 响应体拦截器、全局 Loading 拦截器等）。
+
+
+never（永不存在的类型）：
+是所有类型的Bottom Type（没有任何值可以赋值给 never，除了 never 本身）。
+场景：
+抛出异常或死循环函数的返回值类型：function error(): never { throw new Error() }。
+全面性检查（Exhaustiveness Check），在 switch&#x2F;case 分支中防止遗漏新增的联合类型分支：
+
+
+
+
+
+123456789101112131415type Direction &#x3D; &#39;Up&#39; | &#39;Down&#39; | &#39;Left&#39; | &#39;Right&#39;;function handleMove(dir: Direction) {  switch (dir) {    case &#39;Up&#39;: break;    case &#39;Down&#39;: break;    case &#39;Left&#39;: break;    case &#39;Right&#39;: break;    default:      &#x2F;&#x2F; 如果后期有人给 Direction 新增了 &#39;Forward&#39; 类型，而这里没有写对应的 case，      &#x2F;&#x2F; 那么编译到这里时就会报错，因为 &#39;Forward&#39; 不能赋值给 never。      const exhaustiveCheck: never &#x3D; dir;      return exhaustiveCheck;  }}
+</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E8%B7%A8%E7%AB%AF%E3%80%81%E8%B7%A8%E6%A1%86%E6%9E%B6%E4%B8%8E%E8%B0%83%E5%92%8C"><span class="nav-text">五、 跨端、跨框架与调和</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E4%B8%BB%E9%97%AE%EF%BC%9AReact-%E5%92%8C-Vue-%E5%9C%A8%E5%BA%95%E5%B1%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%9B%B4%E6%96%B0%E5%8E%9F%E7%90%86%E4%B8%8A%E6%9C%89%E4%BB%80%E4%B9%88%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-text">6. 主问：React 和 Vue 在底层的数据绑定与更新原理上有什么本质区别？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A%E4%B8%8E%E6%9B%B4%E6%96%B0%E5%8E%9F%E7%90%86%E5%8C%BA%E5%88%AB"><span class="nav-text">1. 数据绑定与更新原理区别
+React：单向数据流 + 显式状态更新
+数据单向流转。更新依赖显式调用 setState，React 本身对具体哪个数据发生了变化“一无所知”。
+它采用粗粒度的更新策略：一旦组件状态改变，React 会自顶向下重新执行该组件及其所有子组件的渲染逻辑。
+必须通过虚拟 DOM 进行调和与 Diff 算法对比，找出差异后再打补丁到真实 DOM（可以通过 useMemo 或 React.memo 做手动阻断优化）。
+
+
+Vue：响应式劫持 + 依赖收集（双向数据绑定）
+使用 Object.defineProperty (Vue2) 或 Proxy (Vue3) 对数据进行属性劫持。
+它采用细粒度的更新策略：组件渲染时会自动触发 getter 进行依赖收集（Collect Dependency），将当前的副作用函数（Render Watcher&#x2F;Effect）与数据键绑定。
+一旦数据变化，触发 setter 精准派发更新，直接告知 Reactivity 系统哪些组件发生了变化，从而只对变化了的组件进行局部精准渲染。
+
+
+
+2. 虚拟 DOM 生成与 Diff 算法大厂对比
+虚拟 DOM 生成：
+在 React 中，我们写的 JSX 经由 Babel 编译，转化为 React 17+ 的 _jsxRuntime.jsx(...) 或低版本的 React.createElement(...) 函数调用。
+这些函数执行后，会返回一个描述 DOM 结构的普通 JS 对象（即 Virtual DOM）。
+
+
+Diff 算法差异：
+React Diff（单端&#x2F;单向遍历）：
+为了降低计算成本，React 做出了三大假设：相同层级节点对比；不同类型组件产生不同树；通过 key 识别移动。
+算法过程：只做单向从左到右遍历。
+第一轮遍历：尝试复用新旧节点中位置没有发生改变的节点。一旦遇到不能复用的，终止遍历。
+第二轮遍历：将剩余旧节点放入一个以 key 为键的 Map 中，然后遍历新节点，从 Map 中查找复用。通过对比新旧节点在旧树中的索引 lastPlacedIndex，决定节点是插入、删除还是移动。
+
+
+
+
+Vue2 Diff（双端指针）：
+采用双端指针算法（头头、尾尾、头尾、尾头四路对比）。从两端向中间收拢，在处理“首尾互换”、“倒序”等场景下，比起 React 的单向对比，能够显著减少真实 DOM 的移动次数。
+
+
+Vue3 Diff（快速 Diff &#x2F; 最长递增子序列）：
+借鉴了 ivi 和 inferno 算法。
+首先自前向后、自后向前进行相同节点的预处理。
+对于中间乱序部分，Vue3 建立了一个“新旧节点位置映射表”，并利用“最长递增子序列（LIS）”算法计算出不需要移动的节点索引。只对处于子序列之外的节点进行移动，达到了最少移动 DOM 的极致性能。
+
+
+
+
+
+3. 跨端方案对比：Uniapp vs Taro
+开发心智与技术栈：
+Uniapp：基于 Vue 生态。对于习惯 Vue 语法的开发者极为友好，开发上手简单，生态和组件库在小程序端非常庞大。
+Taro：由京东凹凸实验室开发，主要支持 React 技术栈（虽然目前也兼容 Vue，但 React 仍是主流生态）。
+
+
+多端一致性与架构优势：
+Uniapp 的重心在于微信小程序的高效输出，对于多端（Web, App, H5）的细节抹平在大型复杂业务中可能存在兼容性缺陷。
+Taro 在设计之初就高度重视多端一致性。它通过高度重构的编译时（利用 Babel 转换 React JSX 代码为小程序模板）和强大的运行时（劫持小程序 DOM&#x2F;BOM 接口）设计，使得在多端代码编译时表现得极其稳定。
+
+
+为什么中大型项目更倾向于 Taro：
+逻辑复用性：React 的 Hooks 设计使得非 UI 的纯业务逻辑复用率高达 95% 以上，且无需考虑 Vue 复杂的 watch&#x2F;computed 依赖链路。
+大型团队协作与 TS 契合度：React 技术栈天然与 TypeScript 完美契合，配合 Taro 能够实现完美的静态类型检查。这对于数十人协作、维护周期长达数年的中大型复杂跨端项目来说，能极大地降低线上故障率，保证代码的高可维护性。
+
+
+
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%99%9A%E6%8B%9F-DOM-%E7%94%9F%E6%88%90%E4%B8%8E-Diff-%E7%AE%97%E6%B3%95%E5%A4%A7%E5%8E%82%E5%AF%B9%E6%AF%94"><span class="nav-text">2. 虚拟 DOM 生成与 Diff 算法大厂对比
+虚拟 DOM 生成：
+在 React 中，我们写的 JSX 经由 Babel 编译，转化为 React 17+ 的 _jsxRuntime.jsx(...) 或低版本的 React.createElement(...) 函数调用。
+这些函数执行后，会返回一个描述 DOM 结构的普通 JS 对象（即 Virtual DOM）。
+
+
+Diff 算法差异：
+React Diff（单端&#x2F;单向遍历）：
+为了降低计算成本，React 做出了三大假设：相同层级节点对比；不同类型组件产生不同树；通过 key 识别移动。
+算法过程：只做单向从左到右遍历。
+第一轮遍历：尝试复用新旧节点中位置没有发生改变的节点。一旦遇到不能复用的，终止遍历。
+第二轮遍历：将剩余旧节点放入一个以 key 为键的 Map 中，然后遍历新节点，从 Map 中查找复用。通过对比新旧节点在旧树中的索引 lastPlacedIndex，决定节点是插入、删除还是移动。
+
+
+
+
+Vue2 Diff（双端指针）：
+采用双端指针算法（头头、尾尾、头尾、尾头四路对比）。从两端向中间收拢，在处理“首尾互换”、“倒序”等场景下，比起 React 的单向对比，能够显著减少真实 DOM 的移动次数。
+
+
+Vue3 Diff（快速 Diff &#x2F; 最长递增子序列）：
+借鉴了 ivi 和 inferno 算法。
+首先自前向后、自后向前进行相同节点的预处理。
+对于中间乱序部分，Vue3 建立了一个“新旧节点位置映射表”，并利用“最长递增子序列（LIS）”算法计算出不需要移动的节点索引。只对处于子序列之外的节点进行移动，达到了最少移动 DOM 的极致性能。
+
+
+
+
+
+3. 跨端方案对比：Uniapp vs Taro
+开发心智与技术栈：
+Uniapp：基于 Vue 生态。对于习惯 Vue 语法的开发者极为友好，开发上手简单，生态和组件库在小程序端非常庞大。
+Taro：由京东凹凸实验室开发，主要支持 React 技术栈（虽然目前也兼容 Vue，但 React 仍是主流生态）。
+
+
+多端一致性与架构优势：
+Uniapp 的重心在于微信小程序的高效输出，对于多端（Web, App, H5）的细节抹平在大型复杂业务中可能存在兼容性缺陷。
+Taro 在设计之初就高度重视多端一致性。它通过高度重构的编译时（利用 Babel 转换 React JSX 代码为小程序模板）和强大的运行时（劫持小程序 DOM&#x2F;BOM 接口）设计，使得在多端代码编译时表现得极其稳定。
+
+
+为什么中大型项目更倾向于 Taro：
+逻辑复用性：React 的 Hooks 设计使得非 UI 的纯业务逻辑复用率高达 95% 以上，且无需考虑 Vue 复杂的 watch&#x2F;computed 依赖链路。
+大型团队协作与 TS 契合度：React 技术栈天然与 TypeScript 完美契合，配合 Taro 能够实现完美的静态类型检查。这对于数十人协作、维护周期长达数年的中大型复杂跨端项目来说，能极大地降低线上故障率，保证代码的高可维护性。
+
+
+
+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%B7%A8%E7%AB%AF%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94%EF%BC%9AUniapp-vs-Taro"><span class="nav-text">3. 跨端方案对比：Uniapp vs Taro
+开发心智与技术栈：
+Uniapp：基于 Vue 生态。对于习惯 Vue 语法的开发者极为友好，开发上手简单，生态和组件库在小程序端非常庞大。
+Taro：由京东凹凸实验室开发，主要支持 React 技术栈（虽然目前也兼容 Vue，但 React 仍是主流生态）。
+
+
+多端一致性与架构优势：
+Uniapp 的重心在于微信小程序的高效输出，对于多端（Web, App, H5）的细节抹平在大型复杂业务中可能存在兼容性缺陷。
+Taro 在设计之初就高度重视多端一致性。它通过高度重构的编译时（利用 Babel 转换 React JSX 代码为小程序模板）和强大的运行时（劫持小程序 DOM&#x2F;BOM 接口）设计，使得在多端代码编译时表现得极其稳定。
+
+
+为什么中大型项目更倾向于 Taro：
+逻辑复用性：React 的 Hooks 设计使得非 UI 的纯业务逻辑复用率高达 95% 以上，且无需考虑 Vue 复杂的 watch&#x2F;computed 依赖链路。
+大型团队协作与 TS 契合度：React 技术栈天然与 TypeScript 完美契合，配合 Taro 能够实现完美的静态类型检查。这对于数十人协作、维护周期长达数年的中大型复杂跨端项目来说，能极大地降低线上故障率，保证代码的高可维护性。
+
+
+
+</span></a></li></ol></li></ol></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">BY·Wled</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 19 篇文章
+                    </span>
+                    
+                        <span>
+                            共 97.2k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="图片查看器">
+	<button class="image-viewer-close" type="button" aria-label="关闭">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="上一页">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="关闭">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="下一页">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/main.js" ></script>
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/Typed.min.js" ></script>
+
+
+
+
+
+
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+
+
+	
+	<div id="aplayer"></div>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/libs/APlayer.min.js" ></script>
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.9.0/source/js/build/plugins/aplayer.js" ></script>
+
+	
+</body>
+
+</html>
